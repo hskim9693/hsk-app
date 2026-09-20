@@ -90,9 +90,14 @@
             transition: opacity 0.2s;
         }
         button:active { opacity: 0.7; }
+        
         .btn-primary { background: var(--primary); color: white; width: 100%; }
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
+        
+        /* O, X 버튼용 흑백 테마 */
+        .btn-x { background: #1c1c1e; color: #ffffff; border: 2px solid #1c1c1e; font-size: 20px; }
+        .btn-o { background: #ffffff; color: #1c1c1e; border: 2px solid #1c1c1e; font-size: 20px; }
         
         .day-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .day-card {
@@ -110,40 +115,39 @@
 
         .flashcard {
             background: var(--card-bg);
-            padding: 40px 20px;
+            padding: 40px 24px;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.06);
             text-align: center;
             margin-bottom: 16px;
             cursor: pointer;
-            min-height: 220px;
+            min-height: 400px; /* 카드 여유 공간 확보를 위해 높이 증가 */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
         .word-lg { font-size: 60px; font-weight: 700; margin-bottom: 10px; }
-        .back-side { display: none; width: 100%; }
-        .pinyin { font-size: 22px; color: var(--primary); margin-bottom: 10px; font-weight: 600; }
-        .meaning { font-size: 18px; color: #3a3a3c; margin-bottom: 14px; font-weight: bold; }
+        .back-side { display: none; width: 100%; height: 100%; flex-direction: column; justify-content: center; }
+        .pinyin { font-size: 24px; color: var(--primary); margin-bottom: 12px; font-weight: 600; }
+        .meaning { font-size: 20px; color: #3a3a3c; margin-bottom: 20px; font-weight: bold; }
         .example-box {
             background: #f8f8fa;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 15px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
-            margin-top: 10px;
+            margin-top: auto;
         }
-        .btn-group { display: flex; gap: 10px; }
-        .btn-group button { flex: 1; }
+        .btn-group { display: flex; gap: 12px; }
+        .btn-group button { flex: 1; padding: 16px; font-weight: bold; }
 
         .quiz-box { font-size: 20px; font-weight: bold; margin-bottom: 20px; min-height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; }
         .quiz-opt-btn { background: #f2f2f7; color: var(--text); width: 100%; border: 1px solid var(--border); text-align: center; transition: all 0.2s; }
         
-        /* 퀴즈 정답/오답 피드백용 클래스 */
         .btn-correct { background-color: var(--success) !important; color: white !important; border-color: var(--success) !important; }
         .btn-wrong { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
         .quiz-opt-btn:disabled { opacity: 1; cursor: default; }
@@ -190,15 +194,15 @@
                     <div id="vc-pinyin" class="pinyin"></div>
                     <div id="vc-meaning" class="meaning"></div>
                     <div id="vc-example-box" class="example-box">
-                        <div id="vc-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
-                        <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary);"></div>
-                        <div id="vc-ex-ko" style="color:var(--gray);"></div>
+                        <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
+                        <div id="vc-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary);"></div>
+                        <div id="vc-ex-ko" style="color:var(--gray); line-height: 1.4;"></div>
                     </div>
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-danger" onclick="markVocabResult(false)">모름 (-)</button>
-                <button class="btn-success" onclick="markVocabResult(true)">앎 (O)</button>
+                <button class="btn-x" onclick="markVocabResult(false)">X</button>
+                <button class="btn-o" onclick="markVocabResult(true)">O</button>
             </div>
         </div>
 
@@ -220,13 +224,11 @@
                 <div id="quiz-box" class="quiz-box"></div>
                 <div id="quiz-options" class="quiz-options"></div>
                 
-                <!-- 퀴즈 피드백 후 액션 버튼 -->
                 <div id="quiz-post-actions" class="btn-group hidden" style="margin-top: 20px;">
                     <button id="btn-show-expl" style="background:#5856d6; color:white;" onclick="showQuizExplanation()">해석보기</button>
                     <button class="btn-primary" onclick="nextQuizQuestion()">다음 문제 ➡️</button>
                 </div>
 
-                <!-- 퀴즈 해석 창 -->
                 <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 15px;">
                     <div id="qz-word-info" style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #e5e5ea; padding-bottom: 8px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
@@ -252,15 +254,15 @@
                         <div id="rc-pinyin" class="pinyin"></div>
                         <div id="rc-meaning" class="meaning"></div>
                         <div id="rc-example-box" class="example-box">
-                            <div id="rc-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
-                            <div id="rc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary);"></div>
-                            <div id="rc-ex-ko" style="color:var(--gray);"></div>
+                            <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
+                            <div id="rc-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary);"></div>
+                            <div id="rc-ex-ko" style="color:var(--gray); line-height: 1.4;"></div>
                         </div>
                     </div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn-danger" onclick="reviewAnswer(false)">여전히 모름</button>
-                    <button class="btn-success" onclick="reviewAnswer(true)">암기 완료 (제거)</button>
+                    <button class="btn-x" onclick="reviewAnswer(false)">X</button>
+                    <button class="btn-o" onclick="reviewAnswer(true)">O</button>
                 </div>
             </div>
         </div>
@@ -423,7 +425,7 @@
 
         function toggleCardFront() {
             isFlipped = !isFlipped;
-            document.getElementById('vc-back').style.display = isFlipped ? 'block' : 'none';
+            document.getElementById('vc-back').style.display = isFlipped ? 'flex' : 'none';
             document.getElementById('vc-word').style.display = isFlipped ? 'none' : 'block';
         }
 
@@ -454,7 +456,6 @@
                 return;
             }
 
-            // 하단 버튼 및 해석창 초기화
             document.getElementById('quiz-post-actions').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.add('hidden');
             document.getElementById('btn-show-expl').classList.remove('hidden');
@@ -492,7 +493,24 @@
             const optionsBox = document.getElementById('quiz-options');
             optionsBox.innerHTML = '';
 
-            let incorrects = allWords.filter(w => w[poolKey] !== correctAnswer);
+            // 단어 글자 수에 맞는 오답 필터링
+            let targetLength = item.word.length;
+            let incorrects = allWords.filter(w => {
+                if (w[poolKey] === correctAnswer) return false;
+                
+                let wordLen = w.word.length;
+                if (targetLength === 1) return wordLen === 1;
+                if (targetLength === 2) return wordLen === 2;
+                if (targetLength >= 3) return wordLen >= 2;
+                return true;
+            });
+
+            // 필터링된 오답이 3개 미만일 경우 예외 처리
+            if (incorrects.length < 3) {
+                let backup = allWords.filter(w => w[poolKey] !== correctAnswer);
+                incorrects = incorrects.concat(backup).filter((val, index, self) => self.indexOf(val) === index);
+            }
+
             incorrects = shuffle(incorrects).slice(0, 3);
             let choices = shuffle([...incorrects.map(w => w[poolKey]), correctAnswer]);
 
@@ -508,17 +526,15 @@
         }
 
         function checkQuizAnswer(clickedBtn, selected, correct, wordId) {
-            // 버튼 다중 클릭 방지를 위해 모두 비활성화
             const buttons = document.querySelectorAll('.quiz-opt-btn');
             buttons.forEach(btn => btn.disabled = true);
 
             if (selected === correct) {
                 score++;
-                clickedBtn.classList.add('btn-correct'); // 정답일 경우 초록색
+                clickedBtn.classList.add('btn-correct');
             } else {
-                clickedBtn.classList.add('btn-wrong'); // 오답일 경우 빨간색
+                clickedBtn.classList.add('btn-wrong');
                 
-                // 오답을 선택했어도 실제 정답인 버튼을 찾아 초록색으로 표시
                 buttons.forEach(btn => {
                     if (btn.innerText === correct) {
                         btn.classList.add('btn-correct');
@@ -531,14 +547,12 @@
                 }
             }
             
-            // 해석보기 및 다음 문제 액션 컨테이너 표시
             document.getElementById('quiz-post-actions').classList.remove('hidden');
         }
 
         function showQuizExplanation() {
             const item = currentList[currentIndex];
             
-            // 퀴즈 문제 단어의 기본 정보 바인딩
             document.getElementById('qz-word-info').innerText = `${item.word} [${item.pinyin}] - ${item.meaning}`;
 
             if (item.example_zh) {
@@ -609,7 +623,7 @@
 
         function toggleReviewCard() {
             isFlipped = !isFlipped;
-            document.getElementById('rc-back').style.display = isFlipped ? 'block' : 'none';
+            document.getElementById('rc-back').style.display = isFlipped ? 'flex' : 'none';
             document.getElementById('rc-word').style.display = isFlipped ? 'none' : 'block';
         }
 
