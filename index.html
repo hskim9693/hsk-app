@@ -7,7 +7,7 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-       
+     
 
         :root {
             --primary: #8d5b4c;         
@@ -236,14 +236,12 @@
 <body>
 
     <div class="app-container">
-        <!-- 상단 네비게이션 -->
         <div id="top-nav" class="top-nav hidden">
             <button class="nav-btn" onclick="goHome()">🏠 홈</button>
             <span id="nav-title" class="nav-title">학습</span>
             <button class="nav-btn" onclick="goSettings()">⚙️ 설정</button>
         </div>
 
-        <!-- 1. 홈 화면 -->
         <div id="screen-home">
             <div class="panel" style="margin-bottom: 24px; padding: 36px 24px;">
                 <h1 style="margin: 0 0 8px 0; font-size: 28px; letter-spacing: -0.5px; color: var(--primary);">🇨🇳 HSK 4급</h1>
@@ -255,12 +253,10 @@
             <button class="menu-btn" onclick="goSettings()">⚙️ 설정 <span>데이터 관리</span></button>
         </div>
 
-        <!-- 2. Day 선택 화면 -->
         <div id="screen-vocab-days" class="hidden">
             <div id="day-grid" class="day-grid"></div>
         </div>
 
-        <!-- 2-1. Day 선택 후 설정 팝업 화면 -->
         <div id="screen-vocab-options" class="hidden">
             <div class="panel" style="text-align: left; padding: 28px 24px; margin-bottom: 24px;">
                 <h3 id="vocab-option-title" style="margin:0 0 20px 0; font-size:22px; color: var(--primary);">Day 학습 설정</h3>
@@ -285,14 +281,12 @@
             <button class="btn-secondary" onclick="openVocbDays()">◀ Day 다시 선택하기</button>
         </div>
 
-        <!-- 3. 단어 카드 학습 화면 -->
         <div id="screen-vocab-card" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 15px;">◀ Day 선택으로</button>
                 <div style="font-size:15px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <!-- 스와이프 가능한 플래시카드 영역 -->
             <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
@@ -324,7 +318,6 @@
             </div>
         </div>
 
-        <!-- 3-1. 단어 학습 완료 화면 -->
         <div id="screen-vocab-result" class="hidden">
             <div class="panel" style="padding: 40px 24px;">
                 <h2 style="margin:0 0 12px 0; font-size: 26px; color: var(--primary);">단어 학습 완료! 🎉</h2>
@@ -337,7 +330,6 @@
             </div>
         </div>
 
-        <!-- 4. 퀴즈 메뉴 화면 -->
         <div id="screen-quiz-menu" class="hidden">
             <div class="panel" style="text-align: left; padding: 24px; margin-bottom: 20px;">
                 <h3 style="margin:0 0 16px 0; font-size:20px;">퀴즈 형식 선택</h3>
@@ -349,7 +341,6 @@
             <button class="menu-btn" onclick="selectQuizType('writing')">✍️ 뜻 보고 직접 쓰기 <span>한자 출력</span></button>
         </div>
 
-        <!-- 4-1. 퀴즈 출제 설정 화면 -->
         <div id="screen-quiz-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 24px; margin-bottom: 20px;">
                 <h3 id="quiz-setting-title" style="margin:0 0 16px 0; font-size:20px; color: var(--primary);">퀴즈 출제 설정</h3>
@@ -384,7 +375,6 @@
             <button class="btn-secondary" onclick="openQuizMenu()">◀ 형식 다시 선택하기</button>
         </div>
 
-        <!-- 5. 퀴즈 진행 화면 -->
         <div id="screen-quiz-play" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <button class="nav-btn" onclick="openQuizMenu()" style="padding: 0; font-size: 15px;">◀ 퀴즈 설정으로</button>
@@ -395,7 +385,6 @@
                 <div id="quiz-box" class="quiz-box"></div>
                 <div id="quiz-options" class="quiz-options"></div>
 
-                <!-- 쓰기 유형 전용 입력 박스 -->
                 <div id="quiz-writing-box" class="hidden" style="margin-top: 10px;">
                     <input type="text" id="quiz-input" placeholder="한자를 입력하세요" style="width: 100%; padding: 14px; font-size: 18px; border: 1.5px solid var(--border); border-radius: 14px; text-align: center; box-sizing: border-box; outline: none; margin-bottom: 12px;" />
                     <button class="btn-primary" onclick="submitWritingAnswer()">정답 확인 ✍️</button>
@@ -409,7 +398,6 @@
                     </div>
                 </div>
 
-                <!-- 해설 보기 박스 -->
                 <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--primary-light); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
                     <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
@@ -429,7 +417,6 @@
             </div>
         </div>
 
-        <!-- 6. 오답노트 화면 -->
         <div id="screen-review" class="hidden">
             <div class="panel" id="review-empty-box">
                 <h3 style="margin: 0 0 12px 0; font-size: 22px;">오답노트가 비어있습니다 🎉</h3>
@@ -464,7 +451,6 @@
             </div>
         </div>
 
-        <!-- 7. 설정 시스템 화면 -->
         <div id="screen-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 32px 24px;">
                 <h3 style="margin:0 0 12px 0; font-size:22px;">설정 및 데이터 관리</h3>
@@ -475,7 +461,6 @@
             </div>
         </div>
 
-        <!-- 8. 결과 완료 화면 -->
         <div id="screen-result" class="hidden">
             <div class="panel" style="padding: 40px 24px;">
                 <h2 style="margin:0 0 8px 0; font-size: 26px;">테스트 완료! 🎉</h2>
@@ -793,7 +778,6 @@
             showVocbCard();
         }
 
-        // --- 스와이프 제스처 핸들러 구현 ---
         let touchStartX = 0;
         let touchStartY = 0;
         let currentX = 0;
@@ -827,9 +811,9 @@
 
             let diffX = e.changedTouches[0].clientX - touchStartX;
             if (diffX > 80) {
-                markVocabResult(true);
+                markVocbResult(true);
             } else if (diffX < -80) {
-                markVocabResult(false);
+                markVocbResult(false);
             }
         });
 
@@ -859,9 +843,9 @@
 
             let diffX = e.clientX - touchStartX;
             if (diffX > 80) {
-                markVocabResult(true);
+                markVocbResult(true);
             } else if (diffX < -80) {
-                markVocabResult(false);
+                markVocbResult(false);
             }
         });
 
@@ -1082,9 +1066,10 @@
             writingBox.classList.add('hidden');
 
             const quizBox = document.getElementById('quiz-box');
+            
             if (userInput === item.word) {
                 score++;
-                quizBox.style.background = '#eaf2ea'; // 초록 배경
+                quizBox.style.background = '#eaf2ea'; 
                 quizBox.style.color = '#2d5a27';
                 quizBox.innerHTML = `
                     <div style="font-size: 16px; font-weight: 700; color: #2d5a27; margin-bottom: 8px;">${item.meaning}</div>
@@ -1092,13 +1077,13 @@
                     <div style="font-size: 14px; font-weight: 600; color: var(--primary);">${item.pinyin}</div>
                 `;
             } else {
-                quizBox.style.background = 'var(--danger-light)'; // 붉은 배경
+                quizBox.style.background = 'var(--danger-light)'; 
                 quizBox.style.color = 'var(--danger)';
                 quizBox.innerHTML = `
-                    <div style="font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 8px;">입력: ${userInput || '없음'}</div>
-                    <div style="font-size: 16px; font-weight: 700; color: #8a2be2; margin-bottom: 8px;">${item.meaning}</div>
-                    <div style="font-size: 32px; font-weight: 800; letter-spacing: 2px; margin-bottom: 6px;">${item.word}</div>
-                    <div style="font-size: 13px; font-weight: 600; color: var(--danger);">${item.pinyin}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 6px;">입력: ${userInput || '없음'}</div>
+                    <div style="font-size: 16px; font-weight: 700; color: #2d5a27; margin-bottom: 8px;">${item.meaning}</div>
+                    <div style="font-size: 38px; font-weight: 800; letter-spacing: 2px; margin-bottom: 6px;">${item.word}</div>
+                    <div style="font-size: 14px; font-weight: 600; color: var(--primary);">${item.pinyin}</div>
                 `;
                 
                 if (!wrongWordIds.includes(item.word_id)) {
