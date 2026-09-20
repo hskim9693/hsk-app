@@ -8,7 +8,8 @@
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
       
-            
+        
+
         :root {
             --primary: #8d5b4c;         
             --primary-light: #f5ece6;    
@@ -274,7 +275,7 @@
                         <option value="all">전체 보기</option>
                         <option value="learned">🔵 외움</option>
                         <option value="confused">🟠 헷갈림</option>
-                        <option value="forgot">🔴 모름</option>
+                        <option value="unmarked">⚪ 미선택 (모름)</option>
                     </select>
                 </div>
                 <button class="btn-primary" onclick="startVocabSession()">학습 시작하기 🚀</button>
@@ -372,8 +373,7 @@
                     <div class="radio-group" style="width: 100%; justify-content: space-between;">
                         <label><input type="checkbox" name="quiz-status" value="1" checked> 🔵 외움</label>
                         <label><input type="checkbox" name="quiz-status" value="2" checked> 🟠 헷갈림</label>
-                        <label><input type="checkbox" name="quiz-status" value="3" checked> 🔴 모름</label>
-                        <label><input type="checkbox" name="quiz-status" value="0" checked> ⚪ 미분류</label>
+                        <label><input type="checkbox" name="quiz-status" value="0" checked> ⚪ 미선택 (모름)</label>
                     </div>
                 </div>
             </div>
@@ -640,7 +640,7 @@
             
             const filterVal = document.getElementById('vocab-status-filter').value;
             if (filterVal !== 'all') {
-                let targetStatus = filterVal === 'learned' ? 1 : filterVal === 'confused' ? 2 : 3;
+                let targetStatus = filterVal === 'learned' ? 1 : filterVal === 'confused' ? 2 : 0;
                 list = list.filter(w => (wordStatuses[w.word_id] || 0) === targetStatus);
             }
 
@@ -672,7 +672,7 @@
                 let list = allWords.slice(selectedStartIdx, selectedEndIdx);
                 const filterVal = document.getElementById('vocab-status-filter').value;
                 if (filterVal !== 'all') {
-                    let targetStatus = filterVal === 'learned' ? 1 : filterVal === 'confused' ? 2 : 3;
+                    let targetStatus = filterVal === 'learned' ? 1 : filterVal === 'confused' ? 2 : 0;
                     list = list.filter(w => (wordStatuses[w.word_id] || 0) === targetStatus);
                 }
                 const mode = document.querySelector('input[name="vocab-mode"]:checked').value;
@@ -690,7 +690,8 @@
         function cycleWordStatus() {
             const item = currentList[currentIndex];
             let currentStatus = wordStatuses[item.word_id] || 0;
-            let nextStatus = (currentStatus + 1) % 4;
+            // 0(미선택/모름) -> 1(외움) -> 2(헷갈림) -> 0 순환 (빨간색 제거)
+            let nextStatus = (currentStatus + 1) % 3;
             
             if (nextStatus === 0) {
                 delete wordStatuses[item.word_id];
@@ -709,11 +710,8 @@
             } else if (status === 2) {
                 badge.innerText = '🟠';
                 badge.style.background = 'var(--warning-light)';
-            } else if (status === 3) {
-                badge.innerText = '🔴';
-                badge.style.background = 'var(--danger-light)';
             } else {
-                badge.innerText = '⚪';
+                badge.innerText = '⚪'; // 미선택(모름) 초기 상태
                 badge.style.background = 'var(--bg)';
             }
         }
@@ -772,7 +770,7 @@
         function prevVocbCard() {
             if (currentIndex > 0) {
                 currentIndex--;
-                showVocabCard();
+                showVocbCard();
             } else {
                 alert("첫 번째 단어입니다.");
             }
@@ -790,7 +788,7 @@
                 }
             }
             currentIndex++;
-            showVocabCard();
+            showVocbCard();
         }
 
         async function selectQuizType(type) {
@@ -1114,7 +1112,6 @@
             const badge = document.getElementById('rc-status-badge');
             if (status === 1) { badge.innerText = '🔵'; badge.style.background = '#eaf2ea'; }
             else if (status === 2) { badge.innerText = '🟠'; badge.style.background = 'var(--warning-light)'; }
-            else if (status === 3) { badge.innerText = '🔴'; badge.style.background = 'var(--danger-light)'; }
             else { badge.innerText = '⚪'; badge.style.background = 'var(--bg)'; }
 
             const exBox = document.getElementById('rc-example-box');
@@ -1138,7 +1135,7 @@
         function cycleReviewStatus() {
             const item = currentList[currentIndex];
             let currentStatus = wordStatuses[item.word_id] || 0;
-            let nextStatus = (currentStatus + 1) % 4;
+            let nextStatus = (currentStatus + 1) % 3;
             
             if (nextStatus === 0) {
                 delete wordStatuses[item.word_id];
@@ -1150,7 +1147,6 @@
             const badge = document.getElementById('rc-status-badge');
             if (nextStatus === 1) { badge.innerText = '🔵'; badge.style.background = '#eaf2ea'; }
             else if (nextStatus === 2) { badge.innerText = '🟠'; badge.style.background = 'var(--warning-light)'; }
-            else if (nextStatus === 3) { badge.innerText = '🔴'; badge.style.background = 'var(--danger-light)'; }
             else { badge.innerText = '⚪'; badge.style.background = 'var(--bg)'; }
         }
 
