@@ -136,13 +136,18 @@
             box-sizing: border-box;
             margin-top: 10px;
         }
-        .hint { font-size: 13px; color: var(--gray); margin-top: 15px; }
         .btn-group { display: flex; gap: 10px; }
         .btn-group button { flex: 1; }
 
         .quiz-box { font-size: 20px; font-weight: bold; margin-bottom: 20px; min-height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; }
-        .quiz-opt-btn { background: #f2f2f7; color: var(--text); width: 100%; border: 1px solid var(--border); text-align: center; }
+        .quiz-opt-btn { background: #f2f2f7; color: var(--text); width: 100%; border: 1px solid var(--border); text-align: center; transition: all 0.2s; }
+        
+        /* 퀴즈 정답/오답 피드백용 클래스 */
+        .btn-correct { background-color: var(--success) !important; color: white !important; border-color: var(--success) !important; }
+        .btn-wrong { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
+        .quiz-opt-btn:disabled { opacity: 1; cursor: default; }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -185,11 +190,11 @@
                     <div id="vc-pinyin" class="pinyin"></div>
                     <div id="vc-meaning" class="meaning"></div>
                     <div id="vc-example-box" class="example-box">
-                        <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
+                        <div id="vc-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
+                        <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary);"></div>
                         <div id="vc-ex-ko" style="color:var(--gray);"></div>
                     </div>
                 </div>
-                <div id="vc-hint" class="hint">터치하여 뒷면 보기</div>
             </div>
             <div class="btn-group">
                 <button class="btn-danger" onclick="markVocabResult(false)">모름 (-)</button>
@@ -214,6 +219,21 @@
                 <div id="quiz-type-label" style="font-size: 13px; color: var(--gray); margin-bottom: 10px;"></div>
                 <div id="quiz-box" class="quiz-box"></div>
                 <div id="quiz-options" class="quiz-options"></div>
+                
+                <!-- 퀴즈 피드백 후 액션 버튼 -->
+                <div id="quiz-post-actions" class="btn-group hidden" style="margin-top: 20px;">
+                    <button id="btn-show-expl" style="background:#5856d6; color:white;" onclick="showQuizExplanation()">해석보기</button>
+                    <button class="btn-primary" onclick="nextQuizQuestion()">다음 문제 ➡️</button>
+                </div>
+
+                <!-- 퀴즈 해석 창 -->
+                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 15px;">
+                    <div id="qz-word-info" style="font-size: 16px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #e5e5ea; padding-bottom: 8px; color: var(--primary);"></div>
+                    <div id="qz-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
+                    <div id="qz-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary);"></div>
+                    <div id="qz-ex-ko" style="color:var(--gray); margin-bottom: 15px;"></div>
+                    <button class="btn-primary" onclick="nextQuizQuestion()">다음 문제 ➡️</button>
+                </div>
             </div>
         </div>
 
@@ -232,11 +252,11 @@
                         <div id="rc-pinyin" class="pinyin"></div>
                         <div id="rc-meaning" class="meaning"></div>
                         <div id="rc-example-box" class="example-box">
-                            <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
+                            <div id="rc-ex-zh" style="margin-bottom:4px; font-weight:500; color:#1c1c1e;"></div>
+                            <div id="rc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary);"></div>
                             <div id="rc-ex-ko" style="color:var(--gray);"></div>
                         </div>
                     </div>
-                    <div id="rc-hint" class="hint">터치하여 뒷면 보기</div>
                 </div>
                 <div class="btn-group">
                     <button class="btn-danger" onclick="reviewAnswer(false)">여전히 모름</button>
@@ -288,8 +308,8 @@
                     let w_id = item.word_id || item.id || index;
                     let hanzi = item.word || item.hanzi || '';
                     
-                    // 예상되는 다양한 JSON 예문 키 대응
-                    let ex_zh = item.example_zh || item.example || item.예문 || item.ex || item.example_cn || '';
+                    let ex_zh = item.example_zh || item.example_sentence || item.example || item.예문 || item.ex || item.example_cn || '';
+                    let ex_py = item.example_pinyin || item.예문병음 || item.ex_py || '';
                     let ex_ko = item.example_ko || item.example_meaning || item.해석 || item.예문해석 || item.ex_ko || '';
                     
                     if (!hanzi && mn && typeof mn === 'string') {
@@ -313,6 +333,7 @@
                         pinyin: py || '',
                         meaning: cleanMn || '뜻 없음',
                         example_zh: ex_zh,
+                        example_pinyin: ex_py,
                         example_ko: ex_ko
                     };
                 });
@@ -383,11 +404,11 @@
             document.getElementById('vc-pinyin').innerText = item.pinyin;
             document.getElementById('vc-meaning').innerText = item.meaning;
             
-            // 예문 데이터 존재 여부에 따른 동적 렌더링
             const exBox = document.getElementById('vc-example-box');
             if (item.example_zh) {
                 exBox.style.display = 'block';
                 document.getElementById('vc-ex-zh').innerText = item.example_zh;
+                document.getElementById('vc-ex-py').innerText = item.example_pinyin;
                 document.getElementById('vc-ex-ko').innerText = item.example_ko;
             } else {
                 exBox.style.display = 'none';
@@ -398,14 +419,12 @@
             isFlipped = false;
             document.getElementById('vc-back').style.display = 'none';
             document.getElementById('vc-word').style.display = 'block';
-            document.getElementById('vc-hint').style.display = 'block';
         }
 
         function toggleCardFront() {
             isFlipped = !isFlipped;
             document.getElementById('vc-back').style.display = isFlipped ? 'block' : 'none';
             document.getElementById('vc-word').style.display = isFlipped ? 'none' : 'block';
-            document.getElementById('vc-hint').style.display = isFlipped ? 'none' : 'block';
         }
 
         function markVocabResult(isKnown) {
@@ -434,6 +453,11 @@
                 showFinalResult(score, Math.min(currentList.length, 20));
                 return;
             }
+
+            // 하단 버튼 및 해석창 초기화
+            document.getElementById('quiz-post-actions').classList.add('hidden');
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+            document.getElementById('btn-show-expl').classList.remove('hidden');
 
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${Math.min(currentList.length, 20)}`;
@@ -476,22 +500,65 @@
                 const btn = document.createElement('button');
                 btn.className = 'quiz-opt-btn';
                 btn.innerText = choice;
-                btn.onclick = () => checkQuizAnswer(choice, correctAnswer, item.word_id);
+                btn.onclick = function() {
+                    checkQuizAnswer(this, choice, correctAnswer, item.word_id);
+                };
                 optionsBox.appendChild(btn);
             });
         }
 
-        function checkQuizAnswer(selected, correct, wordId) {
+        function checkQuizAnswer(clickedBtn, selected, correct, wordId) {
+            // 버튼 다중 클릭 방지를 위해 모두 비활성화
+            const buttons = document.querySelectorAll('.quiz-opt-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
             if (selected === correct) {
                 score++;
-                alert('정답입니다! 🎉');
+                clickedBtn.classList.add('btn-correct'); // 정답일 경우 초록색
             } else {
-                alert(`틀렸습니다! 정답: [ ${correct} ]`);
+                clickedBtn.classList.add('btn-wrong'); // 오답일 경우 빨간색
+                
+                // 오답을 선택했어도 실제 정답인 버튼을 찾아 초록색으로 표시
+                buttons.forEach(btn => {
+                    if (btn.innerText === correct) {
+                        btn.classList.add('btn-correct');
+                    }
+                });
+
                 if (!wrongWordIds.includes(wordId)) {
                     wrongWordIds.push(wordId);
                     localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds));
                 }
             }
+            
+            // 해석보기 및 다음 문제 액션 컨테이너 표시
+            document.getElementById('quiz-post-actions').classList.remove('hidden');
+        }
+
+        function showQuizExplanation() {
+            const item = currentList[currentIndex];
+            
+            // 퀴즈 문제 단어의 기본 정보 바인딩
+            document.getElementById('qz-word-info').innerText = `${item.word} [${item.pinyin}] - ${item.meaning}`;
+
+            if (item.example_zh) {
+                document.getElementById('qz-ex-zh').innerText = item.example_zh;
+                document.getElementById('qz-ex-py').innerText = item.example_pinyin;
+                document.getElementById('qz-ex-ko').innerText = item.example_ko;
+                
+                document.getElementById('qz-ex-zh').style.display = 'block';
+                document.getElementById('qz-ex-py').style.display = 'block';
+            } else {
+                document.getElementById('qz-ex-zh').style.display = 'none';
+                document.getElementById('qz-ex-py').style.display = 'none';
+                document.getElementById('qz-ex-ko').innerText = "등록된 예문이 없습니다.";
+            }
+
+            document.getElementById('quiz-explanation-box').classList.remove('hidden');
+            document.getElementById('btn-show-expl').classList.add('hidden');
+        }
+
+        function nextQuizQuestion() {
             currentIndex++;
             loadQuizQuestion();
         }
@@ -523,11 +590,11 @@
             document.getElementById('rc-pinyin').innerText = item.pinyin;
             document.getElementById('rc-meaning').innerText = item.meaning;
             
-            // 오답노트에도 동일한 예문 렌더링 로직 적용
             const exBox = document.getElementById('rc-example-box');
             if (item.example_zh) {
                 exBox.style.display = 'block';
                 document.getElementById('rc-ex-zh').innerText = item.example_zh;
+                document.getElementById('rc-ex-py').innerText = item.example_pinyin;
                 document.getElementById('rc-ex-ko').innerText = item.example_ko;
             } else {
                 exBox.style.display = 'none';
@@ -538,14 +605,12 @@
             isFlipped = false;
             document.getElementById('rc-back').style.display = 'none';
             document.getElementById('rc-word').style.display = 'block';
-            document.getElementById('rc-hint').style.display = 'block';
         }
 
         function toggleReviewCard() {
             isFlipped = !isFlipped;
             document.getElementById('rc-back').style.display = isFlipped ? 'block' : 'none';
             document.getElementById('rc-word').style.display = isFlipped ? 'none' : 'block';
-            document.getElementById('rc-hint').style.display = isFlipped ? 'none' : 'block';
         }
 
         function reviewAnswer(isKnown) {
