@@ -29,8 +29,15 @@
             --shadow-lg: 0 12px 32px rgba(61, 49, 42, 0.08);
         }
         
+        /* 한자 및 전체 글꼴 두께와 렌더링 통일 */
+        body, div, span, button, input, select, h1, h2, h3 {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-weight: 600;
+        }
+        
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--bg);
             margin: 0;
             padding: 20px 16px;
@@ -216,7 +223,7 @@
         
         .blank-text { color: var(--primary); font-weight: 800; letter-spacing: 2px; }
         
-        /* 예문 속 강조 단어 스타일 (밑줄 제거 및 붉은 계열 색상 적용) */
+        /* 해설 예문 단어 강조 (밑줄 제거 및 붉은 계열 색상) */
         .highlight-word { color: var(--danger); font-weight: 800; }
 
         .hidden { display: none !important; }
@@ -375,7 +382,6 @@
                     <button id="btn-show-expl" style="background:var(--text); color:white;" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
                         <button class="btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
-                        <!-- 다음 문제 화살표 이모지를 이전 문제와 어울리는 심볼형태로 변경 -->
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
@@ -387,7 +393,6 @@
                     <div id="qz-ex-ko" style="color:#5c5c5e; font-weight:500; margin-bottom: 20px; word-break: break-all;"></div>
                     <div style="display: flex; gap: 10px; width: 100%;">
                         <button class="btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
-                        <!-- 해설 안의 다음 문제 이모지도 심볼형태로 변경 -->
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
