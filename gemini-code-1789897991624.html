@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나만의 HSK 350 단어장</title>
+    <style>
+        :root {
+            --primary: #007aff;
+            --success: #34c759;
+            --danger: #ff3b30;
+            --bg: #f2f2f7;
+            --card-bg: #ffffff;
+            --text: #1c1c1e;
+            --gray: #8e8e93;
+            --border: #d1d1d6;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: var(--text);
+        }
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        /* 상단 네비게이션 바 */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+        }
+        .nav-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        /* 공통 카드 및 컨테이너 스타일 */
+        .panel {
+            background: var(--card-bg);
+            padding: 24px 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        /* 홈 화면 메뉴 버튼 */
+        .menu-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 16px;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.1s, background 0.2s;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-btn:active { transform: scale(0.98); background: #e5e5ea; }
+        .menu-btn span { font-size: 14px; color: var(--gray); font-weight: normal; }
+
+        /* 일반 버튼 */
+        button {
+            padding: 14px;
+            font-size: 16px;
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        button:active { opacity: 0.7; }
+        .btn-primary { background: var(--primary); color: white; width: 100%; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        
+        /* Day 선택 그리드 */
+        .day-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .day-card:active { background: #e5e5ea; }
+
+        /* 단어 학습 카드 */
+        .flashcard {
+            background: var(--card-bg);
+            padding: 40px 20px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            text-align: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .word-lg { font-size: 60px; font-weight: 700; margin-bottom: 10px; }
+        .back-side { display: none; width: 100%; }
+        .pinyin { font-size: 22px; color: var(--primary); margin-bottom: 10px; font-weight: 600; }
+        .meaning { font-size: 18px; color: #3a3a3c; margin-bottom: 14px; font-weight: bold; }
+        .example-box {
+            background: #f8f8fa;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .hint { font-size: 13px; color: var(--gray); margin-top: 15px; }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn-group button { flex: 1; }
+
+        /* 퀴즈 스타일 */
+        .quiz-box { font-size: 20px; font-weight: bold; margin-bottom: 20px; min-height: 50px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+        .quiz-opt-btn { background: #f2f2f7; color: var(--text); width: 100%; border: 1px solid var(--border); text-align: center; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- 상단 네비게이션 -->
+        <div id="top-nav" class="top-nav hidden">
+            <button class="nav-btn" onclick="goHome()">🏠 홈으로</button>
+            <span id="nav-title" class="nav-title">학습</span>
+            <button class="nav-btn" onclick="goSettings()">⚙️ 설정</button>
+        </div>
+
+        <!-- 1. 홈 화면 -->
+        <div id="screen-home">
+            <div class="panel" style="margin-bottom: 20px;">
+                <h1 style="margin: 0 0 8px 0; font-size: 24px;">🇨🇳 HSK 350 마스터</h1>
+                <p style="margin: 0; color: var(--gray); font-size: 14px;">나만의 속도로 완벽하게 정복하기</p>
+            </div>
+            <button class="menu-btn" onclick="openVocbDays()">📚 단어장 (Day별 학습) <span>80개씩</span></button>
+            <button class="menu-btn" onclick="openQuizMenu()">📝 퀴즈 풀기 <span>빈칸·뜻·성조</span></button>
+            <button class="menu-btn" onclick="openReview()">🔥 오답노트 하드트레이닝 <span>틀린 단어 집중 복습</span></button>
+            <button class="menu-btn" onclick="goSettings()">⚙️ 설정 시스템 <span>데이터 관리</span></button>
+        </div>
+
+        <!-- 2. Day 선택 화면 -->
+        <div id="screen-vocab-days" class="hidden">
+            <div class="panel" style="text-align: left; padding: 16px 20px; margin-bottom: 16px;">
+                <h3 style="margin:0; font-size:18px;">학습할 Day를 선택하세요</h3>
+            </div>
+            <div id="day-grid" class="day-grid"></div>
+        </div>
+
+        <!-- 3. 단어 카드 학습 화면 -->
+        <div id="screen-vocab-card" class="hidden">
+            <div style="font-size:13px; color:var(--gray); margin-bottom:8px; text-align:right;" id="vocab-progress">0 / 0</div>
+            <div class="flashcard" onclick="toggleCardFront()">
+                <div id="vc-word" class="word-lg"></div>
+                <div id="vc-back" class="back-side">
+                    <div id="vc-pinyin" class="pinyin"></div>
+                    <div id="vc-meaning" class="meaning"></div>
+                    <div class="example-box">
+                        <div id="vc-ex-zh" style="margin-bottom:4px; font-weight:500;"></div>
+                        <div id="vc-ex-ko" style="color:var(--gray);"></div>
+                    </div>
+                </div>
+                <div id="vc-hint" class="hint">터치하여 뒷면 보기</div>
+            </div>
+            <div class="btn-group">
+                <button class="btn-danger" onclick="markVocabResult(false)">모름 (-)</button>
+                <button class="btn-success" onclick="markVocabResult(true)">앎 (O)</button>
+            </div>
+        </div>
+
+        <!-- 4. 퀴즈 메뉴 화면 -->
+        <div id="screen-quiz-menu" class="hidden">
+            <div class="panel" style="text-align: left; padding: 16px 20px; margin-bottom: 16px;">
+                <h3 style="margin:0; font-size:18px;">퀴즈 유형을 선택하세요</h3>
+            </div>
+            <button class="menu-btn" onclick="startQuiz('blank')">📝 예문 빈칸 채우기 퀴즈</button>
+            <button class="menu-btn" onclick="startQuiz('meaning')">🇰🇷 뜻 보고 단어 맞히기</button>
+            <button class="menu-btn" onclick="startQuiz('pinyin')">🎵 단어 보고 성조 맞히기</button>
+        </div>
+
+        <!-- 5. 퀴즈 진행 화면 -->
+        <div id="screen-quiz-play" class="hidden">
+            <div style="font-size:13px; color:var(--gray); margin-bottom:8px; text-align:right;" id="quiz-progress">0 / 0</div>
+            <div class="panel">
+                <div id="quiz-type-label" style="font-size: 13px; color: var(--gray); margin-bottom: 10px;"></div>
+                <div id="quiz-box" class="quiz-box"></div>
+                <div id="quiz-options" class="quiz-options"></div>
+            </div>
+        </div>
+
+        <!-- 6. 오답노트 (하드 트레이닝) 화면 -->
+        <div id="screen-review" class="hidden">
+            <div class="panel" id="review-empty-box">
+                <h3 style="margin-top:0;">오답노트가 비어있습니다 🎉</h3>
+                <p style="color:var(--gray); font-size:14px;">퀴즈나 단어장에서 틀린 단어가 여기에 자동 누적되어 하드 트레이닝 대상이 됩니다.</p>
+                <button class="btn-primary" onclick="goHome()" style="margin-top:10px;">홈으로 돌아가기</button>
+            </div>
+            <div id="review-play-box" class="hidden">
+                <div style="font-size:13px; color:var(--danger); font-weight:bold; margin-bottom:8px; text-align:right;" id="review-progress">오답 집중 훈련 중</div>
+                <div class="flashcard" onclick="toggleReviewCard()">
+                    <div id="rc-word" class="word-lg"></div>
+                    <div id="rc-back" class="back-side">
+                        <div id="rc-pinyin" class="pinyin"></div>
+                        <div id="rc-meaning" class="meaning"></div>
+                    </div>
+                    <div id="rc-hint" class="hint">터치하여 뒷면 보기</div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-danger" onclick="reviewAnswer(false)">여전히 모름</button>
+                    <button class="btn-success" onclick="reviewAnswer(true)">암기 완료 (제거)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 설정 시스템 화면 -->
+        <div id="screen-settings" class="hidden">
+            <div class="panel" style="text-align: left;">
+                <h3 style="margin-top:0;">설정 및 데이터 관리</h3>
+                <p style="color:var(--gray); font-size:14px; line-height:1.4;">브라우저에 저장된 오답 기록 및 학습 데이터를 관리할 수 있습니다.</p>
+                <hr style="border:0; border-top:1px solid var(--border); margin:20px 0;">
+                <button class="btn-danger" onclick="resetWrongWords()" style="margin-bottom:10px;">오답노트 전체 초기화</button>
+                <button class="btn-primary" onclick="goHome()">홈으로 이동</button>
+            </div>
+        </div>
+
+        <!-- 8. 결과 완료 화면 -->
+        <div id="screen-result" class="hidden">
+            <div class="panel">
+                <h2 style="margin-top:0;">학습 / 퀴즈 완료! 🎉</h2>
+                <div id="result-score" style="font-size: 48px; font-weight: bold; color: var(--primary); margin: 20px 0;">0%</div>
+                <p id="result-desc" style="color: var(--gray); margin-bottom: 20px;"></p>
+                <button class="btn-primary" onclick="goHome()">홈으로 돌아가기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allWords = [];
+        let currentList = [];
+        let currentIndex = 0;
+        let score = 0;
+        let isFlipped = false;
+        let currentQuizType = '';
+        
+        // 오답노트 저장소 (localStorage 연동)
+        let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
+
+        async function initData() {
+            try {
+                const res = await fetch('hsk_basic_words_350.json');
+                allWords = await res.json();
+            } catch (e) {
+                alert('단어 데이터(hsk_basic_words_350.json)를 불러오지 못했습니다.');
+            }
+        }
+
+        function shuffle(array) {
+            return [...array].sort(() => Math.random() - 0.5);
+        }
+
+        // 화면전환 헬퍼
+        function showScreen(screenId) {
+            const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-card', 'screen-quiz-menu', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
+            screens.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(screenId).classList.remove('hidden');
+
+            // 상단 네비게이션 표시 여부
+            if (screenId === 'screen-home') {
+                document.getElementById('top-nav').classList.add('hidden');
+            } else {
+                document.getElementById('top-nav').classList.remove('hidden');
+                // 타이틀 변경
+                const titles = {
+                    'screen-vocab-days': '단어장 (Day 선택)',
+                    'screen-vocab-card': '단어 카드 학습',
+                    'screen-quiz-menu': '퀴즈 선택',
+                    'screen-quiz-play': '퀴즈 진행 중',
+                    'screen-review': '오답노트 하드트레이닝',
+                    'screen-settings': '설정 시스템',
+                    'screen-result': '결과 확인'
+                };
+                document.getElementById('nav-title').innerText = titles[screenId] || '';
+            }
+        }
+
+        function goHome() { showScreen('screen-home'); }
+        function goSettings() { showScreen('screen-settings'); }
+
+        // --- 1. 단어장 (80개씩 Day 분할) ---
+        function openVocbDays() {
+            showScreen('screen-vocab-days');
+            const grid = document.getElementById('day-grid');
+            grid.innerHTML = '';
+            
+            const chunkSize = 80;
+            const totalDays = Math.ceil(allWords.length / chunkSize);
+
+            for (let i = 0; i < totalDays; i++) {
+                const start = i * chunkSize + 1;
+                const end = Math.min((i + 1) * chunkSize, allWords.length);
+                
+                const btn = document.createElement('div');
+                btn.className = 'day-card';
+                btn.innerHTML = `Day ${i + 1}<div style="font-size:12px; color:var(--gray); margin-top:4px;">(${start} ~ ${end번}번)</div>`.replace('번번', '번');
+                btn.onclick = () => startVocabDay(i * chunkSize, end);
+                grid.appendChild(btn);
+            }
+        }
+
+        function startVocabDay(startIdx, endIdx) {
+            currentList = allWords.slice(startIdx, endIdx);
+            currentIndex = 0;
+            showScreen('screen-vocab-card');
+            showVocabCard();
+        }
+
+        function showVocabCard() {
+            if (currentIndex >= currentList.length) {
+                showFinalResult(score, currentList.length);
+                return;
+            }
+            const item = currentList[currentIndex];
+            document.getElementById('vc-word').innerText = item.word;
+            document.getElementById('vc-pinyin').innerText = item.pinyin || '';
+            document.getElementById('vc-meaning').innerText = item.meaning || '';
+            document.getElementById('vc-ex-zh').innerText = item.example_zh || '예문 없음';
+            document.getElementById('vc-ex-ko').innerText = item.example_ko || '';
+            document.getElementById('vocab-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
+
+            isFlipped = false;
+            document.getElementById('vc-back').style.display = 'none';
+            document.getElementById('vc-word').style.display = 'block';
+            document.getElementById('vc-hint').style.display = 'block';
+        }
+
+        function toggleCardFront() {
+            isFlipped = !isFlipped;
+            document.getElementById('vc-back').style.display = isFlipped ? 'block' : 'none';
+            document.getElementById('vc-word').style.display = isFlipped ? 'none' : 'block';
+            document.getElementById('vc-hint').style.display = isFlipped ? 'none' : 'block';
+        }
+
+        function markVocabResult(isKnown) {
+            const item = currentList[currentIndex];
+            if (!isKnown) {
+                // 오답노트에 추가 (중복 방지)
+                if (!wrongWordIds.includes(item.word_id)) {
+                    wrongWordIds.push(item.word_id);
+                    localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds));
+                }
+            }
+            currentIndex++;
+            showVocabCard();
+        }
+
+        // --- 2. 퀴즈 시스템 ---
+        function openQuizMenu() {
+            showScreen('screen-quiz-menu');
+        }
+
+        function startQuiz(type) {
+            currentQuizType = type;
+            currentList = shuffle(allWords);
+            currentIndex = 0;
+            score = 0;
+            showScreen('screen-quiz-play');
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            if (currentIndex >= currentList.length || currentIndex >= 20) { // 퀴즈는 20문제씩 끊어서 진행하면 깔끔함
+                showFinalResult(score, Math.min(currentList.length, 20));
+                return;
+            }
+
+            const item = currentList[currentIndex];
+            document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${Math.min(currentList.length, 20)}`;
+            
+            let typeLabel = '';
+            let questionHtml = '';
+            let correctAnswer = '';
+            let poolKey = '';
+
+            if (currentQuizType === 'blank') {
+                typeLabel = '📝 예문 빈칸 채우기';
+                let ex = item.example_zh || `${item.word} 은(는) 필수 단어입니다.`;
+                let masked = ex.replace(new RegExp(item.word, 'g'), '( 🈳 )');
+                questionHtml = `<div style="font-size:16px; line-height:1.5;">${masked}<br><span style="font-size:13px; color:var(--gray); font-weight:normal;">${item.example_ko || item.meaning}</span></div>`;
+                correctAnswer = item.word;
+                poolKey = 'word';
+            } else if (currentQuizType === 'meaning') {
+                typeLabel = '🇰🇷 뜻 보고 단어 맞히기';
+                questionHtml = `<div style="font-size:24px; color:var(--primary);">${item.meaning}</div>`;
+                correctAnswer = item.word;
+                poolKey = 'word';
+            } else if (currentQuizType === 'pinyin') {
+                typeLabel = '🎵 성조 맞히기';
+                questionHtml = `<div style="font-size:50px;">${item.word}</div>`;
+                correctAnswer = item.pinyin;
+                poolKey = 'pinyin';
+            }
+
+            document.getElementById('quiz-type-label').innerText = typeLabel;
+            document.getElementById('quiz-box').innerHTML = questionHtml;
+
+            // 보기 구성 (정답 1개 + 랜덤 오답 3개)
+            const optionsBox = document.getElementById('quiz-options');
+            optionsBox.innerHTML = '';
+
+            let incorrects = allWords.filter(w => w[poolKey] !== correctAnswer);
+            incorrects = shuffle(incorrects).slice(0, 3);
+            let choices = shuffle([...incorrects.map(w => w[poolKey]), correctAnswer]);
+
+            choices.forEach(choice => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-opt-btn';
+                btn.innerText = choice;
+                btn.onclick = () => checkQuizAnswer(choice, correctAnswer, item.word_id);
+                optionsBox.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selected, correct, wordId) {
+            if (selected === correct) {
+                score++;
+                alert('정답입니다! 🎉');
+            } else {
+                alert(`틀렸습니다! 정답: [ ${correct} ]`);
+                if (!wrongWordIds.includes(wordId)) {
+                    wrongWordIds.push(wordId);
+                    localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds));
+                }
+            }
+            currentIndex++;
+            loadQuizQuestion();
+        }
+
+        // --- 3. 오답노트 하드 트레이닝 ---
+        function openReview() {
+            showScreen('screen-review');
+            wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
+
+            if (wrongWordIds.length === 0) {
+                document.getElementById('review-empty-box').classList.remove('hidden');
+                document.getElementById('review-play-box').classList.add('hidden');
+            } else {
+                document.getElementById('review-empty-box').classList.add('hidden');
+                document.getElementById('review-play-box').classList.remove('hidden');
+                
+                // 틀린 단어들만 필터링해서 리스트 구성
+                currentList = allWords.filter(w => wrongWordIds.includes(w.word_id));
+                currentIndex = 0;
+                showReviewCard();
+            }
+        }
+
+        function showReviewCard() {
+            if (currentIndex >= currentList.length) {
+                alert('이번 세션의 오답 복습을 완료했습니다!');
+                goHome();
+                return;
+            }
+            const item = currentList[currentIndex];
+            document.getElementById('rc-word').innerText = item.word;
+            document.getElementById('rc-pinyin').innerText = item.pinyin || '';
+            document.getElementById('rc-meaning').innerText = item.meaning || '';
+            document.getElementById('review-progress').innerText = `오답 집중 훈련 (${currentIndex + 1} / ${currentList.length})`;
+
+            isFlipped = false;
+            document.getElementById('rc-back').style.display = 'none';
+            document.getElementById('rc-word').style.display = 'block';
+            document.getElementById('rc-hint').style.display = 'block';
+        }
+
+        function toggleReviewCard() {
+            isFlipped = !isFlipped;
+            document.getElementById('rc-back').style.display = isFlipped ? 'block' : 'none';
+            document.getElementById('rc-word').style.display = isFlipped ? 'none' : 'block';
+            document.getElementById('rc-hint').style.display = isFlipped ? 'none' : 'block';
+        }
+
+        function reviewAnswer(isKnown) {
+            const item = currentList[currentIndex];
+            if (isKnown) {
+                // 외웠으므로 오답노트에서 제거
+                wrongWordIds = wrongWordIds.filter(id => id !== item.word_id);
+                localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds));
+            }
+            currentIndex++;
+            showReviewCard();
+        }
+
+        // --- 공통 결과 표시 ---
+        function showFinalResult(correctCount, totalCount) {
+            showScreen('screen-result');
+            const percent = Math.round((correctCount / totalCount) * 100);
+            document.getElementById('result-score').innerText = `${percent}%`;
+            document.getElementById('result-desc').innerText = `총 ${totalCount}문항 중 ${correctCount}문항을 맞혔습니다.`;
+        }
+
+        // 설정 초기화
+        function resetWrongWords() {
+            if (confirm('오답노트 기록을 모두 초기화하시겠습니까?')) {
+                localStorage.removeItem('hsk_wrong_words');
+                wrongWordIds = [];
+                alert('초기화되었습니다.');
+                goHome();
+            }
+        }
+
+        // 앱 초기 구동
+        initData();
+    </script>
+</body>
+</html>
