@@ -7,12 +7,7 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-        /* 1. 한자 전용 폰트 정의 (PingFang-Regular) */
-        @font-face {
-            font-family: 'CustomHanziFont';
-            src: url('PingFang-Regular.woff2') format('woff2');
-            unicode-range: U+4E00-9FFF, U+3400-4DBF; /* CJK 통합 한자 기본 및 확장 영역 */
-        }
+
 
         :root {
             --primary: #8d5b4c;         
@@ -36,7 +31,6 @@
             --shadow-lg: 0 12px 32px rgba(61, 49, 42, 0.08);
         }
         
-        /* 기본 전체 폰트는 프리텐다드 설정 */
         body, div, span, button, input, select, h1, h2, h3 {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
             -webkit-font-smoothing: antialiased;
@@ -44,7 +38,6 @@
             font-weight: 600;
         }
         
-        /* 2. 한자가 포함되는 주요 출력 요소들에 한자 전용 폰트 우선 적용 */
         .word-lg, #vc-word-back, #rc-word-back, .quiz-box, .quiz-opt-btn, #vc-ex-zh, #rc-ex-zh, #qz-ex-zh, #qz-word-info {
             font-family: 'CustomHanziFont', 'Pretendard', -apple-system, sans-serif !important;
         }
@@ -158,7 +151,6 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 단어 카드 세로 길이 확장 */
         .flashcard {
             background: var(--card-bg);
             padding: 40px 20px;
@@ -235,7 +227,6 @@
         .radio-group label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
         
         .blank-text { color: var(--primary); font-weight: 800; letter-spacing: 2px; }
-        
         .highlight-word { color: var(--danger); font-weight: 800; }
 
         .hidden { display: none !important; }
@@ -317,7 +308,6 @@
                         <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); word-break: break-all;"></div>
                         <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500; word-break: break-all;"></div>
                         <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; word-break: break-all; margin-bottom: 10px;"></div>
-                        <!-- 단어 뒷면: 예문 듣기 버튼 -->
                         <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 8px 16px; font-size: 13px; width: 100%;">🔊 예문 전체 듣기</button>
                     </div>
                 </div>
@@ -402,20 +392,18 @@
                     </div>
                 </div>
 
-                <!-- 해설 보기 박스 (전체 박스 배경색 유지: var(--primary-light)) -->
+                <!-- 해설 보기 박스 -->
                 <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--primary-light); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
                     <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
                     <div id="qz-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary); font-weight:600; word-break: break-all;"></div>
                     <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 12px; word-break: break-all;"></div>
                     
-                    <!-- 해설 화면: 듣기 버튼들(단어 발음, 예문 전체 듣기) 배경을 연한 아이보리 색상(#fcf8f2)으로 변경 -->
                     <div style="display: flex; gap: 8px; margin-bottom: 16px;">
                         <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #fcf8f2; border: 1.5px solid var(--border);">🔊 단어 발음</button>
                         <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #fcf8f2; border: 1.5px solid var(--border);">🔊 예문 전체 듣기</button>
                     </div>
 
-                    <!-- 하단 버튼 영역: '이전 문제' 버튼 배경만 연한 아이보리 색상(#fcf8f2)으로 변경 -->
                     <div style="display: flex; gap: 10px; width: 100%;">
                         <button class="btn-secondary" style="flex:1; background: #fcf8f2; border: 1.5px solid var(--border);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
@@ -505,6 +493,15 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
+        // 기본 내장 폴백 단어 데이터 (파일 로딩 실패 시 자동 사용)
+        const fallbackWords = [
+            { word_id: 1, word: "爱", pinyin: "ài", meaning: "사랑하다", example_zh: "我爱你", example_pinyin: "Wǒ ài nǐ", example_ko: "나는 너를 사랑해" },
+            { word_id: 2, word: "八", pinyin: "bā", meaning: "여덟", example_zh: "我有八个苹果", example_pinyin: "Wǒ yǒu bā gè píngguǒ", example_ko: "나는 사과 8개가 있어" },
+            { word_id: 3, word: "爸爸", pinyin: "bàba", meaning: "아빠", example_zh: "我爸爸是医生", example_pinyin: "Wǒ bàba shì yīshēng", example_ko: "우리 아빠는 의사야" },
+            { word_id: 4, word: "杯子", pinyin: "bēizi", meaning: "컵", example_zh: "杯子里有水", example_pinyin: "Bēizi li yǒu shuǐ", example_ko: "컵 안에 물이 있어" },
+            { word_id: 5, word: "北京", pinyin: "Běijīng", meaning: "베이징", example_zh: "我去北京", example_pinyin: "Wǒ qù Běijīng", example_ko: "나는 베이징에 가" }
+        ];
+
         function speakChinese(text) {
             if (!('speechSynthesis' in window)) {
                 alert("이 브라우저는 음성 재생을 지원하지 않습니다.");
@@ -528,6 +525,7 @@
         async function initData() {
             try {
                 const res = await fetch('hsk_basic_words_350.json');
+                if (!res.ok) throw new Error("파일 로드 실패");
                 const rawData = await res.json();
                 
                 allWords = rawData.map((item, index) => {
@@ -566,7 +564,9 @@
                     };
                 });
             } catch (e) {
-                alert('단어 데이터를 불러오지 못했습니다.');
+                // 외부 파일 불러오기 실패 시 내장 폴백 데이터 활용
+                console.warn("외부 JSON 로드 실패, 내장 기본 데이터를 사용합니다.");
+                allWords = fallbackWords;
             }
         }
 
@@ -595,12 +595,15 @@
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
 
-        function openVocbDays() {
+        async function openVocbDays() {
+            if (!allWords || allWords.length === 0) {
+                await initData();
+            }
             showScreen('screen-vocab-days');
             const grid = document.getElementById('day-grid');
             grid.innerHTML = '';
             
-            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
 
             for (let i = 0; i < totalDays; i++) {
                 const start = i * CHUNK_SIZE + 1;
@@ -609,7 +612,7 @@
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:13px; color:var(--gray); margin-top:6px; font-weight:500;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => selectVocbDay(i * CHUNK_SIZE, end, i + 1);
+                btn.onclick = () => selectVocabDay(i * CHUNK_SIZE, end, i + 1);
                 grid.appendChild(btn);
             }
         }
@@ -779,7 +782,10 @@
             showVocabCard();
         }
 
-        function selectQuizType(type) {
+        async function selectQuizType(type) {
+            if (!allWords || allWords.length === 0) {
+                await initData();
+            }
             currentQuizType = type;
             showScreen('screen-quiz-settings');
             
@@ -788,7 +794,7 @@
             startSelect.innerHTML = '';
             endSelect.innerHTML = '';
             
-            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
             for (let i = 1; i <= totalDays; i++) {
                 const optStart = document.createElement('option');
                 optStart.value = i;
@@ -803,7 +809,10 @@
             }
         }
 
-        function openQuizMenu() {
+        async function openQuizMenu() {
+            if (!allWords || allWords.length === 0) {
+                await initData();
+            }
             showScreen('screen-quiz-menu');
         }
 
@@ -1004,7 +1013,10 @@
             loadQuizQuestion();
         }
 
-        function openReview() {
+        async function openReview() {
+            if (!allWords || allWords.length === 0) {
+                await initData();
+            }
             showScreen('screen-review');
             wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
@@ -1124,6 +1136,7 @@
             }
         }
 
+        // 초기 앱 구동 시 데이터 선 로드 시도
         initData();
     </script>
 </body>
