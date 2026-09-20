@@ -402,7 +402,7 @@
                     </div>
                 </div>
 
-                <!-- 해설 보기 박스 (전체 박스 배경을 사진 속 색상인 var(--primary-light)로 지정하고, 발음/예문 듣기 및 이전 문제 버튼만 흰색으로 설정) -->
+                <!-- 해설 보기 박스 (전체 박스 배경: var(--primary-light), 듣기/이전 버튼 배경: 조금 연한 아이보리 색상 #fcf9f5) -->
                 <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--primary-light); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
                     <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
@@ -410,12 +410,12 @@
                     <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 12px; word-break: break-all;"></div>
                     
                     <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 단어 발음</button>
-                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 예문 전체 듣기</button>
+                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #fcf9f5; border: 1.5px solid var(--border); border-radius: 20px;">🔊 단어 발음</button>
+                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #fcf9f5; border: 1.5px solid var(--border); border-radius: 20px;">🔊 예문 전체 듣기</button>
                     </div>
 
                     <div style="display: flex; gap: 10px; width: 100%;">
-                        <button class="btn-secondary" style="flex:1; background: #ffffff; border: 1.5px solid var(--border);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button class="btn-secondary" style="flex:1; background: #fcf9f5; border: 1.5px solid var(--border);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
@@ -525,14 +525,27 @@
 
         async function initData() {
             try {
-                const res = await fetch('hsk_basic_words_350.json');
+                let res = null;
+                const possiblePaths = ['hsk_basic_words_350.json', './hsk_basic_words_350.json', '/hsk_basic_words_350.json'];
+                
+                for (let path of possiblePaths) {
+                    try {
+                        res = await fetch(path);
+                        if (res.ok) break;
+                    } catch (err) {}
+                }
+
+                if (!res || !res.ok) {
+                    throw new Error("JSON 파일을 찾을 수 없습니다.");
+                }
+
                 const rawData = await res.json();
                 
                 allWords = rawData.map((item, index) => {
                     let w_id = item.word_id || item.id || item.no || index;
                     let hanzi = item.word || item.hanzi || item.한자 || item.단어 || '';
                     let py = item.pinyin || item.拼音 || item.병음 || '';
-                    let mn = item.meaning || item.뜻 || item.translation || item.의미 || '';
+                    let rawMn = item.meaning || item.뜻 || item.translation || item.의미 || '';
                     
                     let ex_zh = item.example_zh || item.example_sentence || item.example || item.예문 || item.ex || item.example_cn || '';
                     let ex_py = item.example_pinyin || item.예문병음 || item.ex_py || '';
@@ -542,18 +555,27 @@
                         hanzi = item;
                     }
 
+                    let cleanMn = rawMn;
+                    if (typeof rawMn === 'string') {
+                        cleanMn = rawMn.replace(/^[\d\s\.\-]+/, '') 
+                                       .replace(hanzi, '')
+                                       .replace(py, '')
+                                       .trim();
+                        if (!cleanMn) cleanMn = rawMn;
+                    }
+
                     return {
                         word_id: w_id,
                         word: hanzi || '단어추출실패',
                         pinyin: py || '',
-                        meaning: mn || '뜻 없음',
+                        meaning: cleanMn || '뜻 없음',
                         example_zh: ex_zh,
                         example_pinyin: ex_py,
                         example_ko: ex_ko
                     };
                 });
             } catch (e) {
-                alert('단어 데이터를 불러오지 못했습니다. JSON 파일 경로를 확인해주세요.');
+                alert('단어 데이터를 불러오지 못했습니다. 파일 경로 및 네트워크 상태를 확인해주세요.');
             }
         }
 
