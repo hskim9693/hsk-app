@@ -158,15 +158,16 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
+        /* 단어 카드 세로 길이 확장 (min-height 증가 및 내부 여백 조정) */
         .flashcard {
             background: var(--card-bg);
-            padding: 32px 20px;
+            padding: 40px 20px;
             border-radius: 28px;
             box-shadow: var(--shadow-lg);
             text-align: center;
             margin-bottom: 16px;
             position: relative;
-            min-height: 320px;
+            min-height: 420px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -195,21 +196,21 @@
         }
         .status-badge:active { transform: scale(0.9); }
         
-        .word-lg { font-size: 42px; font-weight: 800; margin-bottom: 8px; letter-spacing: 1px; color: var(--text); }
+        .word-lg { font-size: 48px; font-weight: 800; margin-bottom: 12px; letter-spacing: 1px; color: var(--text); }
         .back-side { display: flex; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; }
         
-        .pinyin { font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700; }
-        .meaning { font-size: 18px; color: var(--text); margin-bottom: 14px; font-weight: 700; word-break: keep-all; }
+        .pinyin { font-size: 22px; color: var(--primary); margin-bottom: 10px; font-weight: 700; }
+        .meaning { font-size: 20px; color: var(--text); margin-bottom: 18px; font-weight: 700; word-break: keep-all; }
         
         .example-box {
             background: var(--bg);
-            padding: 14px;
+            padding: 16px;
             border-radius: 14px;
             font-size: 14px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
-            margin-top: 8px;
+            margin-top: 10px;
             line-height: 1.5;
             border: 1px solid var(--border);
             word-break: break-all;
@@ -304,12 +305,14 @@
                 
                 <div id="vc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <div id="vc-word" class="word-lg"></div>
+                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 20px; padding: 10px 20px; font-size: 14px; width: auto;">🔊 발음 듣기</button>
                 </div>
 
                 <div id="vc-back" class="back-side hidden">
-                    <div id="vc-word-back" style="font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 4px;"></div>
+                    <div id="vc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 4px;"></div>
                     <div id="vc-pinyin" class="pinyin"></div>
                     <div id="vc-meaning" class="meaning"></div>
+                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-bottom: 12px; padding: 8px 16px; font-size: 13px; width: auto;">🔊 발음 듣기</button>
                     <div id="vc-example-box" class="example-box">
                         <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); word-break: break-all;"></div>
                         <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500; word-break: break-all;"></div>
@@ -401,7 +404,8 @@
                     <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141,91,76,0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
                     <div id="qz-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary); font-weight:600; word-break: break-all;"></div>
-                    <div id="qz-ex-ko" style="color:#5c5c5e; font-weight:500; margin-bottom: 20px; word-break: break-all;"></div>
+                    <div id="qz-ex-ko" style="color:#5c5c5e; font-weight:500; margin-bottom: 12px; word-break: break-all;"></div>
+                    <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="margin-bottom: 16px; padding: 8px 16px; font-size: 13px; width: auto;">🔊 발음 듣기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
                         <button class="btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
@@ -423,11 +427,13 @@
                     <div id="rc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleReviewStatus();" title="상태 변경">⚪</div>
                     <div id="rc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <div id="rc-word" class="word-lg"></div>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 20px; padding: 10px 20px; font-size: 14px; width: auto;">🔊 발음 듣기</button>
                     </div>
                     <div id="rc-back" class="back-side hidden">
-                        <div id="rc-word-back" style="font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 4px;"></div>
+                        <div id="rc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 4px;"></div>
                         <div id="rc-pinyin" class="pinyin"></div>
                         <div id="rc-meaning" class="meaning"></div>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-bottom: 12px; padding: 8px 16px; font-size: 13px; width: auto;">🔊 발음 듣기</button>
                         <div id="rc-example-box" class="example-box" style="background: var(--danger-light);">
                             <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); word-break: break-all;"></div>
                             <div id="rc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--danger); font-weight: 500; word-break: break-all;"></div>
@@ -487,6 +493,19 @@
         
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
+
+        // 중국어 음성 재생 함수 (Web Speech API)
+        function speakChinese(text) {
+            if (!('speechSynthesis' in window)) {
+                alert("이 브라우저는 음성 재생을 지원하지 않습니다.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        }
 
         async function initData() {
             try {
