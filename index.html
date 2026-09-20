@@ -95,7 +95,6 @@
         .btn-danger { background: var(--danger); color: white; }
         .btn-success { background: var(--success); color: white; }
         
-        /* O, X 버튼용 흑백 테마 */
         .btn-x { background: #1c1c1e; color: #ffffff; border: 2px solid #1c1c1e; font-size: 20px; }
         .btn-o { background: #ffffff; color: #1c1c1e; border: 2px solid #1c1c1e; font-size: 20px; }
         
@@ -121,7 +120,7 @@
             text-align: center;
             margin-bottom: 16px;
             cursor: pointer;
-            min-height: 400px; /* 카드 여유 공간 확보를 위해 높이 증가 */
+            min-height: 400px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -152,6 +151,11 @@
         .btn-wrong { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
         .quiz-opt-btn:disabled { opacity: 1; cursor: default; }
 
+        .control-group { display: flex; justify-content: space-between; align-items: center; background: #f8f8fa; padding: 12px; border-radius: 12px; margin-bottom: 16px; }
+        .control-group label { font-size: 14px; font-weight: bold; color: var(--text); }
+        .control-select { padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 14px; }
+        .radio-group { display: flex; gap: 16px; font-size: 14px; font-weight: bold; }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -180,7 +184,15 @@
         <!-- 2. Day 선택 화면 -->
         <div id="screen-vocab-days" class="hidden">
             <div class="panel" style="text-align: left; padding: 16px 20px; margin-bottom: 16px;">
-                <h3 style="margin:0; font-size:18px;">학습할 Day를 선택하세요</h3>
+                <h3 style="margin:0 0 12px 0; font-size:18px;">학습할 Day를 선택하세요</h3>
+                <!-- 순차/랜덤 선택 옵션 -->
+                <div class="control-group">
+                    <label>학습 방식</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="vocab-mode" value="sequential" checked> 순차</label>
+                        <label><input type="radio" name="vocab-mode" value="random"> 랜덤</label>
+                    </div>
+                </div>
             </div>
             <div id="day-grid" class="day-grid"></div>
         </div>
@@ -209,7 +221,17 @@
         <!-- 4. 퀴즈 메뉴 화면 -->
         <div id="screen-quiz-menu" class="hidden">
             <div class="panel" style="text-align: left; padding: 16px 20px; margin-bottom: 16px;">
-                <h3 style="margin:0; font-size:18px;">퀴즈 유형을 선택하세요</h3>
+                <h3 style="margin:0 0 12px 0; font-size:18px;">퀴즈 설정 및 유형 선택</h3>
+                
+                <!-- 퀴즈 범위 설정 -->
+                <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                    <label>출제 범위 설정</label>
+                    <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                        <select id="quiz-start-day" class="control-select" style="flex:1;"></select>
+                        <span style="font-weight: bold; color: var(--gray);">~</span>
+                        <select id="quiz-end-day" class="control-select" style="flex:1;"></select>
+                    </div>
+                </div>
             </div>
             <button class="menu-btn" onclick="startQuiz('blank')">📝 예문 빈칸 채우기 퀴즈</button>
             <button class="menu-btn" onclick="startQuiz('meaning')">🇰🇷 뜻 보고 단어 맞히기</button>
@@ -290,6 +312,7 @@
     </div>
 
     <script>
+        const CHUNK_SIZE = 80;
         let allWords = [];
         let currentList = [];
         let currentIndex = 0;
@@ -374,23 +397,30 @@
             const grid = document.getElementById('day-grid');
             grid.innerHTML = '';
             
-            const chunkSize = 80;
-            const totalDays = Math.ceil(allWords.length / chunkSize);
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
 
             for (let i = 0; i < totalDays; i++) {
-                const start = i * chunkSize + 1;
-                const end = Math.min((i + 1) * chunkSize, allWords.length);
+                const start = i * CHUNK_SIZE + 1;
+                const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
                 
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:12px; color:var(--gray); margin-top:4px;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => startVocabDay(i * chunkSize, end);
+                btn.onclick = () => startVocabDay(i * CHUNK_SIZE, end);
                 grid.appendChild(btn);
             }
         }
 
         function startVocabDay(startIdx, endIdx) {
-            currentList = allWords.slice(startIdx, endIdx);
+            let list = allWords.slice(startIdx, endIdx);
+            
+            // 라디오 버튼 상태 확인하여 랜덤 여부 결정
+            const mode = document.querySelector('input[name="vocab-mode"]:checked').value;
+            if (mode === 'random') {
+                list = shuffle(list);
+            }
+
+            currentList = list;
             currentIndex = 0;
             showScreen('screen-vocab-card');
             showVocabCard();
@@ -439,11 +469,50 @@
             showVocabCard();
         }
 
-        function openQuizMenu() { showScreen('screen-quiz-menu'); }
+        function openQuizMenu() {
+            showScreen('screen-quiz-menu');
+            
+            const startSelect = document.getElementById('quiz-start-day');
+            const endSelect = document.getElementById('quiz-end-day');
+            startSelect.innerHTML = '';
+            endSelect.innerHTML = '';
+            
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
+            for (let i = 1; i <= totalDays; i++) {
+                const optStart = document.createElement('option');
+                optStart.value = i;
+                optStart.innerText = `Day ${i}`;
+                startSelect.appendChild(optStart);
+
+                const optEnd = document.createElement('option');
+                optEnd.value = i;
+                optEnd.innerText = `Day ${i}`;
+                // 기본적으로 마지막 Day를 선택하도록 설정
+                if (i === totalDays) optEnd.selected = true;
+                endSelect.appendChild(optEnd);
+            }
+        }
 
         function startQuiz(type) {
+            const startDay = parseInt(document.getElementById('quiz-start-day').value);
+            const endDay = parseInt(document.getElementById('quiz-end-day').value);
+
+            if (startDay > endDay) {
+                alert("시작 Day가 종료 Day보다 클 수 없습니다. 범위를 다시 설정해주세요.");
+                return;
+            }
+
+            const startIdx = (startDay - 1) * CHUNK_SIZE;
+            const endIdx = endDay * CHUNK_SIZE;
+            
+            let targetWords = allWords.slice(startIdx, endIdx);
+            if (targetWords.length === 0) {
+                alert("해당 범위에 단어가 없습니다.");
+                return;
+            }
+
             currentQuizType = type;
-            currentList = shuffle(allWords);
+            currentList = shuffle(targetWords);
             currentIndex = 0;
             score = 0;
             showScreen('screen-quiz-play');
@@ -451,6 +520,7 @@
         }
 
         function loadQuizQuestion() {
+            // 최대 20문제 출제
             if (currentIndex >= currentList.length || currentIndex >= 20) {
                 showFinalResult(score, Math.min(currentList.length, 20));
                 return;
@@ -493,7 +563,6 @@
             const optionsBox = document.getElementById('quiz-options');
             optionsBox.innerHTML = '';
 
-            // 단어 글자 수에 맞는 오답 필터링
             let targetLength = item.word.length;
             let incorrects = allWords.filter(w => {
                 if (w[poolKey] === correctAnswer) return false;
@@ -505,7 +574,6 @@
                 return true;
             });
 
-            // 필터링된 오답이 3개 미만일 경우 예외 처리
             if (incorrects.length < 3) {
                 let backup = allWords.filter(w => w[poolKey] !== correctAnswer);
                 incorrects = incorrects.concat(backup).filter((val, index, self) => self.indexOf(val) === index);
