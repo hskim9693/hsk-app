@@ -7,8 +7,7 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-      
-        
+       
 
         :root {
             --primary: #8d5b4c;         
@@ -52,6 +51,7 @@
             box-sizing: border-box;
             color: var(--text);
             line-height: 1.5;
+            touch-action: pan-y;
         }
         
         .app-container {
@@ -165,6 +165,8 @@
             align-items: center;
             border: 1px solid var(--border);
             cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s ease, background-color 0.2s ease;
         }
         
         .status-badge {
@@ -210,7 +212,7 @@
         .btn-group { display: flex; gap: 12px; width: 100%; margin-bottom: 10px; }
         .btn-group button { flex: 1; padding: 16px; font-weight: 800; }
         
-        .quiz-box { font-size: 20px; font-weight: 700; margin-bottom: 20px; padding: 20px 16px; background: var(--bg); border-radius: 16px; min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; word-break: break-all; line-height: 1.5; border: 1px solid var(--border); transition: background 0.3s, color 0.3s; }
+        .quiz-box { font-size: 20px; font-weight: 700; margin-bottom: 20px; padding: 32px 20px; background: var(--bg); border-radius: 16px; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; word-break: break-all; line-height: 1.6; border: 1px solid var(--border); transition: background 0.3s, color 0.3s; }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; }
         
         .quiz-opt-btn { background: var(--card-bg); color: var(--text); width: 100%; border: 1.5px solid var(--border); padding: 14px 16px; font-size: 17px; text-align: center; transition: all 0.2s; box-shadow: var(--shadow-sm); border-radius: 14px; word-break: break-all; font-weight: 600; }
@@ -290,7 +292,8 @@
                 <div style="font-size:15px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <div class="flashcard" onclick="toggleCardFront()">
+            <!-- 스와이프 가능한 플래시카드 영역 -->
+            <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -313,8 +316,8 @@
             </div>
 
             <div class="btn-group">
-                <button class="btn-x" onclick="markVocabResult(false)">X</button>
-                <button class="btn-o" onclick="markVocabResult(true)">O</button>
+                <button class="btn-x" onclick="markVocabResult(false)">X (왼쪽 밀기)</button>
+                <button class="btn-o" onclick="markVocabResult(true)">O (오른쪽 밀기)</button>
             </div>
             <div class="btn-group">
                 <button class="btn-secondary" onclick="prevVocbCard()">◀ 이전 단어</button>
@@ -690,7 +693,6 @@
         function cycleWordStatus() {
             const item = currentList[currentIndex];
             let currentStatus = wordStatuses[item.word_id] || 0;
-            // 0(미선택/모름) -> 1(외움) -> 2(헷갈림) -> 0 순환 (빨간색 제거)
             let nextStatus = (currentStatus + 1) % 3;
             
             if (nextStatus === 0) {
@@ -711,7 +713,7 @@
                 badge.innerText = '🟠';
                 badge.style.background = 'var(--warning-light)';
             } else {
-                badge.innerText = '⚪'; // 미선택(모름) 초기 상태
+                badge.innerText = '⚪';
                 badge.style.background = 'var(--bg)';
             }
         }
@@ -790,6 +792,78 @@
             currentIndex++;
             showVocbCard();
         }
+
+        // --- 스와이프 제스처 핸들러 구현 ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let currentX = 0;
+        let isDragging = false;
+        const cardElem = document.getElementById('flashcard-elem');
+
+        cardElem.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isDragging = true;
+        }, { passive: true });
+
+        cardElem.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            currentX = e.touches[0].clientX - touchStartX;
+            if (Math.abs(currentX) > 20) {
+                cardElem.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.03}deg)`;
+                if (currentX > 0) {
+                    cardElem.style.borderColor = 'var(--success)';
+                } else {
+                    cardElem.style.borderColor = 'var(--danger)';
+                }
+            }
+        }, { passive: true });
+
+        cardElem.addEventListener('touchend', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            cardElem.style.transform = 'translateX(0px) rotate(0deg)';
+            cardElem.style.borderColor = 'var(--border)';
+
+            let diffX = e.changedTouches[0].clientX - touchStartX;
+            if (diffX > 80) {
+                markVocabResult(true);
+            } else if (diffX < -80) {
+                markVocabResult(false);
+            }
+        });
+
+        cardElem.addEventListener('mousedown', (e) => {
+            touchStartX = e.clientX;
+            isDragging = true;
+        });
+
+        cardElem.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            currentX = e.clientX - touchStartX;
+            if (Math.abs(currentX) > 20) {
+                cardElem.style.transform = `translateX(${currentX}px) rotate(${currentX * 0.03}deg)`;
+                if (currentX > 0) {
+                    cardElem.style.borderColor = 'var(--success)';
+                } else {
+                    cardElem.style.borderColor = 'var(--danger)';
+                }
+            }
+        });
+
+        cardElem.addEventListener('mouseup', (e) => {
+            if (!isDragging) return;
+            isDragging = false;
+            cardElem.style.transform = 'translateX(0px) rotate(0deg)';
+            cardElem.style.borderColor = 'var(--border)';
+
+            let diffX = e.clientX - touchStartX;
+            if (diffX > 80) {
+                markVocabResult(true);
+            } else if (diffX < -80) {
+                markVocabResult(false);
+            }
+        });
 
         async function selectQuizType(type) {
             if (!allWords || allWords.length === 0) {
@@ -1013,18 +1087,18 @@
                 quizBox.style.background = '#eaf2ea'; // 초록 배경
                 quizBox.style.color = '#2d5a27';
                 quizBox.innerHTML = `
-                    <div style="font-size: 16px; font-weight: 700; color: #2d5a27; margin-bottom: 4px;">${item.meaning}</div>
-                    <div style="font-size: 38px; font-weight: 800; letter-spacing: 2px;">${item.word}</div>
-                    <div style="font-size: 15px; font-weight: 600; color: var(--primary); margin-top: 4px;">${item.pinyin}</div>
+                    <div style="font-size: 16px; font-weight: 700; color: #2d5a27; margin-bottom: 8px;">${item.meaning}</div>
+                    <div style="font-size: 38px; font-weight: 800; letter-spacing: 2px; margin-bottom: 6px;">${item.word}</div>
+                    <div style="font-size: 14px; font-weight: 600; color: var(--primary);">${item.pinyin}</div>
                 `;
             } else {
                 quizBox.style.background = 'var(--danger-light)'; // 붉은 배경
                 quizBox.style.color = 'var(--danger)';
                 quizBox.innerHTML = `
-                    <div style="font-size: 16px; font-weight: 700; color: #8a2be2; margin-bottom: 4px;">${item.meaning}</div>
-                    <div style="font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px;">입력: ${userInput || '없음'}</div>
-                    <div style="font-size: 32px; font-weight: 800; letter-spacing: 2px;">${item.word}</div>
-                    <div style="font-size: 14px; font-weight: 600; color: var(--danger); margin-top: 4px;">${item.pinyin}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--gray); margin-bottom: 8px;">입력: ${userInput || '없음'}</div>
+                    <div style="font-size: 16px; font-weight: 700; color: #8a2be2; margin-bottom: 8px;">${item.meaning}</div>
+                    <div style="font-size: 32px; font-weight: 800; letter-spacing: 2px; margin-bottom: 6px;">${item.word}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--danger);">${item.pinyin}</div>
                 `;
                 
                 if (!wrongWordIds.includes(item.word_id)) {
