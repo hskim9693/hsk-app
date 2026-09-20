@@ -11,7 +11,7 @@
         @font-face {
             font-family: 'CustomHanziFont';
             src: url('PingFang-Regular.woff2') format('woff2');
-            unicode-range: U+4E00-9FFF, U+3400-4DBF; /* CJK 통합 한자 기본 및 확장 영역 */
+            unicode-range: U+4E00-9FFF, U+3400-4DBF;
         }
 
         :root {
@@ -22,8 +22,6 @@
             --danger-light: #fdf2f2;
             --warning: #dda15e;         
             --warning-light: #fef6ec;
-            --info: #8d5b4c;
-            --info-light: #f5ece6;
             
             --bg: #f9f6f0;              
             --card-bg: #ffffff;         
@@ -36,7 +34,6 @@
             --shadow-lg: 0 12px 32px rgba(61, 49, 42, 0.08);
         }
         
-        /* 기본 전체 폰트는 프리텐다드 설정 */
         body, div, span, button, input, select, h1, h2, h3 {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
             -webkit-font-smoothing: antialiased;
@@ -44,7 +41,6 @@
             font-weight: 600;
         }
         
-        /* 2. 한자가 포함되는 주요 출력 요소들에 한자 전용 폰트 우선 적용 */
         .word-lg, #vc-word-back, #rc-word-back, .quiz-box, .quiz-opt-btn, .quiz-input, #vc-ex-zh, #rc-ex-zh, #qz-ex-zh, #qz-word-info {
             font-family: 'CustomHanziFont', 'Pretendard', -apple-system, sans-serif !important;
         }
@@ -158,7 +154,6 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 단어 카드 세로 길이 확장 */
         .flashcard {
             background: var(--card-bg);
             padding: 40px 20px;
@@ -224,7 +219,6 @@
         
         .quiz-opt-btn { background: var(--card-bg); color: var(--text); width: 100%; border: 1.5px solid var(--border); padding: 14px 16px; font-size: 17px; text-align: center; transition: all 0.2s; box-shadow: var(--shadow-sm); border-radius: 14px; word-break: break-all; font-weight: 600; }
         
-        /* 쓰기형 주관식 입력창 스타일 */
         .quiz-input-box { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         .quiz-input { width: 100%; padding: 14px 16px; font-size: 18px; font-weight: 700; border: 1.5px solid var(--border); border-radius: 14px; outline: none; box-sizing: border-box; text-align: center; background: var(--card-bg); color: var(--text); }
         .quiz-input:focus { border-color: var(--primary); }
@@ -240,7 +234,6 @@
         .radio-group label { display: flex; align-items: center; gap: 4px; cursor: pointer; }
         
         .blank-text { color: var(--primary); font-weight: 800; letter-spacing: 2px; }
-        
         .highlight-word { color: var(--danger); font-weight: 800; }
 
         .hidden { display: none !important; }
@@ -263,7 +256,7 @@
                 <p style="margin: 0; color: var(--gray); font-size: 15px; font-weight: 600;">쭝국어 완벽 돌파 张陵赫我爱你</p>
             </div>
             <button class="menu-btn" onclick="openVocbDays()">📚 단어장 학습 <span>Day별 선택</span></button>
-            <button class="menu-btn" onclick="openQuizSettingsDirect()">📝 퀴즈 <span>설정 후 바로 시작</span></button>
+            <button class="menu-btn" onclick="openQuizTypes()">📝 퀴즈 <span>유형 선택</span></button>
             <button class="menu-btn" onclick="openReview()">🔥 오답노트 <span>약점 집중 공략</span></button>
             <button class="menu-btn" onclick="goSettings()">⚙️ 설정 <span>데이터 관리</span></button>
         </div>
@@ -310,8 +303,7 @@
                 
                 <div id="vc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <div id="vc-word" class="word-lg"></div>
-                    <!-- 앞면: 이모지 버튼 하나만 표시 -->
-                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 20px; padding: 10px 16px; font-size: 20px; width: auto; border-radius: 50%;">🔊 듣기</button>
+                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="padding: 8px 16px; font-size: 13px; width: auto; border-radius: 20px; margin-top: 15px;">🔊 듣기</button>
                 </div>
 
                 <div id="vc-back" class="back-side hidden">
@@ -323,8 +315,7 @@
                         <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); word-break: break-all;"></div>
                         <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500; word-break: break-all;"></div>
                         <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; word-break: break-all; margin-bottom: 10px;"></div>
-                        <!-- 뒷면: 예문 듣기 버튼 -->
-                        <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 8px 16px; font-size: 13px; width: 100%;">🔊 예문 듣기</button>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 8px 16px; font-size: 13px; width: 100%; border-radius: 20px;">🔊 예문 듣기</button>
                     </div>
                 </div>
             </div>
@@ -351,7 +342,20 @@
             </div>
         </div>
 
-        <!-- 4. 퀴즈 출제 설정 화면 -->
+        <!-- 4. 퀴즈 형식 선택 화면 -->
+        <div id="screen-quiz-types" class="hidden">
+            <div class="panel" style="padding: 24px; margin-bottom: 20px;">
+                <h3 style="margin: 0 0 16px 0; font-size: 20px; color: var(--primary);">퀴즈 형식 선택</h3>
+            </div>
+            <button class="menu-btn" onclick="selectQuizType('all')">🎲 모든 유형 섞어서 <span>랜덤 출제</span></button>
+            <button class="menu-btn" onclick="selectQuizType('blank')">📝 예문 빈칸 채우기 <span>문맥 파악</span></button>
+            <button class="menu-btn" onclick="selectQuizType('meaning')">🇰🇷 뜻 보고 맞히기 <span>의미 연상</span></button>
+            <button class="menu-btn" onclick="selectQuizType('pinyin')">🎵 성조 맞히기 <span>발음 정확도</span></button>
+            <button class="menu-btn" onclick="selectQuizType('write')">✍️ 주관식 쓰기 <span>직접 타이핑</span></button>
+            <button class="btn-secondary" onclick="goHome()" style="margin-top: 14px;">◀ 홈으로 돌아가기</button>
+        </div>
+
+        <!-- 4-1. 퀴즈 범위 설정 화면 -->
         <div id="screen-quiz-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 24px; margin-bottom: 20px;">
                 <h3 style="margin:0 0 16px 0; font-size:20px; color: var(--primary);">퀴즈 출제 설정</h3>
@@ -376,45 +380,42 @@
                 </div>
             </div>
             <button class="btn-primary" onclick="startQuizAction()" style="margin-bottom: 12px;">퀴즈 시작하기 🚀</button>
-            <button class="btn-secondary" onclick="goHome()">◀ 홈으로 돌아가기</button>
+            <button class="btn-secondary" onclick="openQuizTypes()">◀ 형식 선택으로</button>
         </div>
 
         <!-- 5. 퀴즈 진행 화면 -->
         <div id="screen-quiz-play" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <button class="nav-btn" onclick="openQuizSettingsDirect()" style="padding: 0; font-size: 15px;">◀ 퀴즈 설정으로</button>
+                <button class="nav-btn" onclick="openQuizTypes()" style="padding: 0; font-size: 15px;">◀ 퀴즈 형식으로</button>
                 <div style="font-size:15px; font-weight:600; color:var(--gray);" id="quiz-progress">0 / 0</div>
             </div>
             <div class="panel" style="padding: 24px 20px;">
                 <div id="quiz-type-label" style="font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;"></div>
                 <div id="quiz-box" class="quiz-box"></div>
                 
-                <!-- 객관식 보기 영역 또는 주관식 입력 영역 -->
                 <div id="quiz-options" class="quiz-options"></div>
                 
                 <div id="quiz-post-actions" class="btn-group hidden" style="margin-top: 24px; flex-direction: column; gap: 12px;">
                     <button id="btn-show-expl" style="background:var(--text); color:white;" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
-                        <button class="btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button class="btn-secondary" style="flex:1; background: #ffffff; border: 1.5px solid var(--border);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
 
-                <!-- 해설 보기 박스 (테마에 맞는 부드러운 색상 부여로 가독성 개선) -->
-                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--primary-light); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
-                    <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141,91,76,0.2); padding-bottom: 12px; color: var(--primary);"></div>
+                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--card-bg); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
+                    <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid var(--border); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
                     <div id="qz-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary); font-weight:600; word-break: break-all;"></div>
                     <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 12px; word-break: break-all;"></div>
                     
-                    <!-- 해설 화면: 발음 듣기 & 예문 듣기 버튼 나란히 배치 -->
                     <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px;">🔊 단어 발음</button>
-                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px;">🔊 예문 전체 듣기</button>
+                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 단어 듣기</button>
+                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 예문 듣기</button>
                     </div>
 
                     <div style="display: flex; gap: 10px; width: 100%;">
-                        <button class="btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button class="btn-secondary" style="flex:1; background: #ffffff; border: 1.5px solid var(--border);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button class="btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
@@ -434,7 +435,7 @@
                     <div id="rc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleReviewStatus();" title="상태 변경">⚪</div>
                     <div id="rc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <div id="rc-word" class="word-lg"></div>
-                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 20px; padding: 10px 16px; font-size: 20px; width: auto; border-radius: 50%;">🔊</button>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="padding: 8px 16px; font-size: 13px; width: auto; border-radius: 20px; margin-top: 15px;">🔊 듣기</button>
                     </div>
                     <div id="rc-back" class="back-side hidden">
                         <div id="rc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 4px;"></div>
@@ -445,7 +446,7 @@
                             <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); word-break: break-all;"></div>
                             <div id="rc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--danger); font-weight: 500; word-break: break-all;"></div>
                             <div id="rc-ex-ko" style="color:#5c5c5e; font-weight: 500; word-break: break-all; margin-bottom: 10px;"></div>
-                            <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 8px 16px; font-size: 13px; width: 100%;">🔊 예문 전체 듣기</button>
+                            <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 8px 16px; font-size: 13px; width: 100%; border-radius: 20px; background: #ffffff; border: 1.5px solid var(--border);">🔊 예문 듣기</button>
                         </div>
                     </div>
                 </div>
@@ -489,6 +490,7 @@
         
         let selectedStartIdx = 0;
         let selectedEndIdx = 0;
+        let selectedQuizType = 'all';
         let currentVocbWrongItems = [];
         
         let originalQuizList = [];
@@ -501,7 +503,6 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
-        // 중국어 음성 재생 함수 (Web Speech API)
         function speakChinese(text) {
             if (!('speechSynthesis' in window)) {
                 alert("이 브라우저는 음성 재생을 지원하지 않습니다.");
@@ -514,7 +515,6 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // 예문 전체 발음 재생 함수
         function playExampleAudio(item) {
             if (item && item.example_zh) {
                 speakChinese(item.example_zh);
@@ -573,7 +573,7 @@
         }
 
         function showScreen(screenId) {
-            const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-options', 'screen-vocab-card', 'screen-vocab-result', 'screen-quiz-settings', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
+            const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-options', 'screen-vocab-card', 'screen-vocab-result', 'screen-quiz-types', 'screen-quiz-settings', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
             screens.forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
 
@@ -583,7 +583,7 @@
                 document.getElementById('top-nav').classList.remove('hidden');
                 const titles = {
                     'screen-vocab-days': 'Day 선택', 'screen-vocab-options': '학습 설정', 'screen-vocab-card': '단어 암기', 'screen-vocab-result': '학습 완료',
-                    'screen-quiz-settings': '퀴즈 설정', 'screen-quiz-play': '퀴즈',
+                    'screen-quiz-types': '퀴즈 형식 선택', 'screen-quiz-settings': '퀴즈 설정', 'screen-quiz-play': '퀴즈',
                     'screen-review': '오답 집중 훈련', 'screen-settings': '설정', 'screen-result': '결과 확인'
                 };
                 document.getElementById('nav-title').innerText = titles[screenId] || '';
@@ -607,7 +607,7 @@
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:13px; color:var(--gray); margin-top:6px; font-weight:500;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => selectVocabDay(i * CHUNK_SIZE, end, i + 1);
+                btn.onclick = () => selectVocbDay(i * CHUNK_SIZE, end, i + 1);
                 grid.appendChild(btn);
             }
         }
@@ -777,7 +777,12 @@
             showVocabCard();
         }
 
-        function openQuizSettingsDirect() {
+        function openQuizTypes() {
+            showScreen('screen-quiz-types');
+        }
+
+        function selectQuizType(type) {
+            selectedQuizType = type;
             showScreen('screen-quiz-settings');
             
             const startSelect = document.getElementById('quiz-start-day');
@@ -867,9 +872,11 @@
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
             
-            // 퀴즈 유형 무작위 랜덤 추출 (blank: 빈칸채우기, meaning: 뜻보고맞히기, pinyin: 성조맞히기, write: 쓰기)
-            const quizTypes = ['blank', 'meaning', 'pinyin', 'write'];
-            let currentQuizType = quizTypes[Math.floor(Math.random() * quizTypes.length)];
+            let currentQuizType = selectedQuizType;
+            if (currentQuizType === 'all') {
+                const types = ['blank', 'meaning', 'pinyin', 'write'];
+                currentQuizType = types[Math.floor(Math.random() * types.length)];
+            }
 
             let typeLabel = '';
             let questionHtml = '';
@@ -884,25 +891,22 @@
                 let masked = ex.split(item.word).join('<span class="blank-text">_____</span>');
                 questionHtml = `<div style="font-size:18px; line-height:1.6; font-weight: 500; word-break: break-all;">${masked}<br><span style="font-size:14px; color:var(--gray); font-weight:600; display:block; margin-top:8px; word-break: break-all;">${item.example_ko || item.meaning}</span></div>`;
                 correctAnswer = item.word;
-                
                 renderMultipleChoices(item, correctAnswer, 'word');
             } else if (currentQuizType === 'meaning') {
                 typeLabel = '🇰🇷 뜻 보고 맞히기';
                 questionHtml = `<div style="font-size:20px; color:var(--text); font-weight:800; word-break: break-all;">${item.meaning}</div>`;
                 correctAnswer = item.word;
-                
                 renderMultipleChoices(item, correctAnswer, 'word');
             } else if (currentQuizType === 'pinyin') {
                 typeLabel = '🎵 성조 맞히기';
                 questionHtml = `<div style="font-size:36px; font-weight:800; letter-spacing: 2px;">${item.word}</div>`;
                 correctAnswer = item.pinyin;
-                
                 renderMultipleChoices(item, correctAnswer, 'pinyin');
             } else if (currentQuizType === 'write') {
                 typeLabel = '✍️ 주관식 쓰기';
-                questionHtml = `<div style="font-size:20px; color:var(--text); font-weight:800; word-break: break-all;">뜻: ${item.meaning}<br><span style="font-size:14px; color:var(--primary); font-weight:600;">발음: ${item.pinyin}</span></div>`;
+                /* 요청하신 대로 뜻만 표시하고 발음(pinyin)은 제외했습니다 */
+                questionHtml = `<div style="font-size:20px; color:var(--text); font-weight:800; word-break: break-all;">뜻: ${item.meaning}</div>`;
                 correctAnswer = item.word;
-                
                 renderWriteInput(item, correctAnswer);
             }
 
@@ -1010,7 +1014,6 @@
                 clickedBtn.classList.add('btn-correct');
             } else {
                 clickedBtn.classList.add('btn-wrong');
-                
                 buttons.forEach(btn => {
                     if (btn.innerText === correct) {
                         btn.classList.add('btn-correct');
@@ -1032,7 +1035,6 @@
 
         function showQuizExplanation() {
             const item = currentList[currentIndex];
-            
             document.getElementById('qz-word-info').innerText = `${item.word} [${item.pinyin}] - ${item.meaning}`;
 
             if (item.example_zh) {
@@ -1050,9 +1052,7 @@
 
             document.getElementById('quiz-explanation-box').classList.remove('hidden');
             document.getElementById('btn-show-expl').classList.add('hidden');
-            
-            const postActions = document.getElementById('quiz-post-actions');
-            postActions.classList.add('hidden');
+            document.getElementById('quiz-post-actions').classList.add('hidden');
 
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
