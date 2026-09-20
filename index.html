@@ -7,7 +7,6 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-        /* 1. 한자 전용 폰트 정의 (PingFang-Regular) */
         @font-face {
             font-family: 'CustomHanziFont';
             src: url('PingFang-Regular.woff2') format('woff2');
@@ -266,7 +265,7 @@
             <div id="day-grid" class="day-grid"></div>
         </div>
 
-        <!-- 2-1. Day 선택 후 설정 팝업 화면 -->
+        <!-- 2-1. Day 선택 후 설정 화면 -->
         <div id="screen-vocab-options" class="hidden">
             <div class="panel" style="text-align: left; padding: 28px 24px; margin-bottom: 24px;">
                 <h3 id="vocab-option-title" style="margin:0 0 20px 0; font-size:22px; color: var(--primary);">Day 학습 설정</h3>
@@ -403,15 +402,16 @@
                     </div>
                 </div>
 
-                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--card-bg); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
-                    <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid var(--border); padding-bottom: 12px; color: var(--primary);"></div>
+                <!-- 해설 보기 박스 (전체 박스 배경을 사진 속 색상인 var(--primary-light)로 지정하고, 발음/예문 듣기 및 이전 문제 버튼만 흰색으로 설정) -->
+                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 20px; background: var(--primary-light); border: 1.5px solid var(--border); box-shadow: var(--shadow-sm);">
+                    <div id="qz-word-info" style="font-size: 18px; font-weight: 800; margin-bottom: 12px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); word-break: break-all;"></div>
                     <div id="qz-ex-py" style="margin-bottom:8px; font-size:14px; color:var(--primary); font-weight:600; word-break: break-all;"></div>
                     <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 12px; word-break: break-all;"></div>
                     
                     <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 단어 듣기</button>
-                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 예문 듣기</button>
+                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 단어 발음</button>
+                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 10px; font-size: 13px; background: #ffffff; border: 1.5px solid var(--border); border-radius: 20px;">🔊 예문 전체 듣기</button>
                     </div>
 
                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -529,42 +529,31 @@
                 const rawData = await res.json();
                 
                 allWords = rawData.map((item, index) => {
-                    let mn = item.meaning || item.뜻 || item.translation || '';
-                    let py = item.pinyin || item.拼音 || '';
-                    let w_id = item.word_id || item.id || index;
-                    let hanzi = item.word || item.hanzi || '';
+                    let w_id = item.word_id || item.id || item.no || index;
+                    let hanzi = item.word || item.hanzi || item.한자 || item.단어 || '';
+                    let py = item.pinyin || item.拼音 || item.병음 || '';
+                    let mn = item.meaning || item.뜻 || item.translation || item.의미 || '';
                     
                     let ex_zh = item.example_zh || item.example_sentence || item.example || item.예문 || item.ex || item.example_cn || '';
                     let ex_py = item.example_pinyin || item.예문병음 || item.ex_py || '';
                     let ex_ko = item.example_ko || item.example_meaning || item.해석 || item.예문해석 || item.ex_ko || '';
                     
-                    if (!hanzi && mn && typeof mn === 'string') {
-                        const match = mn.match(/[\u4e00-\u9fa5]+/);
-                        if (match) hanzi = match[0];
-                    }
-
-                    let cleanMn = mn;
-                    if (typeof mn === 'string') {
-                        cleanMn = mn.replace(/^[\d\s]+/, '') 
-                                    .replace(hanzi, '') 
-                                    .replace(py, '')
-                                    .replace(/^[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+/, '') 
-                                    .trim();
-                        if (!cleanMn) cleanMn = mn; 
+                    if (!hanzi && typeof item === 'string') {
+                        hanzi = item;
                     }
 
                     return {
                         word_id: w_id,
                         word: hanzi || '단어추출실패',
                         pinyin: py || '',
-                        meaning: cleanMn || '뜻 없음',
+                        meaning: mn || '뜻 없음',
                         example_zh: ex_zh,
                         example_pinyin: ex_py,
                         example_ko: ex_ko
                     };
                 });
             } catch (e) {
-                alert('단어 데이터를 불러오지 못했습니다.');
+                alert('단어 데이터를 불러오지 못했습니다. JSON 파일 경로를 확인해주세요.');
             }
         }
 
@@ -598,7 +587,7 @@
             const grid = document.getElementById('day-grid');
             grid.innerHTML = '';
             
-            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
 
             for (let i = 0; i < totalDays; i++) {
                 const start = i * CHUNK_SIZE + 1;
@@ -790,7 +779,7 @@
             startSelect.innerHTML = '';
             endSelect.innerHTML = '';
             
-            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE);
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
             for (let i = 1; i <= totalDays; i++) {
                 const optStart = document.createElement('option');
                 optStart.value = i;
@@ -904,7 +893,6 @@
                 renderMultipleChoices(item, correctAnswer, 'pinyin');
             } else if (currentQuizType === 'write') {
                 typeLabel = '✍️ 주관식 쓰기';
-                /* 요청하신 대로 뜻만 표시하고 발음(pinyin)은 제외했습니다 */
                 questionHtml = `<div style="font-size:20px; color:var(--text); font-weight:800; word-break: break-all;">뜻: ${item.meaning}</div>`;
                 correctAnswer = item.word;
                 renderWriteInput(item, correctAnswer);
