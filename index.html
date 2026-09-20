@@ -7,9 +7,8 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-       
-    
-
+      
+            
         :root {
             --primary: #8d5b4c;         
             --primary-light: #f5ece6;    
@@ -1018,14 +1017,16 @@
                 quizBox.innerHTML = `
                     <div style="font-size: 16px; font-weight: 700; color: #2d5a27; margin-bottom: 4px;">${item.meaning}</div>
                     <div style="font-size: 38px; font-weight: 800; letter-spacing: 2px;">${item.word}</div>
+                    <div style="font-size: 15px; font-weight: 600; color: var(--primary); margin-top: 4px;">${item.pinyin}</div>
                 `;
             } else {
                 quizBox.style.background = 'var(--danger-light)'; // 붉은 배경
                 quizBox.style.color = 'var(--danger)';
                 quizBox.innerHTML = `
                     <div style="font-size: 16px; font-weight: 700; color: #8a2be2; margin-bottom: 4px;">${item.meaning}</div>
-                    <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 4px;">입력: ${userInput || '없음'}</div>
+                    <div style="font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px;">입력: ${userInput || '없음'}</div>
                     <div style="font-size: 32px; font-weight: 800; letter-spacing: 2px;">${item.word}</div>
+                    <div style="font-size: 14px; font-weight: 600; color: var(--danger); margin-top: 4px;">${item.pinyin}</div>
                 `;
                 
                 if (!wrongWordIds.includes(item.word_id)) {
