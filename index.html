@@ -128,12 +128,13 @@
         .meaning { font-size: 18px; color: #3a3a3c; margin-bottom: 14px; font-weight: bold; }
         .example-box {
             background: #f8f8fa;
-            padding: 10px;
+            padding: 12px;
             border-radius: 10px;
-            font-size: 13px;
+            font-size: 14px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
+            margin-top: 10px;
         }
         .hint { font-size: 13px; color: var(--gray); margin-top: 15px; }
         .btn-group { display: flex; gap: 10px; }
@@ -183,8 +184,8 @@
                 <div id="vc-back" class="back-side">
                     <div id="vc-pinyin" class="pinyin"></div>
                     <div id="vc-meaning" class="meaning"></div>
-                    <div class="example-box">
-                        <div id="vc-ex-zh" style="margin-bottom:4px; font-weight:500;"></div>
+                    <div id="vc-example-box" class="example-box">
+                        <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
                         <div id="vc-ex-ko" style="color:var(--gray);"></div>
                     </div>
                 </div>
@@ -230,6 +231,10 @@
                     <div id="rc-back" class="back-side">
                         <div id="rc-pinyin" class="pinyin"></div>
                         <div id="rc-meaning" class="meaning"></div>
+                        <div id="rc-example-box" class="example-box">
+                            <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:500; color:#1c1c1e;"></div>
+                            <div id="rc-ex-ko" style="color:var(--gray);"></div>
+                        </div>
                     </div>
                     <div id="rc-hint" class="hint">터치하여 뒷면 보기</div>
                 </div>
@@ -277,20 +282,21 @@
                 const res = await fetch('hsk_basic_words_350.json');
                 const rawData = await res.json();
                 
-                // [데이터 정규화 모듈] 비정형 텍스트에서 한자와 뜻을 강제 분리
                 allWords = rawData.map((item, index) => {
                     let mn = item.meaning || item.뜻 || item.translation || '';
                     let py = item.pinyin || item.拼音 || '';
                     let w_id = item.word_id || item.id || index;
                     let hanzi = item.word || item.hanzi || '';
                     
-                    // 1. word 키가 없으면 텍스트 안에서 한자만 정규식으로 추출
+                    // 예상되는 다양한 JSON 예문 키 대응
+                    let ex_zh = item.example_zh || item.example || item.예문 || item.ex || item.example_cn || '';
+                    let ex_ko = item.example_ko || item.example_meaning || item.해석 || item.예문해석 || item.ex_ko || '';
+                    
                     if (!hanzi && mn && typeof mn === 'string') {
                         const match = mn.match(/[\u4e00-\u9fa5]+/);
                         if (match) hanzi = match[0];
                     }
 
-                    // 2. meaning 문장에서 번호, 추출된 한자, 알파벳(병음)을 제거하여 순수 뜻만 남김
                     let cleanMn = mn;
                     if (typeof mn === 'string') {
                         cleanMn = mn.replace(/^[\d\s]+/, '') 
@@ -298,7 +304,6 @@
                                     .replace(py, '')
                                     .replace(/^[a-zA-Zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜü\s]+/, '') 
                                     .trim();
-                        // 정제 후 아무것도 안 남으면 안전을 위해 원본 데이터 복구
                         if (!cleanMn) cleanMn = mn; 
                     }
 
@@ -307,8 +312,8 @@
                         word: hanzi || '단어추출실패',
                         pinyin: py || '',
                         meaning: cleanMn || '뜻 없음',
-                        example_zh: item.example_zh || item.example || '',
-                        example_ko: item.example_ko || ''
+                        example_zh: ex_zh,
+                        example_ko: ex_ko
                     };
                 });
             } catch (e) {
@@ -355,7 +360,6 @@
                 
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
-                // 버그 픽스: ${end번} 오류 수정 완료
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:12px; color:var(--gray); margin-top:4px;">(${start} ~ ${end}번)</div>`;
                 btn.onclick = () => startVocabDay(i * chunkSize, end);
                 grid.appendChild(btn);
@@ -378,8 +382,17 @@
             document.getElementById('vc-word').innerText = item.word;
             document.getElementById('vc-pinyin').innerText = item.pinyin;
             document.getElementById('vc-meaning').innerText = item.meaning;
-            document.getElementById('vc-ex-zh').innerText = item.example_zh || '예문 없음';
-            document.getElementById('vc-ex-ko').innerText = item.example_ko;
+            
+            // 예문 데이터 존재 여부에 따른 동적 렌더링
+            const exBox = document.getElementById('vc-example-box');
+            if (item.example_zh) {
+                exBox.style.display = 'block';
+                document.getElementById('vc-ex-zh').innerText = item.example_zh;
+                document.getElementById('vc-ex-ko').innerText = item.example_ko;
+            } else {
+                exBox.style.display = 'none';
+            }
+
             document.getElementById('vocab-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
 
             isFlipped = false;
@@ -433,7 +446,6 @@
             if (currentQuizType === 'blank') {
                 typeLabel = '📝 예문 빈칸 채우기';
                 let ex = item.example_zh || `${item.word} 은(는) 필수 단어입니다.`;
-                // 버그 픽스: split.join 방식으로 정규식 붕괴(문자 분할) 차단
                 let masked = ex.split(item.word).join('( 🈳 )');
                 questionHtml = `<div style="font-size:16px; line-height:1.5;">${masked}<br><span style="font-size:13px; color:var(--gray); font-weight:normal;">${item.example_ko || item.meaning}</span></div>`;
                 correctAnswer = item.word;
@@ -510,6 +522,17 @@
             document.getElementById('rc-word').innerText = item.word;
             document.getElementById('rc-pinyin').innerText = item.pinyin;
             document.getElementById('rc-meaning').innerText = item.meaning;
+            
+            // 오답노트에도 동일한 예문 렌더링 로직 적용
+            const exBox = document.getElementById('rc-example-box');
+            if (item.example_zh) {
+                exBox.style.display = 'block';
+                document.getElementById('rc-ex-zh').innerText = item.example_zh;
+                document.getElementById('rc-ex-ko').innerText = item.example_ko;
+            } else {
+                exBox.style.display = 'none';
+            }
+
             document.getElementById('review-progress').innerText = `오답 집중 훈련 (${currentIndex + 1} / ${currentList.length})`;
 
             isFlipped = false;
