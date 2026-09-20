@@ -7,7 +7,8 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-     
+       
+    
 
         :root {
             --primary: #8d5b4c;         
@@ -209,7 +210,7 @@
         .btn-group { display: flex; gap: 12px; width: 100%; margin-bottom: 10px; }
         .btn-group button { flex: 1; padding: 16px; font-weight: 800; }
         
-        .quiz-box { font-size: 20px; font-weight: 700; margin-bottom: 20px; padding: 20px 16px; background: var(--bg); border-radius: 16px; min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; word-break: break-all; line-height: 1.5; border: 1px solid var(--border); }
+        .quiz-box { font-size: 20px; font-weight: 700; margin-bottom: 20px; padding: 20px 16px; background: var(--bg); border-radius: 16px; min-height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; word-break: break-all; line-height: 1.5; border: 1px solid var(--border); transition: background 0.3s, color 0.3s; }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; }
         
         .quiz-opt-btn { background: var(--card-bg); color: var(--text); width: 100%; border: 1.5px solid var(--border); padding: 14px 16px; font-size: 17px; text-align: center; transition: all 0.2s; box-shadow: var(--shadow-sm); border-radius: 14px; word-break: break-all; font-weight: 600; }
@@ -338,6 +339,7 @@
             <div class="panel" style="text-align: left; padding: 24px; margin-bottom: 20px;">
                 <h3 style="margin:0 0 16px 0; font-size:20px;">퀴즈 형식 선택</h3>
             </div>
+            <button class="menu-btn" onclick="selectQuizType('mix')">🎲 종합 랜덤 퀴즈 <span>모든 유형 무작위 출제</span></button>
             <button class="menu-btn" onclick="selectQuizType('blank')">📝 예문 빈칸 채우기 <span>문맥 파악</span></button>
             <button class="menu-btn" onclick="selectQuizType('meaning')">🇰🇷 뜻 보고 맞히기 <span>의미 연상</span></button>
             <button class="menu-btn" onclick="selectQuizType('pinyin')">🎵 성조 맞히기 <span>발음 정확도</span></button>
@@ -898,6 +900,17 @@
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
             
+            // 퀴즈 박스 스타일 초기화
+            const quizBox = document.getElementById('quiz-box');
+            quizBox.style.background = 'var(--bg)';
+            quizBox.style.color = 'var(--text)';
+
+            let activeType = currentQuizType;
+            if (activeType === 'mix') {
+                const types = ['blank', 'meaning', 'pinyin', 'writing'];
+                activeType = types[Math.floor(Math.random() * types.length)];
+            }
+
             let typeLabel = '';
             let questionHtml = '';
             
@@ -906,21 +919,21 @@
             optionsBox.innerHTML = '';
             writingBox.classList.add('hidden');
 
-            if (currentQuizType === 'blank') {
+            if (activeType === 'blank') {
                 typeLabel = '📝 예문 빈칸 채우기';
                 let ex = item.example_zh || `${item.word} 은(는) 필수 단어입니다.`;
                 let masked = ex.split(item.word).join('<span class="blank-text">_____</span>');
                 questionHtml = `<div style="font-size:18px; line-height:1.6; font-weight: 500; word-break: break-all;">${masked}<br><span style="font-size:14px; color:var(--gray); font-weight:600; display:block; margin-top:8px; word-break: break-all;">${item.example_ko || item.meaning}</span></div>`;
                 renderChoiceOptions(item.word, 'word');
-            } else if (currentQuizType === 'meaning') {
+            } else if (activeType === 'meaning') {
                 typeLabel = '🇰🇷 뜻 보고 맞히기';
                 questionHtml = `<div style="font-size:20px; color:var(--text); font-weight:800; word-break: break-all;">${item.meaning}</div>`;
                 renderChoiceOptions(item.word, 'word');
-            } else if (currentQuizType === 'pinyin') {
+            } else if (activeType === 'pinyin') {
                 typeLabel = '🎵 성조 맞히기';
                 questionHtml = `<div style="font-size:36px; font-weight:800; letter-spacing: 2px;">${item.word}</div>`;
                 renderChoiceOptions(item.pinyin, 'pinyin');
-            } else if (currentQuizType === 'writing') {
+            } else if (activeType === 'writing') {
                 typeLabel = '✍️ 뜻 보고 직접 쓰기';
                 questionHtml = `<div style="font-size:22px; color:var(--text); font-weight:800; word-break: break-all;">${item.meaning}</div>`;
                 writingBox.classList.remove('hidden');
@@ -929,7 +942,9 @@
             }
 
             document.getElementById('quiz-type-label').innerText = typeLabel;
-            document.getElementById('quiz-box').innerHTML = questionHtml;
+            quizBox.innerHTML = questionHtml;
+            // 현재 문제의 실제 출제 유형 저장 (정답 판정용)
+            quizBox.dataset.activeType = activeType;
         }
 
         function renderChoiceOptions(correctAnswer, poolKey) {
@@ -1001,9 +1016,13 @@
             const quizBox = document.getElementById('quiz-box');
             if (userInput === item.word) {
                 score++;
-                quizBox.innerHTML += `<div style="margin-top: 12px; color: var(--success); font-weight: 800; font-size: 16px;">정답입니다! 🎉 (${item.word})</div>`;
+                quizBox.style.background = '#eaf2ea'; // 초록 배경
+                quizBox.style.color = '#2d5a27';
+                quizBox.innerHTML = `<div style="font-weight: 800; font-size: 22px;">정답입니다! 🎉<br><span style="font-size: 32px; display: block; margin-top: 8px;">${item.word}</span></div>`;
             } else {
-                quizBox.innerHTML += `<div style="margin-top: 12px; color: var(--danger); font-weight: 800; font-size: 16px;">오답입니다! (입력: ${userInput || '없음'} / 정답: ${item.word})</div>`;
+                quizBox.style.background = 'var(--danger-light)'; // 붉은 배경
+                quizBox.style.color = 'var(--danger)';
+                quizBox.innerHTML = `<div style="font-weight: 800; font-size: 18px;">오답입니다!<br><span style="font-size: 14px; display: block; margin-top: 4px; color: var(--text);">입력: ${userInput || '없음'}</span>정답: <span style="font-size: 28px; display: block; margin-top: 4px;">${item.word}</span></div>`;
                 
                 if (!wrongWordIds.includes(item.word_id)) {
                     wrongWordIds.push(item.word_id);
