@@ -548,29 +548,29 @@
             { word_id: 29, word: "飞机", pinyin: "fēijī", meaning: "비행기", example_zh: "坐飞机去北京", example_pinyin: "Zuò fēijī qù Běijīng", example_ko: "비행기를 타고 베이징에 가다" },
             { word_id: 30, word: "分钟", pinyin: "fēnzhōng", meaning: "분 (시간)", example_zh: "等我五分钟", example_pinyin: "Děng wǒ wǔ fēnzhōng", example_ko: "나를 5분만 기다려줘" },
             { word_id: 31, word: "高兴", pinyin: "gāoxìng", meaning: "기쁘다, 즐겁다", example_zh: "很高兴认识你", example_pinyin: "Hěn gāoxìng rènshi nǐ", example_ko: "알게 되어서 반가워" },
-            { word_id: 32, word: "个", pinyin: "gè", meaning: "개 (가장 흔한 양사)", example_zh: "我要一个苹果", example_pinyin: "Wǒ yào yí ge píngguǒ", example_ko: "나는 사과 하나를 원해요" },
-            { word_id: 33, word: "工作", pinyin: "gōngzuò", meaning: "일하다, 직업", example_zh: "我在银行工作", example_pinyin: "Wǒ zài yínháng gōngzuò", example_ko: "나는 은행에서 일한다" },
-            { word_id: 34, word: "狗", pinyin: "gǒu", meaning: "개 (동물)", example_zh: "我有一只狗", example_pinyin: "Wǒ yǒu yì zhī gǒu", example_ko: "나는 개 한 마리가 있어" },
+            { word_id: 32, word: "个", pinyin: "gè", meaning: "개", example_zh: "我要一个苹果", example_pinyin: "Wǒ yào yí ge píngguǒ", example_ko: "나는 사과 하나를 원해요" },
+            { word_id: 33, word: "工作", pinyin: "gōngzuò", meaning: "일하다", example_zh: "我在银行工作", example_pinyin: "Wǒ zài yínháng gōngzuò", example_ko: "나는 은행에서 일한다" },
+            { word_id: 34, word: "狗", pinyin: "gǒu", meaning: "개", example_zh: "我有一只狗", example_pinyin: "Wǒ yǒu yì zhī gǒu", example_ko: "나는 개 한 마리가 있어" },
             { word_id: 35, word: "汉语", pinyin: "hànyǔ", meaning: "중국어", example_zh: "我学习汉语", example_pinyin: "Wǒ xuéxí hànyǔ", example_ko: "나는 중국어를 공부한다" },
-            { word_id: 36, word: "好", pinyin: "hǎo", meaning: "좋다, 맛있다", example_zh: "天气很好", example_pinyin: "Tiānqì hěn hǎo", example_ko: "날씨가 아주 좋다" },
-            { word_id: 37, word: "号", pinyin: "hào", meaning: "날짜, 호수", example_zh: "今天是几号", example_pinyin: "Jīntiān shì jǐ hào", example_ko: "오늘은 며칠인가요?" },
+            { word_id: 36, word: "好", pinyin: "hǎo", meaning: "좋다", example_zh: "天气很好", example_pinyin: "Tiānqì hěn hǎo", example_ko: "날씨가 아주 좋다" },
+            { word_id: 37, word: "号", pinyin: "hào", meaning: "날짜", example_zh: "今天是几号", example_pinyin: "Jīntiān shì jǐ hào", example_ko: "오늘은 며칠인가요?" },
             { word_id: 38, word: "喝", pinyin: "hē", meaning: "마시다", example_zh: "我想喝咖啡", example_pinyin: "Wǒ xiǎng hē kāfēi", example_ko: "나는 커피를 마시고 싶다" },
-            { word_id: 39, word: "和", pinyin: "hé", meaning: "~와, 그리고", example_zh: "你和我", example_pinyin: "Nǐ hé wǒ", example_ko: "너와 나" },
-            { word_id: 40, word: "很", pinyin: "hěn", meaning: "매우, 아주", example_zh: "这件衣服很贵", example_pinyin: "Zhè jiàn yīfu hěn guì", example_ko: "이 옷은 아주 비싸다" }
+            { word_id: 39, word: "和", pinyin: "hé", meaning: "~와", example_zh: "你和我", example_pinyin: "Nǐ hé wǒ", example_ko: "너와 나" },
+            { word_id: 40, word: "很", pinyin: "hěn", meaning: "매우", example_zh: "这件衣服很贵", example_pinyin: "Zhè jiàn yīfu hěn guì", example_ko: "이 옷은 아주 비싸다" }
         ];
 
         function initData() {
             let list = [...fullRealWords];
             const samplePool = [
-                { w: "后面", p: "hòumian", m: "뒤쪽" }, { w: "回", p: "huí", m: "돌아가다" }, { w: "会", p: "huì", m: "~할 수 있다" }, { w: "几", p: "jǐ", m: "얼마, 몇" },
-                { w: "家", p: "jiā", m: "집, 가족" }, { w: "叫", p: "jiào", m: "이름하다, 부르다" }, { w: "今天", p: "jīntiān", m: "오늘" }, { w: "九", p: "jiǔ", m: "아홉" },
-                { w: "开", p: "kāi", m: "열다, 운전하다" }, { w: "看", p: "kàn", m: "보다" }, { w: "看见", p: "kànjiàn", m: "보다, 눈에 뜨이다" }, { w: "块", p: "kuài", m: "위안(화폐 단위)" },
-                { w: "来", p: "lái", m: "오다" }, { w: "老师", p: "lǎoshī", m: "선생님" }, { w: "了", p: "le", m: "(완료/변화 조사)" }, { w: "冷", p: "lěng", m: "춥다" },
-                { w: "里", p: "lǐ", m: "~안에" }, { w: "零", p: "líng", m: "영, 0" }, { w: "买", p: "mǎi", m: "사다" }, { w: "妈妈", p: "māma", m: "엄마" },
-                { w: "猫", p: "māo", m: "고양이" }, { w: "没", p: "méi", m: "~가 없다, 아니하다" }, { w: "没关系", p: "méi guānxi", m: "괜찮다" }, { w: "米饭", p: "mǐfàn", m: "쌀밥" },
-                { w: "明天", p: "míngtiān", m: "내일" }, { w: "名字", p: "míngzi", m: "이름" }, { w: "哪", p: "nǎ", m: "어느, 어떤" }, { w: "哪儿", p: "nǎr", m: "어디" },
-                { w: "那", p: "nà", m: "저, 저것" }, { w: "呢", p: "ne", m: "(의문/상태 지속 조사)" }, { w: "能", p: "néng", m: "~할 수 있다" }, { w: "你", p: "nǐ", m: "너, 당신" },
-                { w: "年", p: "nián", m: "년, 해" }, { w: "女儿", p: "nǚ'ér", m: "딸" }, { w: "朋友", p: "péngyou", m: "친구" }, { w: "漂亮", p: "piàoliang", m: "예쁘다" },
+                { w: "后面", p: "hòumian", m: "뒤쪽" }, { w: "回", p: "huí", m: "돌아가다" }, { w: "会", p: "huì", m: "~할 수 있다" }, { w: "几", p: "jǐ", m: "몇" },
+                { w: "家", p: "jiā", m: "집" }, { w: "叫", p: "jiào", m: "부르다" }, { w: "今天", p: "jīntiān", m: "오늘" }, { w: "九", p: "jiǔ", m: "아홉" },
+                { w: "开", p: "kāi", m: "열다" }, { w: "看", p: "kàn", m: "보다" }, { w: "看见", p: "kànjiàn", m: "눈에 뜨이다" }, { w: "块", p: "kuài", m: "위안" },
+                { w: "来", p: "lái", m: "오다" }, { w: "老师", p: "lǎoshī", m: "선생님" }, { w: "了", p: "le", m: "~완료" }, { w: "冷", p: "lěng", m: "춥다" },
+                { w: "里", p: "lǐ", m: "~안" }, { w: "零", p: "líng", m: "영" }, { w: "买", p: "mǎi", m: "사다" }, { w: "妈妈", p: "māma", m: "엄마" },
+                { w: "猫", p: "māo", m: "고양이" }, { w: "没", p: "méi", m: "~가 없다" }, { w: "没关系", p: "méi guānxi", m: "괜찮다" }, { w: "米饭", p: "mǐfàn", m: "쌀밥" },
+                { w: "明天", p: "míngtiān", m: "내일" }, { w: "名字", p: "míngzi", m: "이름" }, { w: "哪", p: "nǎ", m: "어느" }, { w: "哪儿", p: "nǎr", m: "어디" },
+                { w: "那", p: "nà", m: "저것" }, { w: "呢", p: "ne", m: "(지속조사)" }, { w: "能", p: "néng", m: "~할 수 있다" }, { w: "你", p: "nǐ", m: "너" },
+                { w: "年", p: "nián", m: "년" }, { w: "女儿", p: "nǚ'ér", m: "딸" }, { w: "朋友", p: "péngyou", m: "친구" }, { w: "漂亮", p: "piàoliang", m: "예쁘다" },
                 { w: "苹果", p: "píngguǒ", m: "사과" }, { w: "七", p: "qī", m: "일곱" }, { w: "钱", p: "qián", m: "돈" }, { w: "前面", p: "qiánmiàn", m: "앞쪽" }
             ];
 
@@ -579,9 +579,9 @@
                 let currentItem = samplePool[poolIdx % samplePool.length];
                 list.push({
                     word_id: i,
-                    word: `${currentItem.w}${i > 80 ? Math.floor(i/80) : ''}`,
+                    word: currentItem.w, // 📌 번호 제거 완료
                     pinyin: currentItem.p,
-                    meaning: `${currentItem.m} (${i}번)`,
+                    meaning: currentItem.m, // 📌 번호(괄호) 제거 완료
                     example_zh: `这是关于 ${currentItem.w} 的例句`,
                     example_pinyin: `Zhe shi guanyu ${currentItem.p} de liju`,
                     example_ko: `이것은 ${currentItem.m}에 관한 예문입니다.`
@@ -748,7 +748,6 @@
 
             document.getElementById('vocab-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
             
-            // 📌 단어 암기 프로그레스 바 업데이트
             const percent = ((currentIndex + 1) / currentList.length) * 100;
             document.getElementById('vocab-progress-bar').style.width = `${percent}%`;
 
@@ -851,7 +850,6 @@
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
             
-            // 📌 퀴즈 프로그레스 바 업데이트
             const percent = ((currentIndex + 1) / currentList.length) * 100;
             document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
 
