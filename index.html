@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK 4급 마스터</title>
 
-    <!-- 스마트폰 홈 화면 아이콘 설정 -->
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22HSK%204%EA%B8%89%20%EB%A7%88%EC%8A%A4%ED%84%B0%22%2C%22short_name%22%3A%22HSK%204%EA%B8%89%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f6f0%22%2C%22theme_color%22%3A%22%238d5b4c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22.%2Ficon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
@@ -20,7 +19,7 @@
             --danger: #bc4749;          
             --danger-light: #fdf2f2;
             --warning: #dda15e;         
-            --warning-light: #fef6ec; /* 연한 아이보리 색 */
+            --warning-light: #fef6ec; 
             
             --bg: #f9f6f0;              
             --card-bg: #ffffff;         
@@ -161,7 +160,7 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 단어 암기 카드 비율: 가로:세로 = 4:5 */
+        /* 📌 단어 암기 카드 비율: 가로:세로 = 4:5 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -174,8 +173,6 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
             border: 1px solid var(--border);
             cursor: pointer;
             user-select: none;
@@ -197,24 +194,6 @@
             justify-content: center;
             background: var(--bg);
             z-index: 2;
-        }
-        
-        .word-lg { font-size: 46px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
-        .back-side { display: flex; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; }
-        
-        .pinyin { font-size: 20px; color: var(--primary); margin-bottom: 4px; font-weight: 700; }
-        .meaning { font-size: 19px; color: var(--text); margin-bottom: 10px; font-weight: 700; }
-        
-        .example-box {
-            background: var(--bg);
-            padding: 10px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            text-align: left;
-            width: 100%;
-            box-sizing: border-box;
-            margin-top: 4px;
-            border: 1px solid var(--border);
         }
         
         .btn-group { display: flex; gap: 8px; width: 100%; margin-bottom: 6px; }
@@ -311,25 +290,35 @@
                 <div style="font-size:13px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <!-- 플래시카드 -->
+            <!-- 📌 플래시카드: 앞/뒷면 구조 완벽 적용 -->
             <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
-                <div id="vc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <div id="vc-word" class="word-lg"></div>
-                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 10px; padding: 8px 14px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
+                <!-- 📌 카드 앞면: 단어는 중앙에, 버튼은 하단에 배치 -->
+                <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                        <div id="vc-word" style="font-size: 46px; font-weight: 800; color: var(--text);"></div>
+                    </div>
+                    <div style="padding-bottom: 10px;">
+                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
+                    </div>
                 </div>
 
-                <div id="vc-back" class="back-side hidden">
-                    <div id="vc-word-back" style="font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
-                    <div id="vc-pinyin" class="pinyin"></div>
-                    <div id="vc-meaning" class="meaning"></div>
-                    
-                    <div id="vc-example-box" class="example-box">
-                        <div id="vc-ex-zh" style="margin-bottom:2px; font-weight:600; color:var(--text);"></div>
-                        <div id="vc-ex-py" style="margin-bottom:2px; font-size:12px; color:var(--primary); font-weight: 500;"></div>
-                        <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; margin-bottom: 6px;"></div>
-                        <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 5px 10px; font-size: 11px; width: 100%;">🔊 예문 전체 듣기</button>
+                <!-- 📌 카드 뒷면: 사진(image_4bb918.jpg) 디자인 완벽 적용 -->
+                <div id="vc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                        <div id="vc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 6px;"></div>
+                        <div id="vc-pinyin" style="font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700;"></div>
+                        <div id="vc-meaning" style="font-size: 18px; color: var(--text); margin-bottom: 24px; font-weight: 700;"></div>
+                        
+                        <div id="vc-example-box" style="background: var(--primary-light); padding: 16px; border-radius: 16px; text-align: left; width: 100%; box-sizing: border-box;">
+                            <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); font-size: 15px;"></div>
+                            <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500;"></div>
+                            <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; font-size: 13px; margin-bottom: 16px;"></div>
+                            <div style="text-align: center;">
+                                <button style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700;" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);">🔊 예문 전체 듣기</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -424,25 +413,32 @@
                     <button class="quiz-action-btn btn-primary" onclick="submitWritingAnswer()">정답 확인 ✍️</button>
                 </div>
                 
-                <div id="quiz-post-actions" class="quiz-options hidden" style="margin-top: 6px;">
-                    <button id="btn-show-expl" class="quiz-action-btn" style="background: var(--warning-light); color: var(--text);" onclick="showQuizExplanation()">📖 해설 보기</button>
-                    <div style="display: flex; gap: 6px; width: 100%;">
-                        <button class="quiz-action-btn btn-secondary" style="flex:1;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
-                        <button class="quiz-action-btn btn-primary" style="flex:1;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
+                <!-- 📌 정답 선택 직후 보여지는 해설보기 / 이전 / 다음 버튼 (image_4bbcbc.jpg 반영) -->
+                <div id="quiz-post-actions-pre-expl" class="hidden" style="margin-top: 12px; width: 100%;">
+                    <button id="btn-show-expl" style="width: 100%; background: var(--text); color: white; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; margin-bottom: 8px;" onclick="showQuizExplanation()">📖 해설 보기</button>
+                    <div style="display: flex; gap: 8px; width: 100%;">
+                        <button style="flex:1; background: var(--gray-light); color: var(--text); border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button style="flex:1; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
 
-                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 8px; background: var(--warning-light); padding: 12px;">
-                    <div id="qz-word-info" style="font-size: 15px; font-weight: 800; margin-bottom: 6px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 6px; color: var(--primary);"></div>
-                    <div id="qz-ex-zh" style="margin-bottom:2px; font-weight:700;"></div>
-                    <div id="qz-ex-py" style="margin-bottom:4px; font-size:12px; color:var(--primary); font-weight:600;"></div>
-                    <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 8px;"></div>
+                <!-- 📌 해설 보기 버튼 클릭 후 나타나는 해설 전체 박스 (image_4bbd20.jpg 반영) -->
+                <div id="quiz-explanation-box" class="hidden" style="margin-top: 12px; background: var(--primary-light); padding: 18px 16px; border-radius: 16px; border: none; text-align: left; width: 100%; box-sizing: border-box;">
+                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--text);"></div>
                     
-                    <div style="display: flex; gap: 6px; margin-bottom: 6px;">
-                        <button class="quiz-action-btn btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1;">🔊 단어 발음</button>
-                        <button class="quiz-action-btn btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1;">🔊 예문 전체 듣기</button>
+                    <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; font-size: 15px; color: var(--text);"></div>
+                    <div id="qz-ex-py" style="margin-bottom:6px; font-size:13px; color: var(--primary); font-weight:600;"></div>
+                    <div id="qz-ex-ko" style="color: var(--gray); font-weight:500; margin-bottom: 18px; font-size: 14px;"></div>
+                    
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <button style="flex: 1; background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px; font-size: 13px; font-weight: 700;" onclick="speakChinese(currentList[currentIndex].word)">🔊 단어 발음</button>
+                        <button style="flex: 1; background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px; font-size: 13px; font-weight: 700;" onclick="playExampleAudio(currentList[currentIndex])">🔊 예문 전체 듣기</button>
                     </div>
-                    <button class="quiz-action-btn btn-primary" onclick="nextQuizQuestion()">다음 문제 ▶</button>
+                    
+                    <div style="display: flex; gap: 8px;">
+                        <button style="flex: 1; background: var(--bg); color: var(--text); border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 700;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button style="flex: 1; background: var(--primary); color: white; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 700;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -456,22 +452,32 @@
             </div>
             <div id="review-play-box" class="hidden">
                 <div style="font-size:13px; color:var(--danger); font-weight:700; margin-bottom:8px; text-align:right;" id="review-progress">오답 훈련 중</div>
+                
+                <!-- 오답 노트 카드 적용 -->
                 <div class="flashcard" onclick="toggleReviewCard()">
                     <div id="rc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleReviewStatus();" title="상태 변경">⚪</div>
-                    <div id="rc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <div id="rc-word" class="word-lg"></div>
-                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 10px; padding: 8px 14px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
+                    <div id="rc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+                        <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                            <div id="rc-word" style="font-size: 46px; font-weight: 800; color: var(--text);"></div>
+                        </div>
+                        <div style="padding-bottom: 10px;">
+                            <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 발음 듣기</button>
+                        </div>
                     </div>
-                    <div id="rc-back" class="back-side hidden">
-                        <div id="rc-word-back" style="font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
-                        <div id="rc-pinyin" class="pinyin"></div>
-                        <div id="rc-meaning" class="meaning"></div>
-                        
-                        <div id="rc-example-box" class="example-box" style="background: var(--danger-light);">
-                            <div id="rc-ex-zh" style="margin-bottom:2px; font-weight:600;"></div>
-                            <div id="rc-ex-py" style="margin-bottom:2px; font-size:12px; color:var(--danger);"></div>
-                            <div id="rc-ex-ko" style="color:#5c5c5e; margin-bottom: 6px;"></div>
-                            <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 5px 10px; font-size: 11px; width: 100%;">🔊 예문 전체 듣기</button>
+                    <div id="rc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                            <div id="rc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 6px;"></div>
+                            <div id="rc-pinyin" style="font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700;"></div>
+                            <div id="rc-meaning" style="font-size: 18px; color: var(--text); margin-bottom: 24px; font-weight: 700;"></div>
+                            
+                            <div id="rc-example-box" style="background: var(--primary-light); padding: 16px; border-radius: 16px; text-align: left; width: 100%; box-sizing: border-box;">
+                                <div id="rc-ex-zh" style="margin-bottom:6px; font-weight:700; color:var(--text); font-size: 15px;"></div>
+                                <div id="rc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500;"></div>
+                                <div id="rc-ex-ko" style="color:var(--gray); font-weight: 500; font-size: 13px; margin-bottom: 16px;"></div>
+                                <div style="text-align: center;">
+                                    <button style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700;" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);">🔊 예문 전체 듣기</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -527,14 +533,13 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
-        // 외부 JSON 파일에서 단어 데이터를 불러와 파싱하는 함수
+        // 📌 외부 JSON 파일에서 단어 데이터를 불러와 파싱하는 함수
         async function loadWordsData() {
             try {
                 const response = await fetch('./hsk_basic_words_350.json');
                 const data = await response.json();
                 
                 allWords = data.map(item => {
-                    // meaning 필드에 탭(\t) 문자가 있을 경우, 마지막 부분(한국어 뜻)만 추출
                     let pureMeaning = item.meaning;
                     if (pureMeaning && pureMeaning.includes('\t')) {
                         const parts = pureMeaning.split('\t');
@@ -543,12 +548,12 @@
 
                     return {
                         word_id: item.word_id,
-                        word: item.hanzi, // 단어
-                        pinyin: item.pinyin, // 병음
-                        meaning: pureMeaning, // 뜻 (추출됨)
-                        example_zh: item.example_sentence, // 예문
-                        example_pinyin: item.example_pinyin, // 예문 병음
-                        example_ko: item.example_meaning // 예문 해석
+                        word: item.hanzi,
+                        pinyin: item.pinyin, 
+                        meaning: pureMeaning,
+                        example_zh: item.example_sentence,
+                        example_pinyin: item.example_pinyin,
+                        example_ko: item.example_meaning
                     };
                 });
             } catch (error) {
@@ -602,10 +607,9 @@
             const grid = document.getElementById('day-grid');
             grid.innerHTML = '';
             
-            // 80개 단위로 정확히 분할
             const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
             for (let i = 0; i < totalDays; i++) {
-                const start = i * CHUNK_SIZE + 1; // 표기용 번호 (1, 81, 161 ...)
+                const start = i * CHUNK_SIZE + 1;
                 const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
                 
                 const btn = document.createElement('div');
@@ -624,7 +628,6 @@
         }
 
         function startVocabSession() {
-            // 인덱스 기반으로 정확하게 해당 범위를 잘라냄
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
             
             const filterVal = document.getElementById('vocab-status-filter').value;
@@ -812,9 +815,9 @@
         function loadQuizQuestion() {
             if (currentIndex >= currentList.length) { showFinalResult(score, currentList.length); return; }
 
-            document.getElementById('quiz-post-actions').classList.add('hidden');
+            // 📌 새로운 문제가 나타날 때 UI 상태 초기화
+            document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.add('hidden');
-            document.getElementById('btn-show-expl').classList.remove('hidden');
 
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
@@ -883,7 +886,8 @@
                 if (!wrongWordIds.includes(item.word_id)) { wrongWordIds.push(item.word_id); localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds)); }
                 if (!currentQuizWrongItems.find(w => w.word_id === item.word_id)) currentQuizWrongItems.push(item);
             }
-            document.getElementById('quiz-post-actions').classList.remove('hidden');
+            // 정답 체크 시 프리-해설보기 영역 표시
+            document.getElementById('quiz-post-actions-pre-expl').classList.remove('hidden');
         }
 
         function submitWritingAnswer() {
@@ -902,7 +906,8 @@
                 if (!wrongWordIds.includes(item.word_id)) { wrongWordIds.push(item.word_id); localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds)); }
                 if (!currentQuizWrongItems.find(w => w.word_id === item.word_id)) currentQuizWrongItems.push(item);
             }
-            document.getElementById('quiz-post-actions').classList.remove('hidden');
+            // 정답 체크 시 프리-해설보기 영역 표시
+            document.getElementById('quiz-post-actions-pre-expl').classList.remove('hidden');
         }
 
         function showQuizExplanation() {
@@ -911,9 +916,10 @@
             document.getElementById('qz-ex-zh').innerText = item.example_zh || '';
             document.getElementById('qz-ex-py').innerText = item.example_pinyin || '';
             document.getElementById('qz-ex-ko').innerText = item.example_ko || '';
+            
+            // 프리 영역 숨기고 전체 해설 박스 표시
+            document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.remove('hidden');
-            document.getElementById('btn-show-expl').classList.add('hidden');
-            document.getElementById('quiz-post-actions').classList.add('hidden');
         }
 
         function prevQuizQuestion() { if (currentIndex > 0) { currentIndex--; loadQuizQuestion(); } else alert("첫 번째 문제입니다."); }
@@ -989,7 +995,6 @@
             }
         }
 
-        // 앱 시작 시 데이터 로드 실행
         window.addEventListener('DOMContentLoaded', () => {
             loadWordsData();
         });
