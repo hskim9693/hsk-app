@@ -536,14 +536,13 @@
 
         async function loadWordsData() {
             try {
-                // 기존 350 파일명으로 복원 (요청하신 파일명)
                 const response = await fetch('./hsk_basic_words_350.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
                 
-                allWords = data.map(item => {
+                allWords = data.map((item, index) => {
                     let pureMeaning = item.meaning;
                     if (pureMeaning && pureMeaning.includes('\t')) {
                         const parts = pureMeaning.split('\t');
@@ -551,13 +550,13 @@
                     }
 
                     return {
-                        word_id: item.word_id,
-                        word: item.hanzi,
+                        word_id: item.word_id !== undefined ? item.word_id : index, // 고유 ID가 없을 경우 인덱스로 대체하여 에러 방지
+                        word: item.hanzi || item.word,
                         pinyin: item.pinyin, 
                         meaning: pureMeaning,
-                        example_zh: item.example_sentence,
+                        example_zh: item.example_sentence || item.example_zh,
                         example_pinyin: item.example_pinyin,
-                        example_ko: item.example_meaning
+                        example_ko: item.example_meaning || item.example_ko
                     };
                 });
             } catch (error) {
@@ -797,7 +796,7 @@
             else alert("첫 번째 단어입니다.");
         }
 
-        function markVocabResult(isKnown) {
+        function markVocbResult(isKnown) {
             const item = currentList[currentIndex];
             if (!isKnown) {
                 if (!wrongWordIds.includes(item.word_id)) {
@@ -952,7 +951,6 @@
             document.getElementById('quiz-post-actions-pre-expl').classList.remove('hidden');
         }
 
-        // 앱 실행 시 자동 데이터 로드 보장
         window.addEventListener('DOMContentLoaded', async () => {
             await loadWordsData();
             
