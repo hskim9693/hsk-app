@@ -575,7 +575,7 @@
 
         async function loadWordsData() {
             try {
-                const response = await fetch('./hsk_basic_words_350.json');
+                const response = await fetch('./hsk_basic_words_600.json');
                 const data = await response.json();
                 
                 allWords = data.map(item => {
