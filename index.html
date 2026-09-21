@@ -13,8 +13,7 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-     
-
+       
         :root {
             --primary: #8d5b4c;         
             --primary-light: #f5ece6;    
@@ -321,7 +320,7 @@
                 </div>
             </div>
 
-            <!-- 하단 OX 버튼 (글자 단순화) -->
+            <!-- 하단 OX 버튼 -->
             <div class="btn-group">
                 <button class="btn-x" onclick="markVocabResult(false)">X</button>
                 <button class="btn-o" onclick="markVocabResult(true)">O</button>
@@ -633,7 +632,7 @@
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:13px; color:var(--gray); margin-top:6px; font-weight:500;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => selectVocabDay(i * CHUNK_SIZE, end, i + 1);
+                btn.onclick = () => selectVocbDay(i * CHUNK_SIZE, end, i + 1);
                 grid.appendChild(btn);
             }
         }
@@ -785,7 +784,7 @@
             }
         }
 
-        function markVocbResult(isKnown) {
+        function markVocabResult(isKnown) {
             const item = currentList[currentIndex];
             if (!isKnown) {
                 if (!wrongWordIds.includes(item.word_id)) {
@@ -800,7 +799,7 @@
             showVocbCard();
         }
 
-        // --- 스와이프 제스처 핸들러 (감도 범위 좁힘: 40px 이상만 밀어도 작동) ---
+        // --- 스와이프 제스처 핸들러 (감도 범위 대폭 축소: 25px 이상만 밀어도 작동) ---
         let touchStartX = 0;
         let touchStartY = 0;
         let currentX = 0;
@@ -833,10 +832,10 @@
             cardElem.style.borderColor = 'var(--border)';
 
             let diffX = e.changedTouches[0].clientX - touchStartX;
-            if (diffX > 40) { // 40px 이상 오른쪽으로 밀면 O (외움) 처리
-                markVocbResult(true);
-            } else if (diffX < -40) { // 40px 이상 왼쪽으로 밀면 X (오답) 처리
-                markVocbResult(false);
+            if (diffX > 25) { // 25px 이상 오른쪽으로 밀면 O 처리 후 다음 카드
+                markVocabResult(true);
+            } else if (diffX < -25) { // 25px 이상 왼쪽으로 밀면 X 처리 후 다음 카드
+                markVocabResult(false);
             }
         });
 
@@ -865,9 +864,9 @@
             cardElem.style.borderColor = 'var(--border)';
 
             let diffX = e.clientX - touchStartX;
-            if (diffX > 40) {
-                markVocbResult(true);
-            } else if (diffX < -40) {
+            if (diffX > 25) {
+                markVocabResult(true);
+            } else if (diffX < -25) {
                 markVocbResult(false);
             }
         });
