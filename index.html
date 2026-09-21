@@ -537,7 +537,7 @@
         async function loadWordsData() {
             try {
                 // 기존 350 파일명으로 복원 (요청하신 파일명)
-                const response = await fetch('./hsk_basic_words_600.json');
+                const response = await fetch('./hsk_basic_words_350.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -562,7 +562,7 @@
                 });
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
-                alert("단어장 데이터(hsk_basic_words_600.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
+                alert("단어장 데이터(hsk_basic_words_350.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
             }
         }
 
