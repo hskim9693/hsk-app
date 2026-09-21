@@ -85,7 +85,7 @@
             height: 6px;
             background: var(--border);
             border-radius: 3px;
-            margin-bottom: 20px; /* 간격 넓힘 */
+            margin-bottom: 20px;
             overflow: hidden;
             box-sizing: border-box;
         }
@@ -108,7 +108,6 @@
             border: 1px solid var(--border);
         }
         
-        /* 메인 화면 박스 높이 및 여유감 */
         .menu-btn {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -144,7 +143,6 @@
         .btn-danger { background: var(--danger); color: white; width: 100%; }
         .btn-secondary { background: var(--gray-light); color: var(--text); width: 100%; }
         
-        /* O, X 박스 색상을 퀴즈 정답/오답 컬러 또는 브라운 계열로 변경 */
         .btn-x { background: var(--danger); color: #ffffff; font-size: 20px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 18px; }
         .btn-o { background: var(--success); color: #ffffff; font-size: 20px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 18px; }
         
@@ -157,7 +155,7 @@
             font-size: 18px;
             font-weight: 700;
             cursor: pointer;
-            text-align: left; /* 글자 왼쪽 이동 */
+            text-align: left;
             position: relative;
             box-shadow: var(--shadow-sm);
         }
@@ -201,11 +199,10 @@
         .btn-group { display: flex; gap: 8px; width: 100%; margin-bottom: 6px; }
         .btn-group button { flex: 1; padding: 12px; font-weight: 800; }
         
-        /* 퀴즈 문제 박스 높이 줄임 */
         .quiz-box { 
             font-size: 17px; 
             font-weight: 700; 
-            margin-bottom: 16px; /* 보기와 간격 조금 늘림 */
+            margin-bottom: 16px; 
             padding: 20px 20px; 
             background: var(--bg); 
             border-radius: 16px; 
@@ -220,7 +217,6 @@
         }
         .quiz-options { display: flex; flex-direction: column; gap: 10px; }
         
-        /* 보기 박스 높이 조금 늘림 */
         .quiz-opt-btn, .quiz-action-btn { 
             background: var(--card-bg); 
             color: var(--text); 
@@ -275,12 +271,12 @@
             <button class="menu-btn" onclick="goSettings()">⚙️ 설정 <span>데이터 관리</span></button>
         </div>
 
-        <!-- 2. Day 선택 화면 (번호 범위 삭제, 글자 왼쪽 이동, 퍼센트 작은 박스 추가) -->
+        <!-- 2. Day 선택 화면 -->
         <div id="screen-vocab-days" class="hidden">
             <div id="day-grid" class="day-grid"></div>
         </div>
 
-        <!-- 2-1. 단어 목록 화면 (학습하기 박스 및 문구 삭제, 단어 터치 시 바로 학습 진입, 병음/뜻/갈색 동그라미 배치) -->
+        <!-- 2-1. 단어 목록 화면 -->
         <div id="screen-vocab-day-detail" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 13px;">◀ Day 목록으로</button>
@@ -300,7 +296,7 @@
                 <div style="font-size:13px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <!-- 플래시카드 (앞면 단어 정중앙, 듣기 창 2/3 지점) -->
+            <!-- 플래시카드 -->
             <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
@@ -332,8 +328,8 @@
             </div>
 
             <div class="btn-group">
-                <button class="btn-x" onclick="markVocabResult(false)">X</button>
-                <button class="btn-o" onclick="markVocabResult(true)">O</button>
+                <button class="btn-x" onclick="markVocbResult(false)">X</button>
+                <button class="btn-o" onclick="markVocbResult(true)">O</button>
             </div>
             <div class="btn-group">
                 <button class="btn-secondary" onclick="prevVocbCard()">◀ 이전 단어</button>
@@ -365,7 +361,7 @@
             <button class="menu-btn" onclick="selectQuizType('writing')">✍️ 쓰기 <span>한자 출력</span></button>
         </div>
 
-        <!-- 4-1. 퀴즈 설정 화면 ('랜덤' 명칭 변경 반영) -->
+        <!-- 4-1. 퀴즈 설정 화면 -->
         <div id="screen-quiz-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 18px; margin-bottom: 14px;">
                 <h3 id="quiz-setting-title" style="margin:0 0 12px 0; font-size:17px; color: var(--primary);">퀴즈 출제 설정</h3>
@@ -388,7 +384,7 @@
                 </div>
 
                 <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 0;">
-                    <label>상태 선택 ('미선택' 글자 삭제 및 ⚪ 반영)</label>
+                    <label>상태 선택</label>
                     <div class="radio-group" style="width: 100%; justify-content: space-between;">
                         <label><input type="checkbox" name="quiz-status" value="1" checked> 🔵 외움</label>
                         <label><input type="checkbox" name="quiz-status" value="2" checked> 🟠 헷갈림</label>
@@ -400,7 +396,7 @@
             <button class="btn-secondary" onclick="openQuizMenu()">◀ 형식 다시 선택하기</button>
         </div>
 
-        <!-- 5. 퀴즈 진행 화면 (버튼 높이, 간격, 엔터키 지원 쓰기 영역) -->
+        <!-- 5. 퀴즈 진행 화면 -->
         <div id="screen-quiz-play" class="hidden">
             <div class="progress-bar-container">
                 <div id="quiz-progress-bar" class="progress-bar-fill"></div>
@@ -420,7 +416,6 @@
                     <button class="quiz-action-btn btn-primary" onclick="submitWritingAnswer()" style="padding: 16px; background: var(--primary);">정답 확인 ✍️</button>
                 </div>
                 
-                <!-- 해설 보기 및 이전/다음 버튼 간격 및 높이 확장 -->
                 <div id="quiz-post-actions-pre-expl" class="hidden" style="margin-top: 18px; width: 100%;">
                     <button id="btn-show-expl" style="width: 100%; background: var(--text); color: white; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; margin-bottom: 10px;" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
@@ -541,7 +536,11 @@
 
         async function loadWordsData() {
             try {
-                const response = await fetch('./hsk_basic_words_350.json');
+                // 기존 350 파일명으로 복원 (요청하신 파일명)
+                const response = await fetch('./hsk_basic_words_600.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
                 
                 allWords = data.map(item => {
@@ -563,7 +562,7 @@
                 });
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
-                alert("단어장 데이터(hsk_basic_words_350.json)를 불러오지 못했습니다. 파일 위치를 확인해주세요.");
+                alert("단어장 데이터(hsk_basic_words_600.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
             }
         }
 
@@ -587,19 +586,25 @@
 
         function showScreen(screenId) {
             const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-day-detail', 'screen-vocab-options', 'screen-vocab-card', 'screen-vocab-result', 'screen-quiz-menu', 'screen-quiz-settings', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
-            screens.forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(screenId).classList.remove('hidden');
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(screenId);
+            if (target) target.classList.remove('hidden');
 
+            const topNav = document.getElementById('top-nav');
+            const navTitle = document.getElementById('nav-title');
             if (screenId === 'screen-home') {
-                document.getElementById('top-nav').classList.add('hidden');
+                if (topNav) topNav.classList.add('hidden');
             } else {
-                document.getElementById('top-nav').classList.remove('hidden');
+                if (topNav) topNav.classList.remove('hidden');
                 const titles = {
                     'screen-vocab-days': 'Day 선택', 'screen-vocab-day-detail': '단어 목록', 'screen-vocab-card': '단어 암기', 'screen-vocab-result': '학습 완료',
                     'screen-quiz-menu': '퀴즈', 'screen-quiz-settings': '퀴즈 설정', 'screen-quiz-play': '퀴즈',
                     'screen-review': '오답 집중 훈련', 'screen-settings': '설정', 'screen-result': '결과 확인'
                 };
-                document.getElementById('nav-title').innerText = titles[screenId] || '';
+                if (navTitle) navTitle.innerText = titles[screenId] || '';
             }
         }
 
@@ -607,9 +612,12 @@
         function goSettings() { showScreen('screen-settings'); }
 
         async function openVocbDays() {
-            if (!allWords || allWords.length === 0) await loadWordsData();
+            if (!allWords || allWords.length === 0) {
+                await loadWordsData();
+            }
             showScreen('screen-vocab-days');
             const grid = document.getElementById('day-grid');
+            if (!grid) return;
             grid.innerHTML = '';
             
             const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
@@ -618,7 +626,6 @@
                 const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
                 const dayNum = i + 1;
                 
-                // 해당 Day의 암기 완료 퍼센트 계산
                 let dayWords = allWords.slice(start, end);
                 let learnedCount = dayWords.filter(w => (wordStatuses[w.word_id] || 0) === 1).length;
                 let percent = dayWords.length > 0 ? Math.round((learnedCount / dayWords.length) * 100) : 0;
@@ -634,22 +641,22 @@
             }
         }
 
-        // Day를 누르면 목록 페이지로 이동하며, 각 단어 터치 시 바로 순차/모든단어 모드로 학습 진입
         function selectVocbDay(startIdx, endIdx, dayNum) {
             selectedStartIdx = startIdx;
             selectedEndIdx = endIdx;
             selectedDayNum = dayNum;
             
             showScreen('screen-vocab-day-detail');
-            document.getElementById('day-detail-title').innerText = `Day ${dayNum} 단어 목록`;
+            const titleEl = document.getElementById('day-detail-title');
+            if (titleEl) titleEl.innerText = `Day ${dayNum} 단어 목록`;
             
             const listContainer = document.getElementById('day-words-list');
+            if (!listContainer) return;
             listContainer.innerHTML = '';
             
             const dayWords = allWords.slice(startIdx, endIdx);
             dayWords.forEach((item, idx) => {
                 const status = wordStatuses[item.word_id] || 0;
-                // 9번 요청: 외움 동그라미를 갈색 동그라미 스타일(또는 특정 갈색톤)로 반영
                 let statusEmoji = status === 1 ? '🟤' : status === 2 ? '🟠' : '⚪';
                 
                 const card = document.createElement('div');
@@ -664,11 +671,10 @@
                     <div style="min-width: 30px; text-align:right;"><span style="font-size:14px;" title="상태">${statusEmoji}</span></div>
                 `;
                 
-                // 단어를 터치하면 해당 단어부터 순차 모드로 바로 학습 시작
                 card.onclick = () => {
                     currentList = allWords.slice(startIdx, endIdx);
                     currentVocbWrongItems = [];
-                    currentIndex = idx; // 터치한 단어 인덱스부터 시작
+                    currentIndex = idx;
                     showScreen('screen-vocab-card');
                     showVocabCard();
                 };
@@ -737,6 +743,7 @@
 
         function updateStatusBadge(status) {
             const badge = document.getElementById('vc-status-badge');
+            if (!badge) return;
             if (status === 1) { badge.innerText = '🟤'; badge.style.background = '#f5ece6'; }
             else if (status === 2) { badge.innerText = '🟠'; badge.style.background = 'var(--warning-light)'; }
             else { badge.innerText = '⚪'; badge.style.background = 'var(--bg)'; }
@@ -746,7 +753,7 @@
             if (currentIndex >= currentList.length) {
                 showScreen('screen-vocab-result');
                 const retryWrongBtn = document.getElementById('btn-vocab-retry-wrong');
-                retryWrongBtn.style.display = currentVocbWrongItems.length === 0 ? 'none' : 'block';
+                if (retryWrongBtn) retryWrongBtn.style.display = currentVocbWrongItems.length === 0 ? 'none' : 'block';
                 return;
             }
             const item = currentList[currentIndex];
@@ -812,6 +819,7 @@
             
             const startSelect = document.getElementById('quiz-start-day');
             const endSelect = document.getElementById('quiz-end-day');
+            if (!startSelect || !endSelect) return;
             startSelect.innerHTML = ''; endSelect.innerHTML = '';
             
             const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
@@ -944,9 +952,10 @@
             document.getElementById('quiz-post-actions-pre-expl').classList.remove('hidden');
         }
 
-        // 엔터 키 입력 시 바로 정답 확인 가능하도록 지원
-        document.addEventListener('DOMContentLoaded', () => {
-            loadWordsData();
+        // 앱 실행 시 자동 데이터 로드 보장
+        window.addEventListener('DOMContentLoaded', async () => {
+            await loadWordsData();
+            
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     const writingBox = document.getElementById('quiz-writing-box');
@@ -1046,9 +1055,10 @@
             document.getElementById('rc-front-content').classList.remove('hidden');
         }
 
-        function cycleReviewStatus() {
+        function cycleWordStatus() {
             const item = currentList[currentIndex];
-            let nextStatus = ((wordStatuses[item.word_id] || 0) + 1) % 3;
+            let currentStatus = wordStatuses[item.word_id] || 0;
+            let nextStatus = (currentStatus + 1) % 3;
             if (nextStatus === 0) delete wordStatuses[item.word_id];
             else wordStatuses[item.word_id] = nextStatus;
             localStorage.setItem('hsk_word_statuses', JSON.stringify(wordStatuses));
