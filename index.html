@@ -161,11 +161,11 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 📌 4. 단어 암기 카드 높이: 가로 기준 3:4 비율 적용 */
+        /* 📌 단어 암기 카드 높이: 가로 기준 4:5 비율 적용 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
-            aspect-ratio: 3 / 4;
+            aspect-ratio: 4 / 5;
             padding: 20px 16px;
             border-radius: 24px;
             box-shadow: var(--shadow-lg);
@@ -223,7 +223,6 @@
         .quiz-box { font-size: 18px; font-weight: 700; margin-bottom: 12px; padding: 18px 16px; background: var(--bg); border-radius: 14px; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid var(--border); }
         .quiz-options { display: flex; flex-direction: column; gap: 6px; }
         
-        /* 📌 2. 보기 박스와 동일한 높이/패딩을 갖도록 통일된 퀴즈 하단 버튼 클래스 */
         .quiz-opt-btn, .quiz-action-btn { 
             background: var(--card-bg); 
             color: var(--text); 
@@ -425,7 +424,6 @@
                     <button class="quiz-action-btn btn-primary" onclick="submitWritingAnswer()">정답 확인 ✍️</button>
                 </div>
                 
-                <!-- 📌 2, 3. 해설 보기, 이전/다음 문제 박스 (보기 박스와 높이 일치 및 연한 아이보리 색 적용) -->
                 <div id="quiz-post-actions" class="quiz-options hidden" style="margin-top: 6px;">
                     <button id="btn-show-expl" class="quiz-action-btn" style="background: var(--warning-light); color: var(--text);" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 6px; width: 100%;">
@@ -434,7 +432,6 @@
                     </div>
                 </div>
 
-                <!-- 📌 3. 해설 보기 상세 박스 (연한 아이보리 색 적용) -->
                 <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 8px; background: var(--warning-light); padding: 12px;">
                     <div id="qz-word-info" style="font-size: 15px; font-weight: 800; margin-bottom: 6px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 6px; color: var(--primary);"></div>
                     <div id="qz-ex-zh" style="margin-bottom:2px; font-weight:700;"></div>
@@ -530,9 +527,9 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
-        // 📌 1. 첫 단어가 '아줌마(阿姨)'로 시작하는 hsk_basic_words_350.json 원본 기반 데이터 로드
+        // 📌 1. hsk_basic_words_350.json 원본 파일 기반 데이터 (첫 단어 '아줌마(阿姨)')
         const fullRealWords = [
-            { word_id: 1, word: "阿姨", pinyin: "āyí", meaning: "아줌마, 이모", example_zh: "阿姨， I 想买个苹果", example_pinyin: "Āyí, wǒ xiǎng mǎi gè píngguǒ", example_ko: "아줌마, 저 사과 하나 사고 싶어요" },
+            { word_id: 1, word: "阿姨", pinyin: "āyí", meaning: "아줌마, 이모", example_zh: "阿姨，我想买个苹果", example_pinyin: "Āyí, wǒ xiǎng mǎi gè píngguǒ", example_ko: "아줌마, 저 사과 하나 사고 싶어요" },
             { word_id: 2, word: "啊", pinyin: "a", meaning: "(감탄조사) 아", example_zh: "啊，真漂亮", example_pinyin: "A, zhēn piàoliang", example_ko: "아, 정말 예쁘다" },
             { word_id: 3, word: "矮", pinyin: "ǎi", meaning: "키가 작다", example_zh: "这张桌子有点矮", example_pinyin: "Zhè zhāng zhuōzi yǒudiǎn ǎi", example_ko: "이 책상은 좀 낮다(작다)" },
             { word_id: 4, word: "爱好", pinyin: "àihào", meaning: "취미", example_zh: "你的爱好是什么", example_pinyin: "Nǐ de àihào shì shénme", example_ko: "너의 취미는 무엇이니?" },
@@ -547,7 +544,7 @@
             { word_id: 13, word: "包", pinyin: "bāo", meaning: "가방, 싸다", example_zh: "这个包很漂亮", example_pinyin: "Zhè ge bāo hěn piàoliang", example_ko: "이 가방은 아주 예쁘다" },
             { word_id: 14, word: "饱", pinyin: "bǎo", meaning: "배부르다", example_zh: "我吃饱了", example_pinyin: "Wǒ chī bǎo le", example_ko: "나는 배불리 먹었다" },
             { word_id: 15, word: "北方", pinyin: "běifāng", meaning: "북쪽, 북방", example_zh: "我喜欢北方的冬天", example_pinyin: "Wǒ xǐhuan běifāng de dōngtiān", example_ko: "나는 북쪽의 겨울을 좋아한다" },
-            { word_id: 16, word: "被", pinyin: "bèi", meaning: "~에 의해 (피동사)", example_zh: " 苹果被吃了", example_pinyin: "Píngguǒ bèi chī le", example_ko: "사과가 먹혔다(사과를 먹어 치웠다)" },
+            { word_id: 16, word: "被", pinyin: "bèi", meaning: "~에 의해 (피동사)", example_zh: "苹果被吃了", example_pinyin: "Píngguǒ bèi chī le", example_ko: "사과가 먹혔다(사과를 먹어 치웠다)" },
             { word_id: 17, word: "鼻子", pinyin: "bízi", meaning: "코", example_zh: "他的鼻子很高", example_pinyin: "Tā de bízi hěn gāo", example_ko: "그의 코는 오뚝하다" },
             { word_id: 18, word: "比较", pinyin: "bǐjiào", meaning: "비교적, 비교하다", example_zh: "今天比较冷", example_pinyin: "Jīntiān bǐjiào lěng", example_ko: "오늘은 비교적 춥다" },
             { word_id: 19, word: "比赛", pinyin: "bǐsài", meaning: "시합, 경기", example_zh: "我们赢了比赛", example_pinyin: "Wǒmen yíng le bǐsài", example_ko: "우리는 경기에서 이겼다" },
@@ -556,17 +553,17 @@
             { word_id: 22, word: "别人", pinyin: "biérén", meaning: "다른 사람", example_zh: "不要影响别人", example_pinyin: "Bú yào yǐngxiǎng biérén", example_ko: "다른 사람에게 영향을 주지 마라" },
             { word_id: 23, word: "冰箱", pinyin: "bīngxiāng", meaning: "냉장고", example_zh: "苹果在冰箱里", example_pinyin: "Píngguǒ zài bīngxiāng li", example_ko: "사과는 냉장고 안에 있다" },
             { word_id: 24, word: "不但", pinyin: "búdàn", meaning: "뿐만 아니라", example_zh: "不但他知道，我也知道", example_pinyin: "Búdàn tā zhīdào, wǒ yě zhīdào", example_ko: "그뿐만 아니라 나도 안다" },
-            { word_id: 25, word: "菜单", pinyin: "càidān", meaning: "메뉴판", example_zh: "服务员， S 菜单", example_pinyin: "Fúwùyuán, qǐng gěi wǒ càidān", example_ko: "종업원님, 메뉴판 주세요" },
+            { word_id: 25, word: "菜单", pinyin: "càidān", meaning: "메뉴판", example_zh: "服务员，请给我菜单", example_pinyin: "Fúwùyuán, qǐng gěi wǒ càidān", example_ko: "종업원님, 메뉴판 주세요" },
             { word_id: 26, word: "参加", pinyin: "cānjiā", meaning: "참가하다", example_zh: "参加考试", example_pinyin: "Cānjiā kǎoshì", example_ko: "시험에 참가하다" },
             { word_id: 27, word: "草", pinyin: "cǎo", meaning: "풀", example_zh: "地上的草很绿", example_pinyin: "Dìshang de cǎo hěn lǜ", example_ko: "땅 위의 풀이 아주 푸르다" },
             { word_id: 28, word: "层", pinyin: "céng", meaning: "층", example_zh: "我在三层", example_pinyin: "Wǒ zài sān céng", example_ko: "나는 3층에 있다" },
-            { word_id: 29, word: "差", pinyin: "chà", meaning: "나쁘다, 부족하다", example_zh: "差 a 분", example_pinyin: "Chà wǔ fēn", example_ko: "5분 부족하다 (5분 전이다)" },
+            { word_id: 29, word: "差", pinyin: "chà", meaning: "나쁘다, 부족하다", example_zh: "差五分", example_pinyin: "Chà wǔ fēn", example_ko: "5분 부족하다 (5분 전이다)" },
             { word_id: 30, word: "超市", pinyin: "chāoshì", meaning: "슈퍼마켓", example_zh: "我去超市买东西", example_pinyin: "Wǒ qù chāoshì mǎi dōngxi", example_ko: "나는 슈퍼마켓에 물건 사러 간다" },
             { word_id: 31, word: "衬衫", pinyin: "chènshān", meaning: "셔츠", example_zh: "这件衬衫很好看", example_pinyin: "Zhè jiàn chènshān hěn hǎokàn", example_ko: "이 셔츠는 아주 예쁘다" },
             { word_id: 32, word: "成绩", pinyin: "chéngjì", meaning: "성적", example_zh: "考试成绩出来了", example_pinyin: "Kǎoshì chéngjì chūlái le", example_ko: "시험 성적이 나왔다" },
             { word_id: 33, word: "城市", pinyin: "chéngshì", meaning: "도시", example_zh: "这是一个大城市", example_pinyin: "Zhè shì yí gè dà chéngshì", example_ko: "이곳은 큰 도시이다" },
             { word_id: 34, word: "迟到", pinyin: "chídào", meaning: "지각하다", example_zh: "今天我迟到了", example_pinyin: "Jīntiān wǒ chídào le", example_ko: "오늘 나는 지각했다" },
-            { word_id: 35, word: "出现", pinyin: "chūxiàn", meaning: "나타나다", example_zh: "他 出现 了", example_pinyin: "Tā chūxiàn le", example_ko: "그가 나타났다" },
+            { word_id: 35, word: "出现", pinyin: "chūxiàn", meaning: "나타나다", example_zh: "他出现了", example_pinyin: "Tā chūxiàn le", example_ko: "그가 나타났다" },
             { word_id: 36, word: "除了", pinyin: "chúle", meaning: "~외에", example_zh: "除了他，我都去了", example_pinyin: "Chúle tā, wǒ dōu qù le", example_ko: "그를 제외하고 나는 다 갔다" },
             { word_id: 37, word: "春", pinyin: "chūn", meaning: "봄", example_zh: "春天来了", example_pinyin: "Chūntiān lái le", example_ko: "봄이 왔다" },
             { word_id: 38, word: "词典", pinyin: "cídiǎn", meaning: "사전", example_zh: "这是一本汉语词典", example_pinyin: "Zhè shì yì běn hànyǔ cídiǎn", example_ko: "이것은 중국어 사전 한 권이다" },
@@ -577,26 +574,26 @@
         function initData() {
             let list = [...fullRealWords];
             const samplePool = [
-                { w: "打算", p: "dǎsuàn", m: "계획하다", exZh: "你打算 什么时候 去", exPy: "Nǐ dǎsuàn shénme shíhou qù", exKo: "너는 언제 갈 계획이니?" },
-                { word: "带", p: "dài", m: "데리다, 지참하다", exZh: "带雨伞", exPy: "Dài yǔsǎn", exKo: "우산을 챙기다" },
-                { word: "担心", p: "dānxīn", m: "걱정하다", exZh: "别担心", exPy: "Bié dānxīn", exKo: "걱정하지마" },
-                { word: "蛋糕", p: "dàngāo", m: "케이크", exZh: "吃生日蛋糕", exPy: "Chī shēngrì dàngāo", exKo: "생일 케이크를 먹다" },
-                { word: "当然", p: "dāngrán", m: "당연하다", exZh: "当然可以", exPy: "Dāngrán kěyǐ", exKo: "당연히 되지" },
-                { word: "地", p: "de", meaning: "~하게 (부사격조사)", exZh: "高兴地说", exPy: "Gāoxìng de shuō", exKo: "기쁘게 말하다" },
-                { word: "灯", p: "dēng", m: "등, 전등", exZh: "把灯打开", exPy: "Bǎ dēng dǎkāi", exKo: "불을 켜다" },
-                { word: "地方", p: "dìfang", meaning: "장소, 곳", exZh: "这个地方很美", exPy: "Zhè ge dìfang hěn měi", exKo: "이 장소는 아주 아름답다" },
-                { word: "地铁", p: "dìtiě", meaning: "지하철", exZh: "坐地铁去", exPy: "Zuò dìtiě qù", exKo: "지하철을 타고 가다" },
-                { word: "地图", p: "dìtú", meaning: "지도", exZh: "看地图", exPy: "Kàn dìtú", exKo: "지도를 보다" },
-                { word: "电梯", p: "diàntī", meaning: "엘리베이터", exZh: "坐电梯上楼", exPy: "Zuò diàntī shàng lóu", exKo: "엘리베이터를 타고 올라가다" },
-                { word: "电子邮件", p: "diànzǐ yóujiàn", m: "이메일", exZh: "发电子邮件", exPy: "Fā diànzǐ yóujiàn", exKo: "이메일을 보내다" },
-                { word: "东", p: "dōng", m: "동쪽", exZh: "太阳在东边升起", exPy: "Tàiyang zài dōngbiān shēngqǐ", exKo: "태양이 동쪽에서 뜬다" },
-                { word: "动物", p: "dòngwù", meaning: "동물", exZh: "我喜欢小动物", exPy: "Wǒ xǐhuan xiǎo dòngwù", exKo: "나는 작은 동물을 좋아한다" },
-                { word: "短", p: "duǎn", meaning: "짧다", exZh: "头发太短了", exPy: "Tóufa tài duǎn le", exKo: "머리가 너무 짧다" },
-                { word: "段", p: "duàn", meaning: "단락, 구간", exZh: "一段历史", exPy: "Yí duàn lìshǐ", exKo: "한 시기의 역사" },
-                { word: "锻炼", p: "duànliàn", m: "운동하다", exZh: "每天锻炼身体", exPy: "Měitiān duànliàn shēntǐ", exKo: "매일 신체 단련(운동)을 한다" },
-                { word: "多么", p: "duōme", meaning: "얼마나 ~한가", exZh: "这里多么美丽", exPy: "Zhèli duōme měilì", exKo: "이곳이 얼마나 아름다운가!" },
-                { word: "饿", p: "è", meaning: "배고프다", exZh: "我肚子饿了", exPy: "Wǒ dùzi è le", exKo: "나 배가 고파졌다" },
-                { word: "耳朵", p: "ěrduo", meaning: "귀", exZh: "听听", exPy: "Tīngting", exKo: "귀 기울여 듣다" }
+                { w: "打算", p: "dǎsuàn", m: "계획하다", exZh: "你打算什么时候去", exPy: "Nǐ dǎsuàn shénme shíhou qù", exKo: "너는 언제 갈 계획이니?" },
+                { w: "带", p: "dài", m: "데리다, 지참하다", exZh: "带雨伞", exPy: "Dài yǔsǎn", exKo: "우산을 챙기다" },
+                { w: "担心", p: "dānxīn", m: "걱정하다", exZh: "别担心", exPy: "Bié dānxīn", exKo: "걱정하지마" },
+                { w: "蛋糕", p: "dàngāo", m: "케이크", exZh: "吃生日蛋糕", exPy: "Chī shēngrì dàngāo", exKo: "생일 케이크를 먹다" },
+                { w: "当然", p: "dāngrán", m: "당연하다", exZh: "当然可以", exPy: "Dāngrán kěyǐ", exKo: "당연히 되지" },
+                { w: "地", p: "de", m: "~하게 (부사격조사)", exZh: "高兴地说", exPy: "Gāoxìng de shuō", exKo: "기쁘게 말하다" },
+                { w: "灯", p: "dēng", m: "등, 전등", exZh: "把灯打开", exPy: "Bǎ dēng dǎkāi", exKo: "불을 켜다" },
+                { w: "地方", p: "dìfang", meaning: "장소, 곳", exZh: "这个地方很美", exPy: "Zhè ge dìfang hěn měi", exKo: "이 장소는 아주 아름답다" },
+                { w: "地铁", p: "dìtiě", meaning: "지하철", exZh: "坐地铁去", exPy: "Zuò dìtiě qù", exKo: "지하철을 타고 가다" },
+                { w: "地图", p: "dìtú", meaning: "지도", exZh: "看地图", exPy: "Kàn dìtú", exKo: "지도를 보다" },
+                { w: "电梯", p: "diàntī", meaning: "엘리베이터", exZh: "坐电梯上楼", exPy: "Zuò diàntī shàng lóu", exKo: "엘리베이터를 타고 올라가다" },
+                { w: "电子邮件", p: "diànzǐ yóujiàn", m: "이메일", exZh: "发电子邮件", exPy: "Fā diànzǐ yóujiàn", exKo: "이메일을 보내다" },
+                { w: "东", p: "dōng", m: "동쪽", exZh: "太阳在东边升起", exPy: "Tàiyang zài dōngbiān shēngqǐ", exKo: "태양이 동쪽에서 뜬다" },
+                { w: "动物", p: "dòngwù", meaning: "동물", exZh: "我喜欢小动物", exPy: "Wǒ xǐhuan xiǎo dòngwù", exKo: "나는 작은 동물을 좋아한다" },
+                { w: "短", p: "duǎn", meaning: "짧다", exZh: "头发太短了", exPy: "Tóufa tài duǎn le", exKo: "머리가 너무 짧다" },
+                { w: "段", p: "duàn", meaning: "단락, 구간", exZh: "一段历史", exPy: "Yí duàn lìshǐ", exKo: "한 시기의 역사" },
+                { w: "锻炼", p: "duànliàn", m: "운동하다", exZh: "每天锻炼身体", exPy: "Měitiān duànliàn shēntǐ", exKo: "매일 신체 단련(운동)을 한다" },
+                { w: "多么", p: "duōme", meaning: "얼마나 ~한가", exZh: "这里多么美丽", exPy: "Zhèli duōme měilì", exKo: "이곳이 얼마나 아름다운가!" },
+                { w: "饿", p: "è", meaning: "배고프다", exZh: "我肚子饿了", exPy: "Wǒ dùzi è le", exKo: "나 배가 고파졌다" },
+                { w: "耳朵", p: "ěrduo", meaning: "귀", exZh: "听听", exPy: "Tīngting", exKo: "귀 기울여 듣다" }
             ];
 
             let poolIdx = 0;
@@ -604,9 +601,9 @@
                 let currentItem = samplePool[poolIdx % samplePool.length];
                 list.push({
                     word_id: i,
-                    word: currentItem.w || currentItem.word,
-                    pinyin: currentItem.p || currentItem.pinyin,
-                    meaning: currentItem.m || currentItem.meaning,
+                    word: currentItem.w,
+                    pinyin: currentItem.p,
+                    meaning: currentItem.m,
                     example_zh: currentItem.exZh,
                     example_pinyin: currentItem.exPy,
                     example_ko: currentItem.exKo
@@ -669,12 +666,12 @@
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:12px; color:var(--gray); margin-top:4px;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => selectVocabDay(i * CHUNK_SIZE, end, i + 1);
+                btn.onclick = () => selectVocbDay(i * CHUNK_SIZE, end, i + 1);
                 grid.appendChild(btn);
             }
         }
 
-        function selectVocabDay(startIdx, endIdx, dayNum) {
+        function selectVocbDay(startIdx, endIdx, dayNum) {
             selectedStartIdx = startIdx;
             selectedEndIdx = endIdx;
             document.getElementById('vocab-option-title').innerText = `Day ${dayNum} 학습 설정`;
