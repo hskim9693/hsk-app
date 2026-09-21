@@ -7,7 +7,7 @@
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
-     
+    
 
         :root {
             --primary: #8d5b4c;         
@@ -244,6 +244,9 @@
 
         <div id="screen-home">
             <div class="panel" style="margin-bottom: 24px; padding: 36px 24px;">
+                <div id="custom-logo-container" style="margin-bottom: 16px; display: none;">
+                    <img id="custom-logo-img" src="" alt="메인 로고" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); box-shadow: var(--shadow-sm);" />
+                </div>
                 <h1 style="margin: 0 0 8px 0; font-size: 28px; letter-spacing: -0.5px; color: var(--primary);">🇨🇳 HSK 4급</h1>
                 <p style="margin: 0; color: var(--gray); font-size: 15px; font-weight: 600;">쭝국어 완벽 돌파 张陵赫我爱你</p>
             </div>
@@ -456,6 +459,13 @@
                 <h3 style="margin:0 0 12px 0; font-size:22px;">설정 및 데이터 관리</h3>
                 <p style="color:var(--gray); font-size:15px; line-height:1.5;">브라우저에 저장된 오답 기록 및 단어 학습 상태를 관리할 수 있습니다.</p>
                 <hr style="border:0; border-top:1.5px solid var(--border); margin:24px 0;">
+                
+                <div style="margin-bottom: 24px;">
+                    <label style="font-size: 15px; font-weight: 700; display: block; margin-bottom: 8px;">🖼️ 메인 화면 아이콘(로고) 설정</label>
+                    <input type="file" id="custom-image-input" accept="image/*" onchange="handleCustomImageUpload(event)" style="width: 100%; padding: 10px; font-size: 14px; border: 1.5px solid var(--border); border-radius: 12px; background: white; box-sizing: border-box; margin-bottom: 8px;" />
+                    <button class="btn-secondary" onclick="resetCustomImage()" style="padding: 10px; font-size: 14px;">기본 아이콘으로 초기화</button>
+                </div>
+
                 <button class="btn-danger" onclick="resetWrongWords()" style="margin-bottom:12px;">🗑 오답노트 전체 초기화</button>
                 <button class="btn-secondary" onclick="goHome()">홈으로 이동</button>
             </div>
@@ -494,6 +504,7 @@
         
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
+        let customMainImage = localStorage.getItem('hsk_custom_main_image') || '';
 
         const fallbackWords = [
             { word_id: 1, word: "爱", pinyin: "ài", meaning: "사랑하다", example_zh: "我爱你", example_pinyin: "Wǒ ài nǐ", example_ko: "나는 너를 사랑해" },
@@ -580,6 +591,7 @@
 
             if (screenId === 'screen-home') {
                 document.getElementById('top-nav').classList.add('hidden');
+                updateMainLogoDisplay();
             } else {
                 document.getElementById('top-nav').classList.remove('hidden');
                 const titles = {
@@ -593,6 +605,41 @@
 
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
+
+        // 메인 화면 아이콘 이미지 업데이트 함수
+        function updateMainLogoDisplay() {
+            const container = document.getElementById('custom-logo-container');
+            const imgElem = document.getElementById('custom-logo-img');
+            if (customMainImage) {
+                imgElem.src = customMainImage;
+                container.style.display = 'block';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        // 파일 선택 시 이미지 변환 및 저장
+        function handleCustomImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                customMainImage = e.target.result;
+                localStorage.setItem('hsk_custom_main_image', customMainImage);
+                alert("메인 화면 아이콘이 성공적으로 변경되었습니다!");
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 아이콘 초기화 함수
+        function resetCustomImage() {
+            customMainImage = '';
+            localStorage.removeItem('hsk_custom_main_image');
+            document.getElementById('custom-image-input').value = '';
+            alert("기본 아이콘 상태로 초기화되었습니다.");
+            updateMainLogoDisplay();
+        }
 
         async function openVocbDays() {
             if (!allWords || allWords.length === 0) {
@@ -811,9 +858,9 @@
 
             let diffX = e.changedTouches[0].clientX - touchStartX;
             if (diffX > 80) {
-                markVocbResult(true);
+                markVocabResult(true);
             } else if (diffX < -80) {
-                markVocbResult(false);
+                markVocabResult(false);
             }
         });
 
@@ -843,9 +890,9 @@
 
             let diffX = e.clientX - touchStartX;
             if (diffX > 80) {
-                markVocbResult(true);
+                markVocabResult(true);
             } else if (diffX < -80) {
-                markVocbResult(false);
+                markVocabResult(false);
             }
         });
 
