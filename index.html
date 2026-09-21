@@ -10,7 +10,6 @@
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22HSK%204%EA%B8%89%20%EB%A7%88%EC%8A%A4%ED%84%B0%22%2C%22short_name%22%3A%22HSK%204%EA%B8%89%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f6f0%22%2C%22theme_color%22%3A%22%238d5b4c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22.%2Ficon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 
-    
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
         
@@ -39,13 +38,12 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             font-weight: 600;
-        
         }
         
         body {
             background: var(--bg);
             margin: 0;
-            padding: 14px 16px;
+            padding: 16px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -67,7 +65,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             padding: 0 4px;
         }
         
@@ -78,7 +76,7 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            padding: 4px 0;
+            padding: 6px 0;
         }
         .nav-btn:active { opacity: 0.5; }
         .nav-title { font-size: 17px; font-weight: 700; color: var(--text); }
@@ -89,7 +87,7 @@
             height: 6px;
             background: var(--border);
             border-radius: 3px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             overflow: hidden;
             box-sizing: border-box;
         }
@@ -164,16 +162,16 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 📌 단어 카드 높이 최적화 (버튼이 한 화면에 잘 들어오도록 밸런스 조정) */
+        /* 📌 단어 카드 높이 축소 (min-height 최적화) */
         .flashcard {
             background: var(--card-bg);
-            padding: 20px 16px;
+            padding: 24px 16px;
             border-radius: 24px;
             box-shadow: var(--shadow-lg);
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             position: relative;
-            min-height: 330px;
+            min-height: 290px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -200,36 +198,36 @@
             z-index: 2;
         }
         
-        .word-lg { font-size: 42px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+        .word-lg { font-size: 42px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
         .back-side { display: flex; width: 100%; height: 100%; flex-direction: column; justify-content: center; align-items: center; }
         
-        .pinyin { font-size: 19px; color: var(--primary); margin-bottom: 4px; font-weight: 700; }
-        .meaning { font-size: 18px; color: var(--text); margin-bottom: 10px; font-weight: 700; }
+        .pinyin { font-size: 20px; color: var(--primary); margin-bottom: 6px; font-weight: 700; }
+        .meaning { font-size: 18px; color: var(--text); margin-bottom: 12px; font-weight: 700; }
         
         .example-box {
             background: var(--bg);
-            padding: 10px 12px;
+            padding: 12px;
             border-radius: 12px;
             font-size: 13px;
             text-align: left;
             width: 100%;
             box-sizing: border-box;
-            margin-top: 4px;
+            margin-top: 6px;
             border: 1px solid var(--border);
         }
         
-        .btn-group { display: flex; gap: 8px; width: 100%; margin-bottom: 6px; }
-        .btn-group button { flex: 1; padding: 12px; font-weight: 800; }
+        .btn-group { display: flex; gap: 10px; width: 100%; margin-bottom: 8px; }
+        .btn-group button { flex: 1; padding: 14px; font-weight: 800; }
         
         /* 📌 퀴즈 질문 박스 높이 축소 */
-        .quiz-box { font-size: 18px; font-weight: 700; margin-bottom: 12px; padding: 18px 16px; background: var(--bg); border-radius: 14px; min-height: 80px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid var(--border); }
-        .quiz-options { display: flex; flex-direction: column; gap: 6px; }
+        .quiz-box { font-size: 18px; font-weight: 700; margin-bottom: 14px; padding: 20px 16px; background: var(--bg); border-radius: 14px; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px solid var(--border); }
+        .quiz-options { display: flex; flex-direction: column; gap: 8px; }
         
-        .quiz-opt-btn { background: var(--card-bg); color: var(--text); width: 100%; border: 1.5px solid var(--border); padding: 11px 14px; font-size: 15px; text-align: center; border-radius: 12px; font-weight: 600; }
+        .quiz-opt-btn { background: var(--card-bg); color: var(--text); width: 100%; border: 1.5px solid var(--border); padding: 12px 14px; font-size: 16px; text-align: center; border-radius: 12px; font-weight: 600; }
         .btn-correct { background-color: var(--success) !important; color: white !important; }
         .btn-wrong { background-color: var(--danger) !important; color: white !important; }
         
-        .control-group { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 12px 14px; border-radius: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .control-group { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 14px; border-radius: 14px; margin-bottom: 14px; border: 1px solid var(--border); }
         .control-group label { font-size: 14px; font-weight: 700; color: var(--text); }
         .control-select { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 10px; background: white; font-size: 14px; font-weight: 600; outline: none; color: var(--text); }
         .radio-group { display: flex; gap: 14px; font-size: 13px; font-weight: 600; }
@@ -251,9 +249,9 @@
 
         <!-- 1. 홈 화면 -->
         <div id="screen-home">
-            <div class="panel" style="margin-bottom: 16px; padding: 24px 20px;">
-                <h1 style="margin: 0 0 4px 0; font-size: 24px; color: var(--primary);">🇨🇳 HSK 4급</h1>
-                <p style="margin: 0; color: var(--gray); font-size: 13px;">쭝국어 완벽 돌파 张陵赫我爱你</p>
+            <div class="panel" style="margin-bottom: 20px; padding: 28px 20px;">
+                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">🇨🇳 HSK 4급</h1>
+                <p style="margin: 0; color: var(--gray); font-size: 14px;">쭝국어 완벽 돌파 张陵赫我爱你</p>
             </div>
             <button class="menu-btn" onclick="openVocbDays()">📚 단어장 학습 <span>Day별 선택</span></button>
             <button class="menu-btn" onclick="openQuizMenu()">📝 퀴즈 <span>형식 선택 후 설정</span></button>
@@ -268,16 +266,16 @@
 
         <!-- 2-1. Day 설정 화면 -->
         <div id="screen-vocab-options" class="hidden">
-            <div class="panel" style="text-align: left; padding: 20px; margin-bottom: 16px;">
-                <h3 id="vocab-option-title" style="margin:0 0 14px 0; font-size:18px; color: var(--primary);">Day 학습 설정</h3>
-                <div class="control-group" style="margin-bottom: 10px;">
+            <div class="panel" style="text-align: left; padding: 24px 20px; margin-bottom: 20px;">
+                <h3 id="vocab-option-title" style="margin:0 0 16px 0; font-size:20px; color: var(--primary);">Day 학습 설정</h3>
+                <div class="control-group" style="margin-bottom: 12px;">
                     <label>학습 방식</label>
                     <div class="radio-group">
                         <label><input type="radio" name="vocab-mode" value="sequential" checked> 순차</label>
                         <label><input type="radio" name="vocab-mode" value="random"> 랜덤</label>
                     </div>
                 </div>
-                <div class="control-group" style="margin-bottom: 16px;">
+                <div class="control-group" style="margin-bottom: 20px;">
                     <label>상태 필터</label>
                     <select id="vocab-status-filter" class="control-select">
                         <option value="all">전체 보기</option>
@@ -298,30 +296,30 @@
                 <div id="vocab-progress-bar" class="progress-bar-fill"></div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 13px;">◀ Day 선택으로</button>
-                <div style="font-size:13px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 14px;">◀ Day 선택으로</button>
+                <div style="font-size:14px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <!-- 플래시카드 -->
+            <!-- 플래시카드 (높이 축소됨) -->
             <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                     <div id="vc-word" class="word-lg"></div>
-                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 10px; padding: 8px 14px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
+                    <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 12px; padding: 8px 16px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
                 </div>
 
                 <div id="vc-back" class="back-side hidden">
-                    <div id="vc-word-back" style="font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
+                    <div id="vc-word-back" style="font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
                     <div id="vc-pinyin" class="pinyin"></div>
                     <div id="vc-meaning" class="meaning"></div>
                     
                     <div id="vc-example-box" class="example-box">
-                        <div id="vc-ex-zh" style="margin-bottom:2px; font-weight:600; color:var(--text);"></div>
-                        <div id="vc-ex-py" style="margin-bottom:2px; font-size:12px; color:var(--primary); font-weight: 500;"></div>
-                        <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; margin-bottom: 6px;"></div>
-                        <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 5px 10px; font-size: 11px; width: 100%;">🔊 예문 전체 듣기</button>
+                        <div id="vc-ex-zh" style="margin-bottom:4px; font-weight:600; color:var(--text);"></div>
+                        <div id="vc-ex-py" style="margin-bottom:4px; font-size:12px; color:var(--primary); font-weight: 500;"></div>
+                        <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; margin-bottom: 8px;"></div>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 6px 12px; font-size: 12px; width: 100%;">🔊 예문 전체 듣기</button>
                     </div>
                 </div>
             </div>
@@ -338,10 +336,10 @@
 
         <!-- 3-1. 학습 완료 화면 -->
         <div id="screen-vocab-result" class="hidden">
-            <div class="panel" style="padding: 28px 20px;">
-                <h2 style="margin:0 0 8px 0; font-size: 22px; color: var(--primary);">단어 학습 완료! 🎉</h2>
-                <p style="color: var(--gray); margin-bottom: 20px; font-size: 14px;">선택하신 단어 학습 세션을 모두 끝냈습니다.</p>
-                <div class="btn-group" style="flex-direction: column; gap: 8px;">
+            <div class="panel" style="padding: 32px 20px;">
+                <h2 style="margin:0 0 10px 0; font-size: 24px; color: var(--primary);">단어 학습 완료! 🎉</h2>
+                <p style="color: var(--gray); margin-bottom: 24px; font-size: 15px;">선택하신 단어 학습 세션을 모두 끝냈습니다.</p>
+                <div class="btn-group" style="flex-direction: column; gap: 10px;">
                     <button class="btn-primary" onclick="restartVocbSession(false)">🔄 다시 학습하기</button>
                     <button id="btn-vocab-retry-wrong" class="btn-danger" onclick="restartVocbSession(true)">🔥 틀린 단어만 학습하기</button>
                     <button class="btn-secondary" onclick="goHome()">🏠 홈으로 돌아가기</button>
@@ -351,8 +349,8 @@
 
         <!-- 4. 퀴즈 메뉴 화면 -->
         <div id="screen-quiz-menu" class="hidden">
-            <div class="panel" style="text-align: left; padding: 18px; margin-bottom: 14px;">
-                <h3 style="margin:0 0 10px 0; font-size:17px;">퀴즈 형식 선택</h3>
+            <div class="panel" style="text-align: left; padding: 20px; margin-bottom: 16px;">
+                <h3 style="margin:0 0 12px 0; font-size:18px;">퀴즈 형식 선택</h3>
             </div>
             <button class="menu-btn" onclick="selectQuizType('mix')">🎲 종합 랜덤 퀴즈 <span>모든 유형 무작위 출제</span></button>
             <button class="menu-btn" onclick="selectQuizType('blank')">📝 예문 빈칸 채우기 <span>문맥 파악</span></button>
@@ -363,10 +361,10 @@
 
         <!-- 4-1. 퀴즈 설정 화면 -->
         <div id="screen-quiz-settings" class="hidden">
-            <div class="panel" style="text-align: left; padding: 18px; margin-bottom: 14px;">
-                <h3 id="quiz-setting-title" style="margin:0 0 12px 0; font-size:17px; color: var(--primary);">퀴즈 출제 설정</h3>
+            <div class="panel" style="text-align: left; padding: 20px; margin-bottom: 16px;">
+                <h3 id="quiz-setting-title" style="margin:0 0 14px 0; font-size:18px; color: var(--primary);">퀴즈 출제 설정</h3>
                 
-                <div class="control-group" style="margin-bottom: 10px;">
+                <div class="control-group" style="margin-bottom: 12px;">
                     <label>문제 순서</label>
                     <div class="radio-group">
                         <label><input type="radio" name="quiz-order" value="sequential" checked> 순차</label>
@@ -374,9 +372,9 @@
                     </div>
                 </div>
 
-                <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 10px;">
+                <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
                     <label>범위 지정</label>
-                    <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
                         <select id="quiz-start-day" class="control-select" style="flex:1;"></select>
                         <span style="font-weight: 800; color: var(--border);">~</span>
                         <select id="quiz-end-day" class="control-select" style="flex:1;"></select>
@@ -403,39 +401,39 @@
                 <div id="quiz-progress-bar" class="progress-bar-fill"></div>
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <button class="nav-btn" onclick="openQuizMenu()" style="padding: 0; font-size: 13px;">◀ 퀴즈 설정으로</button>
-                <div style="font-size:13px; font-weight:600; color:var(--gray);" id="quiz-progress">0 / 0</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <button class="nav-btn" onclick="openQuizMenu()" style="padding: 0; font-size: 14px;">◀ 퀴즈 설정으로</button>
+                <div style="font-size:14px; font-weight:600; color:var(--gray);" id="quiz-progress">0 / 0</div>
             </div>
-            <div class="panel" style="padding: 16px 14px;">
-                <div id="quiz-type-label" style="font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 8px; text-transform: uppercase;"></div>
+            <div class="panel" style="padding: 20px 16px;">
+                <div id="quiz-type-label" style="font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 10px; text-transform: uppercase;"></div>
                 <div id="quiz-box" class="quiz-box"></div>
                 <div id="quiz-options" class="quiz-options"></div>
 
-                <div id="quiz-writing-box" class="hidden" style="margin-top: 6px;">
-                    <input type="text" id="quiz-input" placeholder="한자를 입력하세요" style="width: 100%; padding: 10px; font-size: 15px; border: 1.5px solid var(--border); border-radius: 10px; text-align: center; box-sizing: border-box; outline: none; margin-bottom: 8px;" />
-                    <button class="btn-primary" onclick="submitWritingAnswer()" style="padding: 12px;">정답 확인 ✍️</button>
+                <div id="quiz-writing-box" class="hidden" style="margin-top: 8px;">
+                    <input type="text" id="quiz-input" placeholder="한자를 입력하세요" style="width: 100%; padding: 12px; font-size: 16px; border: 1.5px solid var(--border); border-radius: 12px; text-align: center; box-sizing: border-box; outline: none; margin-bottom: 10px;" />
+                    <button class="btn-primary" onclick="submitWritingAnswer()">정답 확인 ✍️</button>
                 </div>
                 
-                <div id="quiz-post-actions" class="btn-group hidden" style="margin-top: 12px; flex-direction: column; gap: 8px;">
-                    <button id="btn-show-expl" style="background:var(--text); color:white; padding: 10px;" onclick="showQuizExplanation()">📖 해설 보기</button>
-                    <div style="display: flex; gap: 6px; width: 100%;">
-                        <button class="btn-secondary" style="flex:1; padding: 10px;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
-                        <button class="btn-primary" style="flex:1; padding: 10px;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
+                <div id="quiz-post-actions" class="btn-group hidden" style="margin-top: 16px; flex-direction: column; gap: 10px;">
+                    <button id="btn-show-expl" style="background:var(--text); color:white; padding: 12px;" onclick="showQuizExplanation()">📖 해설 보기</button>
+                    <div style="display: flex; gap: 8px; width: 100%;">
+                        <button class="btn-secondary" style="flex:1; padding: 12px;" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button class="btn-primary" style="flex:1; padding: 12px;" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
 
-                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 10px; background: var(--primary-light); padding: 12px;">
-                    <div id="qz-word-info" style="font-size: 15px; font-weight: 800; margin-bottom: 6px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 6px; color: var(--primary);"></div>
-                    <div id="qz-ex-zh" style="margin-bottom:2px; font-weight:700;"></div>
-                    <div id="qz-ex-py" style="margin-bottom:4px; font-size:12px; color:var(--primary); font-weight:600;"></div>
-                    <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 8px;"></div>
+                <div id="quiz-explanation-box" class="example-box hidden" style="margin-top: 14px; background: var(--primary-light); padding: 14px;">
+                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 8px; border-bottom: 1.5px solid rgba(141, 91, 76, 0.2); padding-bottom: 8px; color: var(--primary);"></div>
+                    <div id="qz-ex-zh" style="margin-bottom:4px; font-weight:700;"></div>
+                    <div id="qz-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight:600;"></div>
+                    <div id="qz-ex-ko" style="color:var(--text); font-weight:500; margin-bottom: 10px;"></div>
                     
-                    <div style="display: flex; gap: 6px; margin-bottom: 10px;">
-                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 6px; font-size: 11px;">🔊 단어 발음</button>
-                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 6px; font-size: 11px;">🔊 예문 전체 듣기</button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                        <button class="btn-secondary" onclick="speakChinese(currentList[currentIndex].word)" style="flex: 1; padding: 8px; font-size: 12px;">🔊 단어 발음</button>
+                        <button class="btn-secondary" onclick="playExampleAudio(currentList[currentIndex])" style="flex: 1; padding: 8px; font-size: 12px;">🔊 예문 전체 듣기</button>
                     </div>
-                    <button class="btn-primary" onclick="nextQuizQuestion()" style="padding: 10px;">다음 문제 ▶</button>
+                    <button class="btn-primary" onclick="nextQuizQuestion()" style="padding: 12px;">다음 문제 ▶</button>
                 </div>
             </div>
         </div>
@@ -443,28 +441,28 @@
         <!-- 6. 오답노트 화면 -->
         <div id="screen-review" class="hidden">
             <div class="panel" id="review-empty-box">
-                <h3 style="margin: 0 0 8px 0; font-size: 18px;">오답노트가 비어있습니다 🎉</h3>
-                <p style="color:var(--gray); font-size:13px; margin-bottom: 16px;">학습 중 틀린 단어가 자동으로 누적됩니다.</p>
+                <h3 style="margin: 0 0 10px 0; font-size: 20px;">오답노트가 비어있습니다 🎉</h3>
+                <p style="color:var(--gray); font-size:14px; margin-bottom: 20px;">학습 중 틀린 단어가 자동으로 누적됩니다.</p>
                 <button class="btn-primary" onclick="goHome()">홈으로 돌아가기</button>
             </div>
             <div id="review-play-box" class="hidden">
-                <div style="font-size:13px; color:var(--danger); font-weight:700; margin-bottom:8px; text-align:right;" id="review-progress">오답 훈련 중</div>
+                <div style="font-size:14px; color:var(--danger); font-weight:700; margin-bottom:10px; text-align:right;" id="review-progress">오답 훈련 중</div>
                 <div class="flashcard" onclick="toggleReviewCard()">
                     <div id="rc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleReviewStatus();" title="상태 변경">⚪</div>
                     <div id="rc-front-content" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                         <div id="rc-word" class="word-lg"></div>
-                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 10px; padding: 8px 14px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
+                        <button class="btn-secondary" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);" style="margin-top: 12px; padding: 8px 16px; font-size: 13px; width: auto;">🔊 단어 발음 듣기</button>
                     </div>
                     <div id="rc-back" class="back-side hidden">
-                        <div id="rc-word-back" style="font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
+                        <div id="rc-word-back" style="font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 2px;"></div>
                         <div id="rc-pinyin" class="pinyin"></div>
                         <div id="rc-meaning" class="meaning"></div>
                         
                         <div id="rc-example-box" class="example-box" style="background: var(--danger-light);">
-                            <div id="rc-ex-zh" style="margin-bottom:2px; font-weight:600;"></div>
-                            <div id="rc-ex-py" style="margin-bottom:2px; font-size:12px; color:var(--danger);"></div>
-                            <div id="rc-ex-ko" style="color:#5c5c5e; margin-bottom: 6px;"></div>
-                            <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 5px 10px; font-size: 11px; width: 100%;">🔊 예문 전체 듣기</button>
+                            <div id="rc-ex-zh" style="margin-bottom:4px; font-weight:600;"></div>
+                            <div id="rc-ex-py" style="margin-bottom:4px; font-size:12px; color:var(--danger);"></div>
+                            <div id="rc-ex-ko" style="color:#5c5c5e; margin-bottom: 8px;"></div>
+                            <button class="btn-secondary" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);" style="padding: 6px 12px; font-size: 12px; width: 100%;">🔊 예문 전체 듣기</button>
                         </div>
                     </div>
                 </div>
@@ -477,22 +475,22 @@
 
         <!-- 7. 설정 화면 -->
         <div id="screen-settings" class="hidden">
-            <div class="panel" style="text-align: left; padding: 20px;">
-                <h3 style="margin:0 0 8px 0; font-size:18px;">설정 및 데이터 관리</h3>
-                <p style="color:var(--gray); font-size:13px; line-height:1.4;">브라우저에 저장된 오답 기록 및 단어 학습 상태를 초기화할 수 있습니다.</p>
-                <hr style="border:0; border-top:1.5px solid var(--border); margin:16px 0;">
-                <button class="btn-danger" onclick="resetWrongWords()" style="margin-bottom:8px;">🗑 오답노트 전체 초기화</button>
+            <div class="panel" style="text-align: left; padding: 24px 20px;">
+                <h3 style="margin:0 0 10px 0; font-size:20px;">설정 및 데이터 관리</h3>
+                <p style="color:var(--gray); font-size:14px; line-height:1.4;">브라우저에 저장된 오답 기록 및 단어 학습 상태를 초기화할 수 있습니다.</p>
+                <hr style="border:0; border-top:1.5px solid var(--border); margin:20px 0;">
+                <button class="btn-danger" onclick="resetWrongWords()" style="margin-bottom:10px;">🗑 오답노트 전체 초기화</button>
                 <button class="btn-secondary" onclick="goHome()">홈으로 이동</button>
             </div>
         </div>
 
         <!-- 8. 결과 화면 -->
         <div id="screen-result" class="hidden">
-            <div class="panel" style="padding: 28px 20px;">
-                <h2 style="margin:0 0 4px 0; font-size: 22px;">테스트 완료! 🎉</h2>
-                <div id="result-score" style="font-size: 42px; font-weight: 800; color: var(--primary); margin: 12px 0;">0%</div>
-                <p id="result-desc" style="color: var(--gray); margin-bottom: 20px; font-size: 14px;"></p>
-                <div class="btn-group" style="flex-direction: column; gap: 8px;">
+            <div class="panel" style="padding: 32px 20px;">
+                <h2 style="margin:0 0 6px 0; font-size: 24px;">테스트 완료! 🎉</h2>
+                <div id="result-score" style="font-size: 48px; font-weight: 800; color: var(--primary); margin: 16px 0;">0%</div>
+                <p id="result-desc" style="color: var(--gray); margin-bottom: 24px; font-size: 15px;"></p>
+                <div class="btn-group" style="flex-direction: column; gap: 10px;">
                     <button class="btn-primary" onclick="retryQuiz(false)">🔄 다시하기</button>
                     <button id="btn-retry-wrong" class="btn-danger" onclick="retryQuiz(true)">🔥 틀린 문제만 다시하기</button>
                     <button class="btn-secondary" onclick="goHome()">🏠 홈으로 돌아가기</button>
@@ -520,39 +518,38 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
-        // 📌 1~40번 기본 실전 HSK 4급 단어 데이터 (자연스러운 해석 적용)
         const fullRealWords = [
             { word_id: 1, word: "爱", pinyin: "ài", meaning: "사랑하다", example_zh: "我爱你", example_pinyin: "Wǒ ài nǐ", example_ko: "나는 너를 사랑해" },
             { word_id: 2, word: "八", pinyin: "bā", meaning: "여덟", example_zh: "我有八个苹果", example_pinyin: "Wǒ yǒu bā gè píngguǒ", example_ko: "나는 사과 8개가 있어" },
             { word_id: 3, word: "爸爸", pinyin: "bàba", meaning: "아빠", example_zh: "我爸爸是医生", example_pinyin: "Wǒ bàba shì yīshēng", example_ko: "우리 아빠는 의사야" },
             { word_id: 4, word: "杯子", pinyin: "bēizi", meaning: "컵", example_zh: "杯子里有水", example_pinyin: "Bēizi li yǒu shuǐ", example_ko: "컵 안에 물이 있어" },
             { word_id: 5, word: "北京", pinyin: "Běijīng", meaning: "베이징", example_zh: "我去北京", example_pinyin: "Wǒ qù Běijīng", example_ko: "나는 베이징에 가" },
-            { word_id: 6, word: "本", pinyin: "běn", meaning: "권 (책 단위)", example_zh: "这是一本书", example_pinyin: "Zhè shì yì běn shū", example_ko: "이것은 책 한 권이다" },
+            { word_id: 6, word: "本", pinyin: "běn", meaning: "권 (책을 세는 단위)", example_zh: "这是一本书", example_pinyin: "Zhè shì yì běn shū", example_ko: "이것은 책 한 권이다" },
             { word_id: 7, word: "不客气", pinyin: "bú kèqi", meaning: "천만에요", example_zh: "谢谢你，不客气", example_pinyin: "Xièxie nǐ, bú kèqi", example_ko: "고마워, 천만에" },
-            { word_id: 8, word: "不", pinyin: "bù", meaning: "~가 아니다", example_zh: "我不知道", example_pinyin: "Wǒ bù zhīdào", example_ko: "나는 몰라" },
+            { word_id: 8, word: "不", pinyin: "bù", meaning: "아니다, 않다", example_zh: "我不知道", example_pinyin: "Wǒ bù zhīdào", example_ko: "나는 몰라" },
             { word_id: 9, word: "菜", pinyin: "cài", meaning: "요리, 반찬", example_zh: "中国菜很好吃", example_pinyin: "Zhōngguó cài hěn hǎochī", example_ko: "중국 요리는 아주 맛있어" },
-            { word_id: 10, word: "茶", pinyin: "chá", meaning: "차", example_zh: "请喝茶", example_pinyin: "Qǐng hē chá", example_ko: "차 드세요" },
+            { word_id: 10, word: "茶", pinyin: "chá", meaning: "차 (음료)", example_zh: "请喝茶", example_pinyin: "Qǐng hē chá", example_ko: "차 드세요" },
             { word_id: 11, word: "吃", pinyin: "chī", meaning: "먹다", example_zh: "你在吃什么", example_pinyin: "Nǐ zài chī shénme", example_ko: "너 뭐 먹고 있어?" },
             { word_id: 12, word: "出租车", pinyin: "chūzūchē", meaning: "택시", example_zh: "我们坐出租车去", example_pinyin: "Wǒmen zuò chūzūchē qù", example_ko: "우리는 택시를 타고 가자" },
             { word_id: 13, word: "打电话", pinyin: "dǎ diànhuà", meaning: "전화하다", example_zh: "他在打电话", example_pinyin: "Tā zài dǎ diànhuà", example_ko: "그는 전화하고 있어" },
             { word_id: 14, word: "大", pinyin: "dà", meaning: "크다", example_zh: "这个房子很大", example_pinyin: "Zhè ge fángzi hěn dà", example_ko: "이 집은 아주 커" },
             { word_id: 15, word: "的", pinyin: "de", meaning: "~의", example_zh: "这是我的书", example_pinyin: "Zhè shì wǒ de shū", example_ko: "이것은 내 책이야" },
-            { word_id: 16, word: "点", pinyin: "diǎn", meaning: "시, 조금", example_zh: "现在三点", example_pinyin: "Xiànzài sān diǎn", example_ko: "지금 3시야" },
+            { word_id: 16, word: "点", pinyin: "diǎn", meaning: "시 (시간 단위), 조금", example_zh: "现在三点", example_pinyin: "Xiànzài sān diǎn", example_ko: "지금 3시야" },
             { word_id: 17, word: "电脑", pinyin: "diànnǎo", meaning: "컴퓨터", example_zh: "我有一台电脑", example_pinyin: "Wǒ yǒu yì tái diànnǎo", example_ko: "나는 컴퓨터 한 대가 있어" },
             { word_id: 18, word: "电视", pinyin: "diànshì", meaning: "텔레비전", example_zh: "他们在看电视", example_pinyin: "Tāmen zài kàn diànshì", example_ko: "그들은 TV를 보고 있어" },
             { word_id: 19, word: "电影", pinyin: "diànyǐng", meaning: "영화", example_zh: "我想看电影", example_pinyin: "Wǒ xiǎng kàn diànyǐng", example_ko: "나는 영화를 보고 싶어" },
             { word_id: 20, word: "东西", pinyin: "dōngxi", meaning: "물건", example_zh: "你在买什么东西", example_pinyin: "Nǐ zài mǎi shénme dōngxi", example_ko: "너 어떤 물건을 사고 있니?" },
             { word_id: 21, word: "都", pinyin: "dōu", meaning: "모두", example_zh: "我们都去了", example_pinyin: "Wǒmen dōu qù le", example_ko: "우리 모두 갔어" },
-            { word_id: 22, word: "读", pinyin: "dú", meaning: "읽다", example_zh: "你在读什么书", example_pinyin: "Nǐ zài dú shénme shū", example_ko: "너 어떤 책을 읽고 있니?" },
+            { word_id: 22, word: "读", pinyin: "dú", meaning: "읽다, 공부하다", example_zh: "你在读什么书", example_pinyin: "Nǐ zài dú shénme shū", example_ko: "너 어떤 책을 읽고 있니?" },
             { word_id: 23, word: "对不起", pinyin: "duìbuqǐ", meaning: "미안합니다", example_zh: "对不起，我迟到了", example_pinyin: "Duìbuqǐ, wǒ chídào le", example_ko: "미안해, 내가 늦었어" },
             { word_id: 24, word: "多", pinyin: "duō", meaning: "많다", example_zh: "这里人很多", example_pinyin: "Zhèli rén hěn duō", example_ko: "여기 사람이 아주 많아" },
             { word_id: 25, word: "多少", pinyin: "duōshao", meaning: "얼마나", example_zh: "这个多少钱", example_pinyin: "Zhè ge duōshao qián", example_ko: "이것은 얼마인가요?" },
             { word_id: 26, word: "儿子", pinyin: "érzi", meaning: "아들", example_zh: "这是我儿子", example_pinyin: "Zhè shì wǒ érzi", example_ko: "이 사람은 내 아들입니다" },
-            { word_id: 27, word: "二", pinyin: "èr", meaning: "둘", example_zh: "我有二本书", example_pinyin: "Wǒ yǒu èr běn shū", example_ko: "나는 책 두 권이 있어" },
-            { word_id: 28, word: "饭馆", pinyin: "fànguǎn", meaning: "식당", example_zh: "我们在饭馆吃饭", example_pinyin: "Wǒmen zài fànguǎn chīfàn", example_ko: "우리는 식당에서 밥을 먹는다" },
+            { word_id: 27, word: "二", pinyin: "èr", meaning: "둘, 2", example_zh: "我有二本书", example_pinyin: "Wǒ yǒu èr běn shū", example_ko: "나는 책 두 권이 있어" },
+            { word_id: 28, word: "饭馆", pinyin: "fànguǎn", meaning: "식당, 음식점", example_zh: "我们在饭馆吃饭", example_pinyin: "Wǒmen zài fànguǎn chīfàn", example_ko: "우리는 식당에서 밥을 먹는다" },
             { word_id: 29, word: "飞机", pinyin: "fēijī", meaning: "비행기", example_zh: "坐飞机去北京", example_pinyin: "Zuò fēijī qù Běijīng", example_ko: "비행기를 타고 베이징에 가다" },
-            { word_id: 30, word: "分钟", pinyin: "fēnzhōng", meaning: "분", example_zh: "等我五分钟", example_pinyin: "Děng wǒ wǔ fēnzhōng", example_ko: "나를 5분만 기다려줘" },
-            { word_id: 31, word: "高兴", pinyin: "gāoxìng", meaning: "기쁘다", example_zh: "很高兴认识你", example_pinyin: "Hěn gāoxìng rènshi nǐ", example_ko: "알게 되어서 반가워" },
+            { word_id: 30, word: "分钟", pinyin: "fēnzhōng", meaning: "분 (시간)", example_zh: "等我五分钟", example_pinyin: "Děng wǒ wǔ fēnzhōng", example_ko: "나를 5분만 기다려줘" },
+            { word_id: 31, word: "高兴", pinyin: "gāoxìng", meaning: "기쁘다, 즐겁다", example_zh: "很高兴认识你", example_pinyin: "Hěn gāoxìng rènshi nǐ", example_ko: "알게 되어서 반가워" },
             { word_id: 32, word: "个", pinyin: "gè", meaning: "개", example_zh: "我要一个苹果", example_pinyin: "Wǒ yào yí ge píngguǒ", example_ko: "나는 사과 하나를 원해요" },
             { word_id: 33, word: "工作", pinyin: "gōngzuò", meaning: "일하다", example_zh: "我在银行工作", example_pinyin: "Wǒ zài yínháng gōngzuò", example_ko: "나는 은행에서 일한다" },
             { word_id: 34, word: "狗", pinyin: "gǒu", meaning: "개", example_zh: "我有一只狗", example_pinyin: "Wǒ yǒu yì zhī gǒu", example_ko: "나는 개 한 마리가 있어" },
@@ -567,46 +564,16 @@
         function initData() {
             let list = [...fullRealWords];
             const samplePool = [
-                { w: "后面", p: "hòumian", m: "뒤쪽", exZh: "他在我后面", exPy: "Tā zài wǒ hòumian", exKo: "그는 내 뒤에 있다" },
-                { w: "回", p: "huí", m: "돌아가다", exZh: "我回家了", exPy: "Wǒ huí jiā le", exKo: "나는 집에 돌아왔다" },
-                { w: "会", p: "huì", m: "~할 수 있다", exZh: "我会说汉语", exPy: "Wǒ huì shuō hànyǔ", exKo: "나는 중국어를 할 수 있다" },
-                { w: "几", p: "jǐ", m: "몇", exZh: "你有几本书", exPy: "Nǐ yǒu jǐ běn shū", exKo: "너는 책이 몇 권 있니?" },
-                { w: "家", p: "jiā", m: "집", exZh: "这是我家", exPy: "Zhè shì wǒ jiā", exKo: "이곳은 우리 집이다" },
-                { w: "叫", p: "jiào", m: "부르다", exZh: "你叫什么名字", exPy: "Nǐ jiào shénme míngzi", exKo: "너의 이름은 무엇이니?" },
-                { w: "今天", p: "jīntiān", m: "오늘", exZh: "今天天气很好", exPy: "Jīntiān tiānqì hěn hǎo", exKo: "오늘 날씨가 아주 좋다" },
-                { w: "九", p: "jiǔ", m: "아홉", exZh: "九月九日", exPy: "Jiǔ yuè jiǔ rì", exKo: "9월 9일" },
-                { w: "开", p: "kāi", m: "열다", exZh: "请开门", exPy: "Qǐng kāi mén", exKo: "문을 열어주세요" },
-                { w: "看", p: "kàn", m: "보다", exZh: "看 E 书", exPy: "Kàn shū", exKo: "책을 읽다" },
-                { w: "看见", p: "kànjiàn", m: "눈에 뜨이다", exZh: "我看见他了", exPy: "Wǒ kànjiàn tā le", exKo: "나는 그를 보았다" },
-                { w: "块", p: "kuài", m: "위안", exZh: "十块钱", exPy: "Shí kuài qián", exKo: "10위안" },
-                { w: "来", p: "lái", m: "오다", exZh: "他来了", exPy: "Tā lái le", exKo: "그가 왔다" },
-                { w: "老师", p: "lǎoshī", m: "선생님", exZh: "老师好", exPy: "Lǎoshī hǎo", exKo: "선생님 안녕하세요" },
-                { w: "了", p: "le", m: "~완료", exZh: "我吃了饭", exPy: "Wǒ chī le fàn", exKo: "나는 밥을 먹었다" },
-                { w: "冷", p: "lěng", m: "춥다", exZh: "今天很冷", exPy: "Jīntiān hěn lěng", exKo: "오늘 날씨가 춥다" },
-                { w: "里", p: "lǐ", m: "~안", exZh: "家里有人", exPy: "Jiā li yǒu rén", exKo: "집 안에 사람이 있다" },
-                { w: "零", p: "líng", m: "영", exZh: "零下五度", exPy: "Líng xià wǔ dù", exKo: "영하 5도" },
-                { w: "买", p: "mǎi", m: "사다", exZh: "买水果", exPy: "Mǎi shuǐguǒ", exKo: "과일을 사다" },
-                { w: "妈妈", p: "māma", m: "엄마", exZh: "妈妈做饭", exPy: "Māma zuò fàn", exKo: "엄마가 밥을 하신다" },
-                { w: "猫", p: "māo", m: "고양이", exZh: " I 喜欢猫", exPy: "Wǒ xǐhuan māo", exKo: "나는 고양이를 좋아한다" },
-                { w: "没", p: "méi", m: "~가 없다", exZh: "我没钱", exPy: "Wǒ méi qián", exKo: "나는 돈이 없다" },
-                { w: "没关系", p: "méi guānxi", m: "괜찮다", exZh: "没关系，别哭", exPy: "Méi guānxi, bié kū", exKo: "괜찮아, 울지 마" },
-                { w: "米饭", p: "mǐfàn", m: "쌀밥", exZh: "我爱吃米饭", exPy: "Wǒ ài chī mǐfàn", exKo: "나는 쌀밥을 좋아한다" },
-                { w: "明天", p: "míngtiān", m: "내일", exZh: "明天见", exPy: "Míngtiān jiàn", exKo: "내일 보자" },
-                { w: "名字", p: "míngzi", m: "이름", exZh: " I 的名字", exPy: "Wǒ de míngzi", exKo: "나의 이름" },
-                { w: "哪", p: "nǎ", m: "어느", exZh: "哪本书", exPy: "Nǎ běn shū", exKo: "어느 책" },
-                { w: "哪儿", p: "nǎr", m: "어디", exZh: "你在哪儿", exPy: "Nǐ zài nǎr", exKo: "너는 어디에 있니?" },
-                { w: "那", p: "nà", m: "저것", exZh: "那是什么", exPy: "Nà shì shénme", exKo: "저것은 무엇인가요?" },
-                { w: "呢", p: "ne", m: "(지속)", exZh: "你在干什么呢", exPy: "Nǐ zài gàn shénme ne", exKo: "너 뭐 하고 있니?" },
-                { w: "能", p: "néng", m: "~할 수 있다", exZh: "我能进去吗", exPy: "Wǒ néng jìnqù ma", exKo: "제가 들어가도 될까요?" },
-                { w: "你", p: "nǐ", m: "너", exZh: "你好吗", exPy: "Nǐ hǎo ma", exKo: "너는 잘 지내니?" },
-                { w: "年", p: "nián", m: "년", exZh: "今年是2026年", exPy: "Jīnniān shì èr líng èr liù nián", exKo: "올해는 2026년이다" },
-                { w: "女儿", p: "nǚ'ér", m: "딸", exZh: "我有一个女儿", exPy: "Wǒ yǒu yí gè nǚ'ér", exKo: "나는 딸이 하나 있다" },
-                { w: "朋友", p: "péngyou", m: "친구", exZh: "他是我的朋友", exPy: "Tā shì wǒ de péngyou", exKo: "그는 내 친구이다" },
-                { w: "漂亮", p: "piàoliang", m: "예쁘다", exZh: "她很漂亮", exPy: "Tā hěn piàoliang", exKo: "그녀는 아주 예쁘다" },
-                { w: "苹果", p: "píngguǒ", m: "사과", exZh: " I 想吃苹果", exPy: "Wǒ xiǎng chī píngguǒ", exKo: "나는 사과를 먹고 싶다" },
-                { w: "七", p: "qī", m: "일곱", exZh: "七点 见", exPy: "Qī diǎn jiàn", exKo: "7시에 보자" },
-                { w: "钱", p: "qián", m: "돈", exZh: " I 有很多钱", exPy: "Wǒ yǒu hěn duō qián", exKo: "나는 돈이 아주 많다" },
-                { w: "前面", p: "qiánmiàn", m: "앞쪽", exZh: " 앞에 사람이 있다", exPy: "Qiánmiàn yǒu rén", exKo: "앞쪽에 사람이 있다" }
+                { w: "后面", p: "hòumian", m: "뒤쪽" }, { w: "回", p: "huí", m: "돌아가다" }, { w: "会", p: "huì", m: "~할 수 있다" }, { w: "几", p: "jǐ", m: "몇" },
+                { w: "家", p: "jiā", m: "집" }, { w: "叫", p: "jiào", m: "부르다" }, { w: "今天", p: "jīntiān", m: "오늘" }, { w: "九", p: "jiǔ", m: "아홉" },
+                { w: "开", p: "kāi", m: "열다" }, { w: "看", p: "kàn", m: "보다" }, { w: "看见", p: "kànjiàn", m: "눈에 뜨이다" }, { w: "块", p: "kuài", m: "위안" },
+                { w: "来", p: "lái", m: "오다" }, { w: "老师", p: "lǎoshī", m: "선생님" }, { w: "了", p: "le", m: "~완료" }, { w: "冷", p: "lěng", m: "춥다" },
+                { w: "里", p: "lǐ", m: "~안" }, { w: "零", p: "líng", m: "영" }, { w: "买", p: "mǎi", m: "사다" }, { w: "妈妈", p: "māma", m: "엄마" },
+                { w: "猫", p: "māo", m: "고양이" }, { w: "没", p: "méi", m: "~가 없다" }, { w: "没关系", p: "méi guānxi", m: "괜찮다" }, { w: "米饭", p: "mǐfàn", m: "쌀밥" },
+                { w: "明天", p: "míngtiān", m: "내일" }, { w: "名字", p: "míngzi", m: "이름" }, { w: "哪", p: "nǎ", m: "어느" }, { w: "哪儿", p: "nǎr", m: "어디" },
+                { w: "那", p: "nà", m: "저것" }, { w: "呢", p: "ne", m: "(지속조사)" }, { w: "能", p: "néng", m: "~할 수 있다" }, { w: "你", p: "nǐ", m: "너" },
+                { w: "年", p: "nián", m: "년" }, { w: "女儿", p: "nǚ'ér", m: "딸" }, { w: "朋友", p: "péngyou", m: "친구" }, { w: "漂亮", p: "piàoliang", m: "예쁘다" },
+                { w: "苹果", p: "píngguǒ", m: "사과" }, { w: "七", p: "qī", m: "일곱" }, { w: "钱", p: "qián", m: "돈" }, { w: "前面", p: "qiánmiàn", m: "앞쪽" }
             ];
 
             let poolIdx = 0;
@@ -617,9 +584,9 @@
                     word: currentItem.w,
                     pinyin: currentItem.p,
                     meaning: currentItem.m,
-                    example_zh: currentItem.exZh,
-                    example_pinyin: currentItem.exPy,
-                    example_ko: currentItem.exKo // 📌 자연스러운 해석 적용 완료
+                    example_zh: `这是关于 ${currentItem.w} 的例句`,
+                    example_pinyin: `Zhe shi guanyu ${currentItem.p} de liju`,
+                    example_ko: `이것은 ${currentItem.m}에 관한 예문입니다.`
                 });
                 poolIdx++;
             }
@@ -912,7 +879,7 @@
                 renderChoiceOptions(item.word, 'word');
             } else if (activeType === 'pinyin') {
                 typeLabel = '🎵 성조 맞히기';
-                quizBox.innerHTML = `<div style="font-size:30px; font-weight:800;">${item.word}</div>`;
+                quizBox.innerHTML = `<div style="font-size:32px; font-weight:800;">${item.word}</div>`;
                 renderChoiceOptions(item.pinyin, 'pinyin');
             } else if (activeType === 'writing') {
                 typeLabel = '✍️ 뜻 보고 직접 쓰기';
@@ -961,10 +928,10 @@
             if (userInput === item.word) {
                 score++;
                 quizBox.style.background = '#eaf2ea'; quizBox.style.color = '#2d5a27';
-                quizBox.innerHTML = `<div>${item.meaning}</div><div style="font-size:30px; font-weight:800;">${item.word}</div>`;
+                quizBox.innerHTML = `<div>${item.meaning}</div><div style="font-size:32px; font-weight:800;">${item.word}</div>`;
             } else {
                 quizBox.style.background = 'var(--danger-light)'; quizBox.style.color = 'var(--danger)';
-                quizBox.innerHTML = `<div>입력: ${userInput || '없음'}</div><div>${item.meaning}</div><div style="font-size:30px; font-weight:800;">${item.word}</div>`;
+                quizBox.innerHTML = `<div>입력: ${userInput || '없음'}</div><div>${item.meaning}</div><div style="font-size:32px; font-weight:800;">${item.word}</div>`;
                 if (!wrongWordIds.includes(item.word_id)) { wrongWordIds.push(item.word_id); localStorage.setItem('hsk_wrong_words', JSON.stringify(wrongWordIds)); }
                 if (!currentQuizWrongItems.find(w => w.word_id === item.word_id)) currentQuizWrongItems.push(item);
             }
