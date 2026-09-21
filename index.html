@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HSK 4급 마스터</title>
 
-    <!-- 📌 스마트폰 홈 화면 아이콘 설정 -->
+    <!-- 스마트폰 홈 화면 아이콘 설정 -->
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22HSK%204%EA%B8%89%20%EB%A7%88%EC%8A%A4%ED%84%B0%22%2C%22short_name%22%3A%22HSK%204%EA%B8%89%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f6f0%22%2C%22theme_color%22%3A%22%238d5b4c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22.%2Ficon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
@@ -161,7 +161,7 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 📌 단어 암기 카드 높이: 가로 기준 4:5 비율 적용 */
+        /* 단어 암기 카드 비율: 가로:세로 = 4:5 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -262,7 +262,7 @@
         <div id="screen-home">
             <div class="panel" style="margin-bottom: 16px; padding: 24px 20px;">
                 <h1 style="margin: 0 0 4px 0; font-size: 24px; color: var(--primary);">🇨🇳 HSK 4급</h1>
-                <p style="margin: 0; color: var(--gray); font-size: 13px;">쭝국어 완벽 돌파 张陵赫我爱你</p>
+                <p style="margin: 0; color: var(--gray); font-size: 13px;">쭝국어 완벽 돌파</p>
             </div>
             <button class="menu-btn" onclick="openVocbDays()">📚 단어장 학습 <span>Day별 선택</span></button>
             <button class="menu-btn" onclick="openQuizMenu()">📝 퀴즈 <span>형식 선택 후 설정</span></button>
@@ -527,90 +527,34 @@
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
 
-        // 📌 1. hsk_basic_words_350.json 원본 파일 기반 데이터 (첫 단어 '아줌마(阿姨)')
-        const fullRealWords = [
-            { word_id: 1, word: "阿姨", pinyin: "āyí", meaning: "아줌마, 이모", example_zh: "阿姨，我想买个苹果", example_pinyin: "Āyí, wǒ xiǎng mǎi gè píngguǒ", example_ko: "아줌마, 저 사과 하나 사고 싶어요" },
-            { word_id: 2, word: "啊", pinyin: "a", meaning: "(감탄조사) 아", example_zh: "啊，真漂亮", example_pinyin: "A, zhēn piàoliang", example_ko: "아, 정말 예쁘다" },
-            { word_id: 3, word: "矮", pinyin: "ǎi", meaning: "키가 작다", example_zh: "这张桌子有点矮", example_pinyin: "Zhè zhāng zhuōzi yǒudiǎn ǎi", example_ko: "이 책상은 좀 낮다(작다)" },
-            { word_id: 4, word: "爱好", pinyin: "àihào", meaning: "취미", example_zh: "你的爱好是什么", example_pinyin: "Nǐ de àihào shì shénme", example_ko: "너의 취미는 무엇이니?" },
-            { word_id: 5, word: "安静", pinyin: "ānjìng", meaning: "조용하다", example_zh: "图书馆里很安静", example_pinyin: "Túshūguǎn li hěn ānjìng", example_ko: "도서관 안은 아주 조용하다" },
-            { word_id: 6, word: "把", pinyin: "bǎ", meaning: "~을 (처치사)", example_zh: "把书给我", example_pinyin: "Bǎ shū gěi wǒ", example_ko: "책을 내게 줘" },
-            { word_id: 7, word: "班", pinyin: "bān", meaning: "반, 학급", example_zh: "我们是一个班的", example_pinyin: "Wǒmen shì yí gè bān de", example_ko: "우리는 같은 반이다" },
-            { word_id: 8, word: "搬", pinyin: "bān", meaning: "이사하다, 옮기다", example_zh: "我们下个月搬家", example_pinyin: "Wǒmen xià gè yuè bānjiā", example_ko: "우리는 다음 달에 이사한다" },
-            { word_id: 9, word: "半", pinyin: "bàn", meaning: "반, 절반", example_zh: "一个半小时", example_pinyin: "Yí gè bàn xiǎoshí", example_ko: "한 시간 반" },
-            { word_id: 10, word: "办法", pinyin: "bànfǎ", meaning: "방법", example_zh: "我有一个好办法", example_pinyin: "Wǒ yǒu yí gè hǎo bànfǎ", example_ko: "나에게 좋은 방법이 하나 있어" },
-            { word_id: 11, word: "办公室", pinyin: "bàngōngshì", meaning: "사무실", example_zh: "老师在办公室", example_pinyin: "Lǎoshī zài bàngōngshì", example_ko: "선생님은 사무실에 계신다" },
-            { word_id: 12, word: "帮忙", pinyin: "bāngmáng", meaning: "돕다", example_zh: "谢谢你帮我忙", example_pinyin: "Xièxie nǐ bāng wǒ máng", example_ko: "내 일을 도와주셔서 감사합니다" },
-            { word_id: 13, word: "包", pinyin: "bāo", meaning: "가방, 싸다", example_zh: "这个包很漂亮", example_pinyin: "Zhè ge bāo hěn piàoliang", example_ko: "이 가방은 아주 예쁘다" },
-            { word_id: 14, word: "饱", pinyin: "bǎo", meaning: "배부르다", example_zh: "我吃饱了", example_pinyin: "Wǒ chī bǎo le", example_ko: "나는 배불리 먹었다" },
-            { word_id: 15, word: "北方", pinyin: "běifāng", meaning: "북쪽, 북방", example_zh: "我喜欢北方的冬天", example_pinyin: "Wǒ xǐhuan běifāng de dōngtiān", example_ko: "나는 북쪽의 겨울을 좋아한다" },
-            { word_id: 16, word: "被", pinyin: "bèi", meaning: "~에 의해 (피동사)", example_zh: "苹果被吃了", example_pinyin: "Píngguǒ bèi chī le", example_ko: "사과가 먹혔다(사과를 먹어 치웠다)" },
-            { word_id: 17, word: "鼻子", pinyin: "bízi", meaning: "코", example_zh: "他的鼻子很高", example_pinyin: "Tā de bízi hěn gāo", example_ko: "그의 코는 오뚝하다" },
-            { word_id: 18, word: "比较", pinyin: "bǐjiào", meaning: "비교적, 비교하다", example_zh: "今天比较冷", example_pinyin: "Jīntiān bǐjiào lěng", example_ko: "오늘은 비교적 춥다" },
-            { word_id: 19, word: "比赛", pinyin: "bǐsài", meaning: "시합, 경기", example_zh: "我们赢了比赛", example_pinyin: "Wǒmen yíng le bǐsài", example_ko: "우리는 경기에서 이겼다" },
-            { word_id: 20, word: "必须", pinyin: "bìxū", meaning: "반드시 ~해야 한다", example_zh: "你必须去", example_pinyin: "Nǐ bìxū qù", example_ko: "너는 반드시 가야 한다" },
-            { word_id: 21, word: "变化", pinyin: "biànhuà", meaning: "변화하다, 변화", example_zh: "这里变化很大", example_pinyin: "Zhèli biànhuà hěn dà", example_ko: "이곳은 변화가 아주 크다" },
-            { word_id: 22, word: "别人", pinyin: "biérén", meaning: "다른 사람", example_zh: "不要影响别人", example_pinyin: "Bú yào yǐngxiǎng biérén", example_ko: "다른 사람에게 영향을 주지 마라" },
-            { word_id: 23, word: "冰箱", pinyin: "bīngxiāng", meaning: "냉장고", example_zh: "苹果在冰箱里", example_pinyin: "Píngguǒ zài bīngxiāng li", example_ko: "사과는 냉장고 안에 있다" },
-            { word_id: 24, word: "不但", pinyin: "búdàn", meaning: "뿐만 아니라", example_zh: "不但他知道，我也知道", example_pinyin: "Búdàn tā zhīdào, wǒ yě zhīdào", example_ko: "그뿐만 아니라 나도 안다" },
-            { word_id: 25, word: "菜单", pinyin: "càidān", meaning: "메뉴판", example_zh: "服务员，请给我菜单", example_pinyin: "Fúwùyuán, qǐng gěi wǒ càidān", example_ko: "종업원님, 메뉴판 주세요" },
-            { word_id: 26, word: "参加", pinyin: "cānjiā", meaning: "참가하다", example_zh: "参加考试", example_pinyin: "Cānjiā kǎoshì", example_ko: "시험에 참가하다" },
-            { word_id: 27, word: "草", pinyin: "cǎo", meaning: "풀", example_zh: "地上的草很绿", example_pinyin: "Dìshang de cǎo hěn lǜ", example_ko: "땅 위의 풀이 아주 푸르다" },
-            { word_id: 28, word: "层", pinyin: "céng", meaning: "층", example_zh: "我在三层", example_pinyin: "Wǒ zài sān céng", example_ko: "나는 3층에 있다" },
-            { word_id: 29, word: "差", pinyin: "chà", meaning: "나쁘다, 부족하다", example_zh: "差五分", example_pinyin: "Chà wǔ fēn", example_ko: "5분 부족하다 (5분 전이다)" },
-            { word_id: 30, word: "超市", pinyin: "chāoshì", meaning: "슈퍼마켓", example_zh: "我去超市买东西", example_pinyin: "Wǒ qù chāoshì mǎi dōngxi", example_ko: "나는 슈퍼마켓에 물건 사러 간다" },
-            { word_id: 31, word: "衬衫", pinyin: "chènshān", meaning: "셔츠", example_zh: "这件衬衫很好看", example_pinyin: "Zhè jiàn chènshān hěn hǎokàn", example_ko: "이 셔츠는 아주 예쁘다" },
-            { word_id: 32, word: "成绩", pinyin: "chéngjì", meaning: "성적", example_zh: "考试成绩出来了", example_pinyin: "Kǎoshì chéngjì chūlái le", example_ko: "시험 성적이 나왔다" },
-            { word_id: 33, word: "城市", pinyin: "chéngshì", meaning: "도시", example_zh: "这是一个大城市", example_pinyin: "Zhè shì yí gè dà chéngshì", example_ko: "이곳은 큰 도시이다" },
-            { word_id: 34, word: "迟到", pinyin: "chídào", meaning: "지각하다", example_zh: "今天我迟到了", example_pinyin: "Jīntiān wǒ chídào le", example_ko: "오늘 나는 지각했다" },
-            { word_id: 35, word: "出现", pinyin: "chūxiàn", meaning: "나타나다", example_zh: "他出现了", example_pinyin: "Tā chūxiàn le", example_ko: "그가 나타났다" },
-            { word_id: 36, word: "除了", pinyin: "chúle", meaning: "~외에", example_zh: "除了他，我都去了", example_pinyin: "Chúle tā, wǒ dōu qù le", example_ko: "그를 제외하고 나는 다 갔다" },
-            { word_id: 37, word: "春", pinyin: "chūn", meaning: "봄", example_zh: "春天来了", example_pinyin: "Chūntiān lái le", example_ko: "봄이 왔다" },
-            { word_id: 38, word: "词典", pinyin: "cídiǎn", meaning: "사전", example_zh: "这是一本汉语词典", example_pinyin: "Zhè shì yì běn hànyǔ cídiǎn", example_ko: "이것은 중국어 사전 한 권이다" },
-            { word_id: 39, word: "聪明", pinyin: "cōngming", meaning: "똑똑하다", example_zh: "这个孩子很聪明", example_pinyin: "Zhè ge háizi hěn cōngming", example_ko: "이 아이는 아주 똑똑하다" },
-            { word_id: 40, word: "打扫", pinyin: "dǎsǎo", meaning: "청소하다", example_zh: "打扫房间", example_pinyin: "Dǎsǎo fángjiān", example_ko: "방을 청소하다" }
-        ];
+        // 외부 JSON 파일에서 단어 데이터를 불러와 파싱하는 함수
+        async function loadWordsData() {
+            try {
+                const response = await fetch('./hsk_basic_words_350.json');
+                const data = await response.json();
+                
+                allWords = data.map(item => {
+                    // meaning 필드에 탭(\t) 문자가 있을 경우, 마지막 부분(한국어 뜻)만 추출
+                    let pureMeaning = item.meaning;
+                    if (pureMeaning && pureMeaning.includes('\t')) {
+                        const parts = pureMeaning.split('\t');
+                        pureMeaning = parts[parts.length - 1];
+                    }
 
-        function initData() {
-            let list = [...fullRealWords];
-            const samplePool = [
-                { w: "打算", p: "dǎsuàn", m: "계획하다", exZh: "你打算什么时候去", exPy: "Nǐ dǎsuàn shénme shíhou qù", exKo: "너는 언제 갈 계획이니?" },
-                { w: "带", p: "dài", m: "데리다, 지참하다", exZh: "带雨伞", exPy: "Dài yǔsǎn", exKo: "우산을 챙기다" },
-                { w: "担心", p: "dānxīn", m: "걱정하다", exZh: "别担心", exPy: "Bié dānxīn", exKo: "걱정하지마" },
-                { w: "蛋糕", p: "dàngāo", m: "케이크", exZh: "吃生日蛋糕", exPy: "Chī shēngrì dàngāo", exKo: "생일 케이크를 먹다" },
-                { w: "当然", p: "dāngrán", m: "당연하다", exZh: "当然可以", exPy: "Dāngrán kěyǐ", exKo: "당연히 되지" },
-                { w: "地", p: "de", m: "~하게 (부사격조사)", exZh: "高兴地说", exPy: "Gāoxìng de shuō", exKo: "기쁘게 말하다" },
-                { w: "灯", p: "dēng", m: "등, 전등", exZh: "把灯打开", exPy: "Bǎ dēng dǎkāi", exKo: "불을 켜다" },
-                { w: "地方", p: "dìfang", meaning: "장소, 곳", exZh: "这个地方很美", exPy: "Zhè ge dìfang hěn měi", exKo: "이 장소는 아주 아름답다" },
-                { w: "地铁", p: "dìtiě", meaning: "지하철", exZh: "坐地铁去", exPy: "Zuò dìtiě qù", exKo: "지하철을 타고 가다" },
-                { w: "地图", p: "dìtú", meaning: "지도", exZh: "看地图", exPy: "Kàn dìtú", exKo: "지도를 보다" },
-                { w: "电梯", p: "diàntī", meaning: "엘리베이터", exZh: "坐电梯上楼", exPy: "Zuò diàntī shàng lóu", exKo: "엘리베이터를 타고 올라가다" },
-                { w: "电子邮件", p: "diànzǐ yóujiàn", m: "이메일", exZh: "发电子邮件", exPy: "Fā diànzǐ yóujiàn", exKo: "이메일을 보내다" },
-                { w: "东", p: "dōng", m: "동쪽", exZh: "太阳在东边升起", exPy: "Tàiyang zài dōngbiān shēngqǐ", exKo: "태양이 동쪽에서 뜬다" },
-                { w: "动物", p: "dòngwù", meaning: "동물", exZh: "我喜欢小动物", exPy: "Wǒ xǐhuan xiǎo dòngwù", exKo: "나는 작은 동물을 좋아한다" },
-                { w: "短", p: "duǎn", meaning: "짧다", exZh: "头发太短了", exPy: "Tóufa tài duǎn le", exKo: "머리가 너무 짧다" },
-                { w: "段", p: "duàn", meaning: "단락, 구간", exZh: "一段历史", exPy: "Yí duàn lìshǐ", exKo: "한 시기의 역사" },
-                { w: "锻炼", p: "duànliàn", m: "운동하다", exZh: "每天锻炼身体", exPy: "Měitiān duànliàn shēntǐ", exKo: "매일 신체 단련(운동)을 한다" },
-                { w: "多么", p: "duōme", meaning: "얼마나 ~한가", exZh: "这里多么美丽", exPy: "Zhèli duōme měilì", exKo: "이곳이 얼마나 아름다운가!" },
-                { w: "饿", p: "è", meaning: "배고프다", exZh: "我肚子饿了", exPy: "Wǒ dùzi è le", exKo: "나 배가 고파졌다" },
-                { w: "耳朵", p: "ěrduo", meaning: "귀", exZh: "听听", exPy: "Tīngting", exKo: "귀 기울여 듣다" }
-            ];
-
-            let poolIdx = 0;
-            for (let i = 41; i <= 350; i++) {
-                let currentItem = samplePool[poolIdx % samplePool.length];
-                list.push({
-                    word_id: i,
-                    word: currentItem.w,
-                    pinyin: currentItem.p,
-                    meaning: currentItem.m,
-                    example_zh: currentItem.exZh,
-                    example_pinyin: currentItem.exPy,
-                    example_ko: currentItem.exKo
+                    return {
+                        word_id: item.word_id,
+                        word: item.hanzi, // 단어
+                        pinyin: item.pinyin, // 병음
+                        meaning: pureMeaning, // 뜻 (추출됨)
+                        example_zh: item.example_sentence, // 예문
+                        example_pinyin: item.example_pinyin, // 예문 병음
+                        example_ko: item.example_meaning // 예문 해석
+                    };
                 });
-                poolIdx++;
+            } catch (error) {
+                console.error("데이터 로드 실패:", error);
+                alert("단어장 데이터(hsk_basic_words_350.json)를 불러오지 못했습니다. 파일 위치를 확인해주세요.");
             }
-            allWords = list;
         }
 
         function speakChinese(text) {
@@ -652,26 +596,27 @@
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
 
-        function openVocbDays() {
-            if (!allWords || allWords.length === 0) initData();
+        async function openVocbDays() {
+            if (!allWords || allWords.length === 0) await loadWordsData();
             showScreen('screen-vocab-days');
             const grid = document.getElementById('day-grid');
             grid.innerHTML = '';
             
+            // 80개 단위로 정확히 분할
             const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
             for (let i = 0; i < totalDays; i++) {
-                const start = i * CHUNK_SIZE + 1;
+                const start = i * CHUNK_SIZE + 1; // 표기용 번호 (1, 81, 161 ...)
                 const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
                 
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
                 btn.innerHTML = `Day ${i + 1}<div style="font-size:12px; color:var(--gray); margin-top:4px;">(${start} ~ ${end}번)</div>`;
-                btn.onclick = () => selectVocbDay(i * CHUNK_SIZE, end, i + 1);
+                btn.onclick = () => selectVocabDay(i * CHUNK_SIZE, end, i + 1);
                 grid.appendChild(btn);
             }
         }
 
-        function selectVocbDay(startIdx, endIdx, dayNum) {
+        function selectVocabDay(startIdx, endIdx, dayNum) {
             selectedStartIdx = startIdx;
             selectedEndIdx = endIdx;
             document.getElementById('vocab-option-title').innerText = `Day ${dayNum} 학습 설정`;
@@ -679,7 +624,9 @@
         }
 
         function startVocabSession() {
+            // 인덱스 기반으로 정확하게 해당 범위를 잘라냄
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
+            
             const filterVal = document.getElementById('vocab-status-filter').value;
             if (filterVal !== 'all') {
                 let targetStatus = filterVal === 'learned' ? 1 : filterVal === 'confused' ? 2 : 0;
@@ -806,8 +753,8 @@
             showVocabCard();
         }
 
-        function selectQuizType(type) {
-            if (!allWords || allWords.length === 0) initData();
+        async function selectQuizType(type) {
+            if (!allWords || allWords.length === 0) await loadWordsData();
             currentQuizType = type;
             showScreen('screen-quiz-settings');
             
@@ -824,8 +771,8 @@
             }
         }
 
-        function openQuizMenu() {
-            if (!allWords || allWords.length === 0) initData();
+        async function openQuizMenu() {
+            if (!allWords || allWords.length === 0) await loadWordsData();
             showScreen('screen-quiz-menu');
         }
 
@@ -972,8 +919,8 @@
         function prevQuizQuestion() { if (currentIndex > 0) { currentIndex--; loadQuizQuestion(); } else alert("첫 번째 문제입니다."); }
         function nextQuizQuestion() { currentIndex++; loadQuizQuestion(); }
 
-        function openReview() {
-            if (!allWords || allWords.length === 0) initData();
+        async function openReview() {
+            if (!allWords || allWords.length === 0) await loadWordsData();
             showScreen('screen-review');
             wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
             if (wrongWordIds.length === 0) {
@@ -1042,7 +989,10 @@
             }
         }
 
-        initData();
+        // 앱 시작 시 데이터 로드 실행
+        window.addEventListener('DOMContentLoaded', () => {
+            loadWordsData();
+        });
     </script>
 </body>
 </html>
