@@ -766,16 +766,16 @@
                 
                 const card = document.createElement('div');
                 // ✅ 기존 코드에 position: relative; 만 추가하여 뜻 위치/간격 완벽 유지
-                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
+                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:16px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
                     <!-- 1. 왼쪽 상단 단어 번호 -->
-                    <div style="position:absolute; top:6px; left:14px; font-size:11px; color:var(--gray); font-weight:400;">${globalNum}</div>
+                    <div style="position:absolute; top:6px; left:10px; font-size:11px; color:var(--gray); font-weight:400;">${globalNum}</div>
                     
                     <!-- 2. 기존 단어/병음 영역 -->
                     <div style="display:flex; flex-direction:column; gap:3px; min-width: 100px; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
-                        <span style="font-size:24px; font-weight:800; color:var(--text); transform: translateY(8px);">${item.word}</span>
-                        <span style="font-size:13px; color:var(--primary); font-weight:400; transform: translateY(4px)">${item.pinyin}</span>
+                        <span style="font-size:24px; font-weight:800; color:var(--text); transform: translateX(-3px); transform: translateY(8px);">${item.word}</span>
+                        <span style="font-size:10px; color:var(--primary); font-weight:400; transform: translateX(-2px); transform: translateY(4px)">${item.pinyin}</span>
                     </div>
                     
                     <!-- 3. 기존 뜻 영역 -->
