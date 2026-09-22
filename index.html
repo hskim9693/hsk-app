@@ -29,8 +29,8 @@
             --border: #e6ded3;          
             
             --beige-box: #f9f4ee;       
-            --expl-box-bg: #fcf2f2;     
-            --expl-border: #f0d5d5;     
+            --expl-box-bg: #FDF8F3;     
+            --expl-border: #E0D2C3;     
             --btn-sub-bg: #F4EEE6;      
             --btn-sub-border: #DCD4C9;  
             --btn-sub-text: #3D312A;    
@@ -169,7 +169,7 @@
         .quiz-menu-btn div {
             color: var(--brown-text); 
             font-weight: 800;
-            font-size: 16px; /* 3. 퀴즈 페이지 유형 이름 글씨 크기 약간 줄임[span_2](start_span)[span_2](end_span) */
+            font-size: 16px; 
         }
         .quiz-menu-btn:active { transform: scale(0.97); background: var(--gray-light); }
         .quiz-menu-btn span { font-size: 13px; color: var(--gray); font-weight: 500; }
@@ -207,11 +207,11 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 5. 단어장 카드 길이를 절반으로 줄임 (원래 비율 4 / 5로 복원)[span_3](start_span)[span_3](end_span) */
+        /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
-            aspect-ratio: 4 / 5; 
+            aspect-ratio: 4 / 5;
             padding: 20px 16px;
             border-radius: 24px;
             box-shadow: var(--shadow-lg);
@@ -345,7 +345,6 @@
 
         <div id="screen-vocab-day-detail" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <!-- 1. 단어 목록 왼쪽 상단 버튼을 누르면 Day 목록으로 돌아가도록 수정[span_4](start_span)[span_4](end_span) -->
                 <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 13px;">◀ Day 목록으로</button>
                 <div id="day-detail-title" style="font-size: 16px; font-weight: 800; color: var(--primary);"></div>
             </div>
@@ -492,7 +491,6 @@
                 <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 0;">
                     <label>상태 선택</label>
                     <div class="radio-group" style="width: 100%; justify-content: space-between;">
-                        <!-- 4. 퀴즈 설정 체크박스 name 오류 수정 (checkbox-status -> quiz-status)[span_5](start_span)[span_5](end_span) -->
                         <label><input type="checkbox" name="quiz-status" value="1" checked> 🟤 외움</label>
                         <label><input type="checkbox" name="quiz-status" value="2" checked> 🟠 헷갈림</label>
                         <label><input type="checkbox" name="quiz-status" value="0" checked> ⚪ 모름</label>
@@ -772,9 +770,9 @@
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
                     <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
-                    <!-- 2. 단어 목록 오른쪽 동그라미 크기/여백 약간 줄임[span_6](start_span)[span_6](end_span) -->
-                    <div style="min-width: 24px; text-align:right;">
-                        <span id="list-status-${item.word_id}" style="font-size:17px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
+                    <!-- 3. 단어 목록 오른쪽 동그라미 아이콘 크기를 0.8배로 축소 -->
+                    <div style="min-width: 20px; text-align:right;">
+                        <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
                     </div>
                 `;
 
@@ -803,10 +801,6 @@
             currentIndex = idx;
             showScreen('screen-vocab-card');
             showVocabCard();
-        }
-
-        function backToPrevVocbList() {
-            selectVocbDay(selectedStartIdx, selectedEndIdx, selectedDayNum);
         }
 
         function openVocbOptions() {
@@ -997,7 +991,12 @@
             const checkedStatuses = Array.from(document.querySelectorAll('input[name="quiz-status"]:checked')).map(el => parseInt(el.value));
             if (checkedStatuses.length === 0) { alert("최소 하나 이상의 상태를 선택해주세요."); return; }
 
-            let targetWords = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => checkedStatuses.includes(wordStatuses[w.word_id] || 0));
+            // 2. 모름(0)인 단어도 정상적으로 퀴즈에 필터링되어 불러와지도록 수정
+            let targetWords = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => {
+                const status = wordStatuses[w.word_id] || 0;
+                return checkedStatuses.includes(status);
+            });
+
             if (targetWords.length === 0) { alert("조건에 일치하는 단어가 없습니다."); return; }
 
             if (document.querySelector('input[name="quiz-order"]:checked').value === 'random') targetWords = shuffle(targetWords);
