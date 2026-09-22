@@ -374,7 +374,7 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="startVocabSessionFromOptions()">학습 시작하기 🚀</button>
+                <button class="btn-primary" onclick="startVocbSessionFromOptions()">학습 시작하기 🚀</button>
             </div>
             <button class="btn-secondary" onclick="selectVocbDay(selectedStartIdx, selectedEndIdx, selectedDayNum)">◀ 단어 목록으로 돌아가기</button>
         </div>
@@ -393,7 +393,7 @@
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(50px); justify-content: center;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
@@ -760,14 +760,14 @@
                 const status = wordStatuses[item.word_id] || 0;
                 let statusEmoji = status === 1 ? '🟤' : status === 2 ? '🟠' : '⚪';
                 
-                // 누적 번호 계산 (0001부터 0700까지)
+                // 누적 번호 계산 (0001부터 0700까지) - 굵기를 한 단계 내림 (font-weight: 600)
                 const globalNum = String(startIdx + idx + 1).padStart(4, '0');
                 
                 const card = document.createElement('div');
                 card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
-                    <div style="position:absolute; top:6px; left:12px; font-size:11px; color:var(--gray); font-weight:700;">${globalNum}</div>
+                    <div style="position:absolute; top:6px; left:12px; font-size:11px; color:var(--gray); font-weight:600;">${globalNum}</div>
                     <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer; margin-top:10px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
@@ -914,8 +914,8 @@
             if (isDirectStudyMode) {
                 studyBtnGroup.classList.add('hidden');
                 navBtnGroup.innerHTML = `
-                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">◀ 이전 단어</button>
-                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">다음 단어 ▶</button>
+                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 14px;">◀ 이전 단어</button>
+                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 14px; background: var(--dark-brown); color: white;">다음 단어 ▶</button>
                 `;
             } else {
                 studyBtnGroup.classList.remove('hidden');
