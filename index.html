@@ -773,7 +773,7 @@
                     <div style="position:absolute; top:6px; left:10px; font-size:11px; color:var(--gray); font-weight:500;">${globalNum}</div>
                     
                     <!-- 2. 기존 단어/병음 영역 -->
-                    <div style="display:flex; flex-direction:column; gap:3px; min-width: 100px; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
+                    <div style="display:flex; flex-direction:column; gap:3px; min-width: 100px; cursor:pointer; transform: translateX(-5px)" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
                         <span style="font-size:24px; font-weight:800; color:var(--text); transform: translateX(-15px); transform: translateY(8px);">${item.word}</span>
                         <span style="font-size:11px; color:var(--primary); font-weight:400; transform: translateX(-15px); transform: translateY(7px)">${item.pinyin}</span>
                     </div>
