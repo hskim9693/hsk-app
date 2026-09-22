@@ -766,11 +766,11 @@
                 
                 const card = document.createElement('div');
                 // ✅ 기존 코드에 position: relative; 만 추가하여 뜻 위치/간격 완벽 유지
-                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:18px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
+                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:20px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
                     <!-- 1. 왼쪽 상단 단어 번호 -->
-                    <div style="position:absolute; top:6px; left:10px; font-size:11px; color:var(--gray); font-weight:500;">${globalNum}</div>
+                    <div style="position:absolute; top:6px; left:9px; font-size:11px; color:var(--gray); font-weight:600;">${globalNum}</div>
                     
                     <!-- 2. 기존 단어/병음 영역 -->
                     <div style="display:flex; flex-direction:column; gap:3px; min-width: 100px; cursor:pointer; transform: translateX(-5px)" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
