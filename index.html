@@ -138,6 +138,7 @@
         .icon-menu-btn .icon { font-size: 32px; }
         .icon-menu-btn .label { font-size: 16px; font-weight: 700; color: var(--text); }
         
+        /* 사진 1과 일치하는 퀴즈 메뉴 버튼 스타일 */
         .quiz-menu-btn {
             background: var(--card-bg);
             border: 1.5px solid var(--border);
@@ -427,7 +428,7 @@
             </div>
         </div>
 
-        <!-- 4. 퀴즈 메뉴 화면 -->
+        <!-- 4. 퀴즈 메뉴 화면 (사진 1과 일치하도록 수정) -->
         <div id="screen-quiz-menu" class="hidden">
             <div class="quiz-menu-btn" style="background: var(--card-bg); border-radius: 20px; padding: 22px 20px; margin-bottom: 14px; cursor: default;">
                 <span style="font-size: 17px; font-weight: 700; color: var(--text);">퀴즈 형식 선택</span>
@@ -517,6 +518,7 @@
                     </div>
                 </div>
 
+                <!-- 사진 2와 일치하는 해설 박스 스타일 및 색상 적용 -->
                 <div id="quiz-explanation-box" class="hidden" style="margin-top: 18px; background: #f3efe6; border: 1.5px solid #e5dec9; padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
                     <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--text);"></div>
                     
@@ -608,7 +610,7 @@
     </div>
 
     <script>
-        const CHUNK_SIZE = 600;
+        const CHUNK_SIZE = 600; // 350 대신 600으로 변경
         let allWords = [];
         let currentList = [];
         
@@ -629,7 +631,6 @@
 
         async function loadWordsData() {
             try {
-                // hsk_basic_words_600.json 파일로 변경
                 const response = await fetch('./hsk_basic_words_600.json');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -655,7 +656,7 @@
                 });
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
-                alert("단어장 데이터(hsk_basic_words_600.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
+                alert("단어장 데이터를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
             }
         }
 
@@ -756,6 +757,7 @@
                 const card = document.createElement('div');
                 card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); cursor:pointer;";
                 
+                // 단어 글씨 크기 살짝 줄임(24px), 뜻 글씨체 한 단계 굵게(600)
                 card.innerHTML = `
                     <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px;">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
