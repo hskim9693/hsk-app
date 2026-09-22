@@ -770,11 +770,11 @@
                 
                 card.innerHTML = `
                     <!-- 1. 왼쪽 상단 단어 번호 -->
-                    <div style="position:absolute; top:6px; left:14px; font-size:11px; color:var(--gray); font-weight:700;">${globalNum}</div>
+                    <div style="position:absolute; top:6px; left:14px; font-size:11px; color:var(--gray); font-weight:400;">${globalNum}</div>
                     
                     <!-- 2. 기존 단어/병음 영역 -->
                     <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
-                        <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
+                        <span style="font-size:24px; font-weight:800; color:var(--text); transform: translateY(5px);">${item.word}</span>
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
                     
