@@ -30,7 +30,7 @@
             
             /* 요청하신 색상 반영 */
             --beige-box: #f9f4ee;       
-            --expl-box-bg: #F4EEE6;     /* 해설 박스 전체 배경색 */
+            --expl-box-bg: #FDF8F3;     /* 해설 박스 전체 배경색 */
             --expl-border: #E0D2C3;     /* 해설 박스 테두리선 및 구분선 색상 */
             --btn-sub-bg: #F4EEE6;      /* 이전 문제 버튼 배경색 */
             --btn-sub-border: #DCD4C9;  /* 이전 문제 및 내부 버튼 테두리 색상 */
@@ -518,13 +518,11 @@
                 <div id="quiz-post-actions-pre-expl" class="hidden" style="margin-top: 18px; width: 100%;">
                     <button id="btn-show-expl" style="width: 100%; background: var(--text); color: white; padding: 16px; border: none; border-radius: 16px; font-size: 16px; font-weight: 700; margin-bottom: 10px; box-shadow: var(--shadow-sm);" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
-                        <!-- 이전 문제 버튼 영역 스타일 적용 -->
                         <button style="flex:1; background: var(--btn-sub-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); padding: 16px; border-radius: 16px; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button style="flex:1; background: var(--primary); color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm);" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
 
-                <!-- 해설 박스 영역 스타일 적용 -->
                 <div id="quiz-explanation-box" class="hidden" style="margin-top: 18px; background: var(--expl-box-bg); border: 1.5px solid var(--expl-border); padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
                     <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid var(--expl-border); padding-bottom: 12px; color: var(--brown-text);"></div>
                     
@@ -533,13 +531,11 @@
                     <div id="qz-ex-ko" style="color: var(--gray); font-weight:500; margin-bottom: 18px; font-size: 14px;"></div>
                     
                     <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-                        <!-- 내부 버튼 스타일 적용 (화이트 배경, 지정 테두리) -->
                         <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="speakChinese(currentList[currentIndex].word)">🔊 단어 발음</button>
                         <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="playExampleAudio(currentList[currentIndex])">🔊 예문 전체 듣기</button>
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
-                        <!-- 해설 내부 이전 문제 버튼 영역 스타일 적용 -->
                         <button style="flex: 1; background: var(--btn-sub-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 16px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
                         <button style="flex: 1; background: var(--primary); color: white; border: none; border-radius: 16px; padding: 16px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
