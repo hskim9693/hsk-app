@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK 4급</title>
+    <title>HSK 4급 마스터</title>
 
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
@@ -50,18 +50,18 @@
             touch-action: manipulation;
         }
         
-        body {
+        html, body {
             background: var(--bg);
             margin: 0;
             padding: 14px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             box-sizing: border-box;
             color: var(--text);
             line-height: 1.4;
-            overflow-x: hidden;
+            overflow: hidden; /* 기본적으로 전체 화면 스크롤 잠금 및 확대 방지 */
         }
         
         .app-container {
@@ -70,6 +70,14 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            height: 100%;
+        }
+
+        /* 단어 목록 페이지들은 스크롤이 가능하도록 허용 */
+        #screen-vocab-days, #screen-vocab-day-detail {
+            overflow-y: auto !important;
+            flex: 1;
+            padding-bottom: 20px;
         }
         
         .top-nav {
@@ -189,8 +197,8 @@
         .btn-danger { background: var(--danger); color: white; width: 100%; }
         .btn-secondary { background: var(--gray-light); color: var(--text); width: 100%; }
         
-        .btn-x { background: var(--danger); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 32px 18px; }
-        .btn-o { background: var(--success); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 32px 18px; }
+        .btn-x { background: var(--danger); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 40px 18px; }
+        .btn-o { background: var(--success); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 40px 18px; }
         
         .day-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .day-card {
@@ -207,7 +215,6 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -244,7 +251,7 @@
         }
         
         .btn-group { display: flex; gap: 8px; width: 100%; margin-bottom: 6px; }
-        .btn-group button { flex: 1; padding: 12px; font-weight: 800; }
+        .btn-group button { flex: 1; padding: 18px; font-weight: 800; }
         
         .quiz-box { 
             font-size: 17px; 
@@ -268,7 +275,7 @@
             display: flex; 
             flex-direction: column; 
             gap: 10px; 
-            margin-bottom: 16px; 
+            margin-bottom: 10px; 
         }
         
         .quiz-opt-btn, .quiz-action-btn { 
@@ -313,10 +320,10 @@
             <button class="nav-btn" onclick="goSettings()">⚙️ 설정</button>
         </div>
 
-        <div id="screen-home">
+        <div id="screen-home" class="screen-view">
             <div class="panel" style="margin-bottom: 20px; padding: 32px 20px; background: var(--card-bg);">
-                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">HSK 4급</h1>
-                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">매일 조금씩 단어 외우기^_^v</p>
+                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">🇨🇳 HSK 4급</h1>
+                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">쭝국어 완벽 정복</p>
             </div>
 
             <div class="icon-menu-grid">
@@ -349,7 +356,7 @@
                 <div id="day-detail-title" style="font-size: 16px; font-weight: 800; color: var(--primary);"></div>
             </div>
             
-            <button class="btn-primary" onclick="openVocbOptions()" style="padding: 16px; font-size: 16px; margin-bottom: 14px; border-radius: 16px;">🚀 학습하기</button>
+            <button class="btn-primary" onclick="openVocbOptions()" style="padding: 16px; font-size: 16px; margin-bottom: 14px; border-radius: 16px;">🚀 학습하기 (설정 변경)</button>
 
             <div id="day-words-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
         </div>
@@ -394,11 +401,11 @@
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                    <div style="flex: 1; display: flex; align-items: center; justify-content: center; margin-top: 25px;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
-                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
+                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 발음 듣기</button>
                     </div>
                 </div>
 
@@ -462,7 +469,7 @@
                 <span>발음 정확도</span>
             </button>
             <button class="quiz-menu-btn" onclick="selectQuizType('writing')">
-                <div>✍️ 쓰기</div>
+                <div>✍️ 뜻 보고 직접 쓰기</div>
                 <span>한자 출력</span>
             </button>
         </div>
@@ -770,7 +777,6 @@
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
                     <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
-                    <!-- 3. 단어 목록 오른쪽 동그라미 아이콘 크기를 0.8배로 축소 -->
                     <div style="min-width: 20px; text-align:right;">
                         <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
                     </div>
@@ -795,7 +801,7 @@
         }
 
         function openWordCard(startIdx, endIdx, idx) {
-            isDirectStudyMode = true;
+            isDirectStudyMode = true; 
             currentList = allWords.slice(startIdx, endIdx);
             currentVocbWrongItems = [];
             currentIndex = idx;
@@ -804,7 +810,7 @@
         }
 
         function openVocbOptions() {
-            isDirectStudyMode = false;
+            isDirectStudyMode = false; 
             showScreen('screen-vocab-options');
         }
 
@@ -912,7 +918,7 @@
                 studyBtnGroup.classList.add('hidden');
                 navBtnGroup.innerHTML = `
                     <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1;">◀ 이전 단어</button>
-                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1;">다음 단어 ▶</button>
+                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; background: var(--dark-brown); color: white;">다음 단어 ▶</button>
                 `;
             } else {
                 studyBtnGroup.classList.remove('hidden');
@@ -935,12 +941,12 @@
         }
 
         function prevVocbCard() {
-            if (currentIndex > 0) { currentIndex--; showVocabCard(); }
+            if (currentIndex > 0) { currentIndex--; showVocbCard(); }
             else alert("첫 번째 단어입니다.");
         }
 
         function nextVocbCardModal() {
-            if (currentIndex < currentList.length - 1) { currentIndex++; showVocabCard(); }
+            if (currentIndex < currentList.length - 1) { currentIndex++; showVocbCard(); }
             else alert("마지막 단어입니다.");
         }
 
@@ -991,7 +997,6 @@
             const checkedStatuses = Array.from(document.querySelectorAll('input[name="quiz-status"]:checked')).map(el => parseInt(el.value));
             if (checkedStatuses.length === 0) { alert("최소 하나 이상의 상태를 선택해주세요."); return; }
 
-            // 2. 모름(0)인 단어도 정상적으로 퀴즈에 필터링되어 불러와지도록 수정
             let targetWords = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => {
                 const status = wordStatuses[w.word_id] || 0;
                 return checkedStatuses.includes(status);
@@ -1110,7 +1115,7 @@
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     const writingBox = document.getElementById('quiz-writing-box');
-                    if (writingBox && !writingBox.classList.contains('hidden')) {
+                    if (writingBox && !writingBox.classList.net) {
                         submitWritingAnswer();
                     }
                 }
