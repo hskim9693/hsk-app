@@ -138,7 +138,6 @@
         .icon-menu-btn .icon { font-size: 32px; }
         .icon-menu-btn .label { font-size: 16px; font-weight: 700; color: var(--text); }
         
-        /* 사진 1과 일치하는 퀴즈 메뉴 버튼 스타일 */
         .quiz-menu-btn {
             background: var(--card-bg);
             border: 1.5px solid var(--border);
@@ -286,14 +285,12 @@
 <body>
 
     <div class="app-container" id="app-wrapper">
-        <!-- 상단 네비게이션 -->
         <div id="top-nav" class="top-nav hidden">
             <button class="nav-btn" onclick="goHome()">🏠 홈</button>
             <span id="nav-title" class="nav-title">학습</span>
             <button class="nav-btn" onclick="goSettings()">⚙️ 설정</button>
         </div>
 
-        <!-- 1. 홈 화면 -->
         <div id="screen-home">
             <div class="panel" style="margin-bottom: 20px; padding: 32px 20px; background: var(--card-bg);">
                 <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">🇨🇳 HSK 4급</h1>
@@ -320,12 +317,10 @@
             </div>
         </div>
 
-        <!-- 2. Day 선택 화면 -->
         <div id="screen-vocab-days" class="hidden">
             <div id="day-grid" class="day-grid"></div>
         </div>
 
-        <!-- 2-1. 단어 목록 화면 -->
         <div id="screen-vocab-day-detail" class="hidden">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                 <button class="nav-btn" onclick="openVocbDays()" style="padding: 0; font-size: 13px;">◀ Day 목록으로</button>
@@ -337,7 +332,6 @@
             <div id="day-words-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
         </div>
 
-        <!-- 2-2. 단어장 학습 설정 화면 -->
         <div id="screen-vocab-options" class="hidden">
             <div class="panel" style="text-align: left; padding: 20px; margin-bottom: 16px;">
                 <h3 id="vocab-option-title" style="margin:0 0 14px 0; font-size:18px; color: var(--primary);">학습 설정</h3>
@@ -364,7 +358,6 @@
             <button class="btn-secondary" onclick="selectVocbDay(selectedStartIdx, selectedEndIdx, selectedDayNum)">◀ 단어 목록으로 돌아가기</button>
         </div>
 
-        <!-- 3. 단어 카드 학습 화면 -->
         <div id="screen-vocab-card" class="hidden">
             <div class="progress-bar-container">
                 <div id="vocab-progress-bar" class="progress-bar-fill"></div>
@@ -415,7 +408,6 @@
             </div>
         </div>
 
-        <!-- 3-1. 학습 완료 화면 -->
         <div id="screen-vocab-result" class="hidden">
             <div class="panel" style="padding: 28px 20px;">
                 <h2 style="margin:0 0 8px 0; font-size: 22px; color: var(--primary);">단어 학습 완료! 🎉</h2>
@@ -428,7 +420,6 @@
             </div>
         </div>
 
-        <!-- 4. 퀴즈 메뉴 화면 (사진 1과 일치하도록 수정) -->
         <div id="screen-quiz-menu" class="hidden">
             <div class="quiz-menu-btn" style="background: var(--card-bg); border-radius: 20px; padding: 22px 20px; margin-bottom: 14px; cursor: default;">
                 <span style="font-size: 17px; font-weight: 700; color: var(--text);">퀴즈 형식 선택</span>
@@ -455,7 +446,6 @@
             </button>
         </div>
 
-        <!-- 4-1. 퀴즈 설정 화면 -->
         <div id="screen-quiz-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 18px; margin-bottom: 14px;">
                 <h3 id="quiz-setting-title" style="margin:0 0 12px 0; font-size:17px; color: var(--primary);">퀴즈 출제 설정</h3>
@@ -490,7 +480,6 @@
             <button class="btn-secondary" onclick="openQuizMenu()">◀ 형식 다시 선택하기</button>
         </div>
 
-        <!-- 5. 퀴즈 진행 화면 -->
         <div id="screen-quiz-play" class="hidden">
             <div class="progress-bar-container">
                 <div id="quiz-progress-bar" class="progress-bar-fill"></div>
@@ -518,9 +507,8 @@
                     </div>
                 </div>
 
-                <!-- 사진 2와 일치하는 해설 박스 스타일 및 색상 적용 -->
-                <div id="quiz-explanation-box" class="hidden" style="margin-top: 18px; background: #f3efe6; border: 1.5px solid #e5dec9; padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
-                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--text);"></div>
+                <div id="quiz-explanation-box" class="hidden" style="margin-top: 18px; background: #fdf5f2; border: 1.5px solid #e8d0cb; padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
+                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid rgba(141, 91, 76, 0.2); padding-bottom: 12px; color: var(--primary);"></div>
                     
                     <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; font-size: 15px; color: var(--text);"></div>
                     <div id="qz-ex-py" style="margin-bottom:6px; font-size:13px; color: var(--primary); font-weight:600;"></div>
@@ -539,7 +527,6 @@
             </div>
         </div>
 
-        <!-- 6. 오답노트 화면 -->
         <div id="screen-review" class="hidden">
             <div class="panel" id="review-empty-box">
                 <h3 style="margin: 0 0 8px 0; font-size: 18px;">오답노트가 비어있습니다 🎉</h3>
@@ -583,7 +570,6 @@
             </div>
         </div>
 
-        <!-- 7. 설정 화면 -->
         <div id="screen-settings" class="hidden">
             <div class="panel" style="text-align: left; padding: 20px;">
                 <h3 style="margin:0 0 8px 0; font-size:18px;">설정 및 데이터 관리</h3>
@@ -594,7 +580,6 @@
             </div>
         </div>
 
-        <!-- 8. 결과 화면 -->
         <div id="screen-result" class="hidden">
             <div class="panel" style="padding: 28px 20px;">
                 <h2 style="margin:0 0 4px 0; font-size: 22px;">테스트 완료! 🎉</h2>
@@ -610,7 +595,8 @@
     </div>
 
     <script>
-        const CHUNK_SIZE = 600; // 350 대신 600으로 변경
+        // 600개 단어를 80개씩 나누어 Day 1부터 Day 8까지 구성 (600 / 80 = 7.5)
+        const CHUNK_SIZE = 80;
         let allWords = [];
         let currentList = [];
         
@@ -656,7 +642,7 @@
                 });
             } catch (error) {
                 console.error("데이터 로드 실패:", error);
-                alert("단어장 데이터를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
+                alert("단어장 데이터(hsk_basic_words_600.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
             }
         }
 
@@ -757,7 +743,6 @@
                 const card = document.createElement('div');
                 card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); cursor:pointer;";
                 
-                // 단어 글씨 크기 살짝 줄임(24px), 뜻 글씨체 한 단계 굵게(600)
                 card.innerHTML = `
                     <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px;">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
