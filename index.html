@@ -50,18 +50,19 @@
             touch-action: manipulation;
         }
         
-        body {
+        /* 기본적으로 전체 화면 스크롤 차단 (해설 보기 및 단어 목록 페이지 제외) */
+        html, body {
             background: var(--bg);
             margin: 0;
             padding: 14px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             box-sizing: border-box;
             color: var(--text);
             line-height: 1.4;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         
         .app-container {
@@ -70,6 +71,14 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+            height: 100%;
+        }
+
+        /* Day 선택 페이지 및 단어 목록 상세 페이지는 스크롤 허용 */
+        #screen-vocab-days, #screen-vocab-day-detail {
+            overflow-y: auto !important;
+            flex: 1;
+            padding-bottom: 20px;
         }
         
         .top-nav {
@@ -207,7 +216,6 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
-        /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -375,7 +383,7 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="startVocabSessionFromOptions()">학습 시작하기 🚀</button>
+                <button class="btn-primary" onclick="startVocbSessionFromOptions()">학습 시작하기 🚀</button>
             </div>
             <button class="btn-secondary" onclick="selectVocbDay(selectedStartIdx, selectedEndIdx, selectedDayNum)">◀ 단어 목록으로 돌아가기</button>
         </div>
@@ -394,7 +402,7 @@
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(60px); justify-content: center;">
+                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(50px); justify-content: center;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
@@ -707,6 +715,8 @@
                 };
                 if (navTitle) navTitle.innerText = titles[screenId] || '';
             }
+            // 화면 이동 시 기본적으로 상하 스크롤 차단 (해설 보기가 열릴 때는 showQuizExplanation에서 auto로 변경됨)
+            document.body.style.overflow = 'hidden';
             window.scrollTo(0, 0);
         }
 
@@ -760,19 +770,30 @@
             dayWords.forEach((item, idx) => {
                 const status = wordStatuses[item.word_id] || 0;
                 let statusEmoji = status === 1 ? '🟤' : status === 2 ? '🟠' : '⚪';
+                const formattedNum = String(idx + 1).padStart(4, '0');
                 
                 const card = document.createElement('div');
-                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm);";
+                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
+                    <!-- 1. 왼쪽 상단 작게 번호(nnnn) 매기기 -->
+                    <div style="position:absolute; top:6px; left:12px; font-size:10px; color:var(--gray); font-weight:500;">${formattedNum}</div>
+                    
+                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer; margin-top:8px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
-                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
-                    <!-- 3. 단어 목록 오른쪽 동그라미 아이콘 크기를 0.8배로 축소 -->
-                    <div style="min-width: 20px; text-align:right;">
+                    
+                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer; margin-top:8px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
+                    
+                    <!-- 1. 오른쪽 상단 동그라미 아이콘 이동 -->
+                    <div style="position:absolute; top:6px; right:12px;">
                         <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
+                    </div>
+                    
+                    <!-- 1. 오른쪽 중앙~하단 쪽 스피커 이모티콘 배치 (터치 시 병음/단어 음성 출력) -->
+                    <div style="position:absolute; bottom:6px; right:12px;">
+                        <span style="font-size:18px; cursor:pointer; padding:2px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}')">🔊</span>
                     </div>
                 `;
 
@@ -795,7 +816,7 @@
         }
 
         function openWordCard(startIdx, endIdx, idx) {
-            isDirectStudyMode = true;
+            isDirectStudyMode = true; 
             currentList = allWords.slice(startIdx, endIdx);
             currentVocbWrongItems = [];
             currentIndex = idx;
@@ -804,11 +825,11 @@
         }
 
         function openVocbOptions() {
-            isDirectStudyMode = false;
+            isDirectStudyMode = false; 
             showScreen('screen-vocab-options');
         }
 
-        function startVocabSessionFromOptions() {
+        function startVocbSessionFromOptions() {
             isDirectStudyMode = false;
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
             
@@ -991,7 +1012,6 @@
             const checkedStatuses = Array.from(document.querySelectorAll('input[name="quiz-status"]:checked')).map(el => parseInt(el.value));
             if (checkedStatuses.length === 0) { alert("최소 하나 이상의 상태를 선택해주세요."); return; }
 
-            // 2. 모름(0)인 단어도 정상적으로 퀴즈에 필터링되어 불러와지도록 수정
             let targetWords = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => {
                 const status = wordStatuses[w.word_id] || 0;
                 return checkedStatuses.includes(status);
@@ -1026,6 +1046,7 @@
 
             document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.add('hidden');
+            document.body.style.overflow = 'hidden';
 
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
@@ -1158,6 +1179,8 @@
             document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.remove('hidden');
 
+            // 해설 보기가 펼쳐질 때만 스크롤 허용
+            document.body.style.overflow = 'auto';
             setTimeout(() => {
                 window.scrollTo({
                     top: document.body.scrollHeight,
