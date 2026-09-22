@@ -50,19 +50,19 @@
             touch-action: manipulation;
         }
         
-        /* 3. 해설 보기를 제외한 모든 화면에서 상하 스크롤을 막기 위해 overflow: hidden 적용 */
-        html, body {
+        body {
             background: var(--bg);
             margin: 0;
             padding: 14px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             box-sizing: border-box;
             color: var(--text);
             line-height: 1.4;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto; /* 기본 스크롤 허용 (특정 화면에서만 제어) */
         }
         
         .app-container {
@@ -71,7 +71,6 @@
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            height: 100%;
         }
         
         .top-nav {
@@ -122,10 +121,11 @@
             border: 1px solid var(--border);
         }
         
+        /* 메인 페이지 원래의 2x2 그리드 정렬 및 크기로 복원[span_3](start_span)[span_3](end_span) */
         .icon-menu-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
             margin-top: 10px;
         }
         
@@ -133,22 +133,22 @@
             background: var(--card-bg);
             border: 1.5px solid var(--border);
             color: var(--text);
-            padding: 24px 20px;
-            font-size: 18px;
+            padding: 30px 16px;
+            font-size: 17px;
             font-weight: 700;
             border-radius: 20px;
             cursor: pointer;
             box-shadow: var(--shadow-sm);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            gap: 16px;
+            justify-content: center;
+            gap: 10px;
             box-sizing: border-box;
-            width: 100%;
         }
         .icon-menu-btn:active { transform: scale(0.97); background: var(--gray-light); }
-        .icon-menu-btn .icon { font-size: 28px; }
-        .icon-menu-btn .label { font-size: 18px; font-weight: 700; color: var(--text); }
+        .icon-menu-btn .icon { font-size: 32px; }
+        .icon-menu-btn .label { font-size: 16px; font-weight: 700; color: var(--text); }
         
         .quiz-menu-btn {
             background: var(--card-bg);
@@ -191,7 +191,6 @@
         .btn-danger { background: var(--danger); color: white; width: 100%; }
         .btn-secondary { background: var(--gray-light); color: var(--text); width: 100%; }
         
-        /* 1. 단어 카드 하단 O, X 버튼 높이 키움 */
         .btn-x { background: var(--danger); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 40px 18px; }
         .btn-o { background: var(--success); color: #ffffff; font-size: 22px; font-weight: 800; box-shadow: var(--shadow-sm); padding: 40px 18px; }
         
@@ -245,7 +244,6 @@
             z-index: 2;
         }
         
-        /* 1. 이전단어, 다음단어 버튼 박스 높이(padding)를 늘려줌 */
         .btn-group { display: flex; gap: 8px; width: 100%; margin-bottom: 6px; }
         .btn-group button { flex: 1; padding: 18px; font-weight: 800; }
         
@@ -271,7 +269,7 @@
             display: flex; 
             flex-direction: column; 
             gap: 10px; 
-            margin-bottom: 10px; /* 2. 보기 박스와 해설보기 간격을 기존의 60%로 단축 */
+            margin-bottom: 10px; 
         }
         
         .quiz-opt-btn, .quiz-action-btn { 
@@ -319,9 +317,10 @@
         <div id="screen-home" class="screen-view">
             <div class="panel" style="margin-bottom: 20px; padding: 32px 20px; background: var(--card-bg);">
                 <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">🇨🇳 HSK 4급</h1>
-                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">쭝국어 완벽 정복</p>
+                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">하루에 단어 80개씩</p>
             </div>
 
+            <!-- 원래의 2x2 그리드 형태 버튼으로 복원[span_4](start_span)[span_4](end_span) -->
             <div class="icon-menu-grid">
                 <button class="icon-menu-btn" onclick="openVocbDays()">
                     <span class="icon">📚</span>
@@ -335,10 +334,10 @@
                     <span class="icon">🔥</span>
                     <span class="label">오답노트</span>
                 </button>
-            </div>
-
-            <div style="margin-top: 24px; text-align: center;">
-                <span onclick="goSettings()" style="font-size: 14px; font-weight: 600; color: var(--gray); cursor: pointer; text-decoration: underline;">⚙️ 설정 및 데이터 관리</span>
+                <button class="icon-menu-btn" onclick="goSettings()">
+                    <span class="icon">⚙️</span>
+                    <span class="label">설정</span>
+                </button>
             </div>
         </div>
 
@@ -711,8 +710,12 @@
                 if (navTitle) navTitle.innerText = titles[screenId] || '';
             }
             
-            // 화면 전환 시 스크롤 최상단으로 초기화 및 스크롤 잠금 유지
-            document.body.style.overflow = 'hidden';
+            // 단어 목록 페이지(Day 선택, 단어 목록)에서는 스크롤 허용, 그 외 화면에서는 스크롤 잠금
+            if (screenId === 'screen-vocab-days' || screenId === 'screen-vocab-day-detail') {
+                document.body.style.overflow = 'auto';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
             window.scrollTo(0, 0);
         }
 
@@ -800,7 +803,7 @@
         }
 
         function openWordCard(startIdx, endIdx, idx) {
-            isDirectStudyMode = true; // 단어 목록에서 직접 선택 진입
+            isDirectStudyMode = true;
             currentList = allWords.slice(startIdx, endIdx);
             currentVocbWrongItems = [];
             currentIndex = idx;
@@ -809,7 +812,7 @@
         }
 
         function openVocbOptions() {
-            isDirectStudyMode = false; // 설정(학습하기 버튼)을 통한 진입
+            isDirectStudyMode = false;
             showScreen('screen-vocab-options');
         }
 
@@ -915,7 +918,6 @@
 
             if (isDirectStudyMode) {
                 studyBtnGroup.classList.add('hidden');
-                // 1. 단어 목록에서 터치해서 들어온 경우 다음 단어 박스 색을 어두운 브라운(--dark-brown)으로 변경
                 navBtnGroup.innerHTML = `
                     <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1;">◀ 이전 단어</button>
                     <button onclick="nextVocbCardModal()" style="flex:1; background: var(--dark-brown); color: white;">다음 단어 ▶</button>
@@ -1031,9 +1033,6 @@
 
             document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.add('hidden');
-            
-            // 문제 로딩 시 스크롤 잠금 유지
-            document.body.style.overflow = 'hidden';
 
             const item = currentList[currentIndex];
             document.getElementById('quiz-progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
@@ -1166,7 +1165,6 @@
             document.getElementById('quiz-post-actions-pre-expl').classList.add('hidden');
             document.getElementById('quiz-explanation-box').classList.remove('hidden');
 
-            // 3. 해설 보기를 눌렀을 때만 스크롤을 허용하여 하단 해설 박스로 부드럽게 이동
             document.body.style.overflow = 'auto';
             setTimeout(() => {
                 window.scrollTo({
