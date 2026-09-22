@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK 4급 마스터</title>
+    <title>HSK 4급</title>
 
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
@@ -207,6 +207,7 @@
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
+        /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -313,7 +314,7 @@
         </div>
 
         <div id="screen-home">
-            <div class="panel" style="margin-bottom: 30px; padding: 32px 18px;">
+            <div class="panel" style="margin-bottom: 30px; padding: 32px 18px; background: var();">
                 <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">HSK</h1>
                 <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">매일 조금씩 단어 외우기 ^_^v</p>
             </div>
@@ -374,7 +375,7 @@
                     </div>
                 </div>
 
-                <button class="btn-primary" onclick="startVocbSessionFromOptions()">학습 시작하기 🚀</button>
+                <button class="btn-primary" onclick="startVocabSessionFromOptions()">학습 시작하기 🚀</button>
             </div>
             <button class="btn-secondary" onclick="selectVocbDay(selectedStartIdx, selectedEndIdx, selectedDayNum)">◀ 단어 목록으로 돌아가기</button>
         </div>
@@ -393,7 +394,7 @@
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-                    <div style="flex: 1; display: flex; align-items: center; justify-content: center;">
+                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(50px); justify-content: center;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
@@ -742,7 +743,7 @@
             }
         }
 
-        function selectVocbDay(startIdx, endIdx, dayNum) {
+      function selectVocbDay(startIdx, endIdx, dayNum) {
             selectedStartIdx = startIdx;
             selectedEndIdx = endIdx;
             selectedDayNum = dayNum;
@@ -760,22 +761,37 @@
                 const status = wordStatuses[item.word_id] || 0;
                 let statusEmoji = status === 1 ? '🟤' : status === 2 ? '🟠' : '⚪';
                 
-                // 누적 번호 계산 (0001부터 0700까지) - 굵기를 한 단계 내림 (font-weight: 600)
+                // ✅ 누적 번호 계산 (0001부터 0700까지 연속 상승)
                 const globalNum = String(startIdx + idx + 1).padStart(4, '0');
                 
                 const card = document.createElement('div');
-                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
+                // ✅ 기존 코드에 position: relative; 만 추가하여 뜻 위치/간격 완벽 유지
+                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
-                    <div style="position:absolute; top:6px; left:12px; font-size:11px; color:var(--gray); font-weight:600;">${globalNum}</div>
-                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer; margin-top:10px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
+                    <!-- 1. 왼쪽 상단 단어 번호 -->
+                    <div style="position:absolute; top:6px; left:14px; font-size:11px; color:var(--gray); font-weight:700;">${globalNum}</div>
+                    
+                    <!-- 2. 기존 단어/병음 영역 -->
+                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
-                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer; margin-top:10px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between; height:100%; min-width:30px; margin-top:2px;">
-                        <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding:2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
-                        <span style="font-size:16px; cursor:pointer; padding:4px; margin-top:12px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}');">🔊</span>
+                    
+                    <!-- 3. 기존 뜻 영역 -->
+                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
+                    
+                    <!-- 4. 중앙 레이아웃 틀어짐 방지를 위한 기존 여백(20px) 그대로 유지 -->
+                    <div style="min-width: 20px;"></div>
+                    
+                    <!-- 5. 상태 동그라미 (오른쪽 상단으로 이동) -->
+                    <div style="position:absolute; top:10px; right:14px;">
+                        <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
+                    </div>
+                    
+                    <!-- 6. 스피커 아이콘 (오른쪽 중앙~하단 배치 및 발음 듣기 기능) -->
+                    <div style="position:absolute; bottom:10px; right:14px;">
+                        <span style="font-size:16px; cursor:pointer; padding: 2px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}');">🔊</span>
                     </div>
                 `;
 
@@ -811,7 +827,7 @@
             showScreen('screen-vocab-options');
         }
 
-        function startVocbSessionFromOptions() {
+        function startVocabSessionFromOptions() {
             isDirectStudyMode = false;
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
             
@@ -914,8 +930,8 @@
             if (isDirectStudyMode) {
                 studyBtnGroup.classList.add('hidden');
                 navBtnGroup.innerHTML = `
-                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 14px;">◀ 이전 단어</button>
-                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 14px; background: var(--dark-brown); color: white;">다음 단어 ▶</button>
+                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">◀ 이전 단어</button>
+                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">다음 단어 ▶</button>
                 `;
             } else {
                 studyBtnGroup.classList.remove('hidden');
@@ -938,12 +954,12 @@
         }
 
         function prevVocbCard() {
-            if (currentIndex > 0) { currentIndex--; showVocbCard(); }
+            if (currentIndex > 0) { currentIndex--; showVocabCard(); }
             else alert("첫 번째 단어입니다.");
         }
 
         function nextVocbCardModal() {
-            if (currentIndex < currentList.length - 1) { currentIndex++; showVocbCard(); }
+            if (currentIndex < currentList.length - 1) { currentIndex++; showVocabCard(); }
             else alert("마지막 단어입니다.");
         }
 
@@ -959,7 +975,7 @@
                 }
             }
             currentIndex++;
-            showVocbCard();
+            showVocabCard();
         }
 
         async function selectQuizType(type) {
@@ -994,6 +1010,7 @@
             const checkedStatuses = Array.from(document.querySelectorAll('input[name="quiz-status"]:checked')).map(el => parseInt(el.value));
             if (checkedStatuses.length === 0) { alert("최소 하나 이상의 상태를 선택해주세요."); return; }
 
+            // 2. 모름(0)인 단어도 정상적으로 퀴즈에 필터링되어 불러와지도록 수정
             let targetWords = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => {
                 const status = wordStatuses[w.word_id] || 0;
                 return checkedStatuses.includes(status);
