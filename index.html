@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HSK 4급</title>
+    <title>HSK 4급 마스터</title>
 
     <link rel="apple-touch-icon" href="./icon.png">
     <link rel="icon" type="image/png" href="./icon.png">
-    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22HSK%204%EA%B8%89%20%EB%A7%88%EC%8A%A4%ED%84%84%22%2C%22short_name%22%3A%22HSK%204%EA%B8%89%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f6f0%22%2C%22theme_color%22%3A%22%238d5b4c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22.%2Ficon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22HSK%204%EA%B8%89%20%EB%A7%88%EC%8A%A4%ED%84%B0%22%2C%22short_name%22%3A%22HSK%204%EA%B8%89%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f9f6f0%22%2C%22theme_color%22%3A%22%238d5b4c%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22.%2Ficon.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
 
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -61,12 +61,15 @@
             box-sizing: border-box;
             color: var(--text);
             line-height: 1.4;
+            overflow-x: hidden;
         }
         
         .app-container {
             width: 100%;
             max-width: 440px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
         
         .top-nav {
@@ -310,9 +313,9 @@
         </div>
 
         <div id="screen-home">
-            <div class="panel" style="margin-bottom: 20px; padding: 32px 20px; background: var(--card-bg);">
-                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">🇨🇳 HSK 4급</h1>
-                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">쭝국어 완벽 정복</p>
+            <div class="panel" style="margin-bottom: 30px; padding: 32px 18px;">
+                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">HSK</h1>
+                <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">매일 조금씩 단어 외우기 ^_^v</p>
             </div>
 
             <div class="icon-menu-grid">
@@ -330,8 +333,8 @@
                 </button>
             </div>
 
-            <div style="margin-top: 24px; text-align: center;">
-                <span onclick="goSettings()" style="font-size: 14px; font-weight: 600; color: var(--gray); cursor: pointer; text-decoration: underline;">⚙️ 설정 및 데이터 관리</span>
+            <div style="margin-top: 200px; text-align: left;">
+                <span onclick="goSettings()" style="font-size: 14px; font-weight: 600; color: var(--gray); cursor: pointer;">⚙️ 설정</span>
             </div>
         </div>
 
@@ -345,7 +348,7 @@
                 <div id="day-detail-title" style="font-size: 16px; font-weight: 800; color: var(--primary);"></div>
             </div>
             
-            <button class="btn-primary" onclick="openVocbOptions()" style="padding: 16px; font-size: 16px; margin-bottom: 14px; border-radius: 16px;">🚀 학습하기 (설정 변경)</button>
+            <button class="btn-primary" onclick="openVocbOptions()" style="padding: 16px; font-size: 16px; margin-bottom: 14px; border-radius: 16px;">🚀 학습하기</button>
 
             <div id="day-words-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;"></div>
         </div>
@@ -362,7 +365,7 @@
                     </div>
                 </div>
 
-                <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 16px;">
+                <div class="control-group" style="flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 16px;">
                     <label>출제 (복수 선택 가능)</label>
                     <div class="radio-group" style="width: 100%; justify-content: space-between; flex-wrap: wrap;">
                         <label><input type="checkbox" name="vocab-status" value="1" checked> 🟤 외움</label>
@@ -394,7 +397,7 @@
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
-                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 발음 듣기</button>
+                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
                     </div>
                 </div>
 
@@ -402,12 +405,12 @@
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
                         <div id="vc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 6px;"></div>
                         <div id="vc-pinyin" style="font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700;"></div>
-                        <div id="vc-meaning" style="font-size: 18px; color: var(--text); margin-bottom: 24px; font-weight: 700;"></div>
+                        <div id="vc-meaning" style="font-size: 18px; color: var(--text); margin-bottom: 26px; font-weight: 700;"></div>
                         
-                        <div id="vc-example-box" style="background: var(--bg); padding: 18px 16px; border-radius: 16px; text-align: left; width: 100%; box-sizing: border-box; border: 1px solid var(--border);">
-                            <div id="vc-ex-zh" style="margin-bottom:6px; font-weight:600; color:var(--text); font-size: 15px;"></div>
-                            <div id="vc-ex-py" style="margin-bottom:6px; font-size:13px; color:var(--primary); font-weight: 500;"></div>
-                            <div id="vc-ex-ko" style="color:var(--gray); font-weight: 500; font-size: 13px; margin-bottom: 16px;"></div>
+                        <div id="vc-example-box" style="background: var(--bg); padding: 20px 16px; border-radius: 16px; text-align: left; width: 100%; box-sizing: border-box; border: 1px solid var(--border);">
+                            <div id="vc-ex-zh" style="margin-bottom:7px; font-weight:600; color:var(--text); font-size: 15px;"></div>
+                            <div id="vc-ex-py" style="margin-bottom:7px; font-size:13px; color:var(--primary); font-weight: 500;"></div>
+                            <div id="vc-ex-ko" style="color:var(--text); font-weight: 500; font-size: 13px; margin-bottom: 16px;"></div>
                             <div style="text-align: center; width: 100%;">
                                 <button style="width: 100%; background: var(--gray-light); color: var(--text); border: none; border-radius: 14px; padding: 12px; font-size: 14px; font-weight: 700;" onclick="event.stopPropagation(); playExampleAudio(currentList[currentIndex]);">🔊 예문 전체 듣기</button>
                             </div>
@@ -417,11 +420,11 @@
             </div>
 
             <div id="vocab-study-btn-group" class="btn-group">
-                <button class="btn-x" style="padding: 18px;" onclick="markVocbResult(false)">X</button>
-                <button class="btn-o" style="padding: 18px;" onclick="markVocbResult(true)">O</button>
+                <button class="btn-x" onclick="markVocbResult(false)">X</button>
+                <button class="btn-o" onclick="markVocbResult(true)">O</button>
             </div>
             <div id="vocab-nav-btn-group" class="btn-group">
-                <button class="btn-secondary" onclick="prevVocbCard()" style="width: 100%; padding: 18px;">◀ 이전 단어</button>
+                <button class="btn-secondary" onclick="prevVocbCard()" style="width: 100%;">◀ 이전 단어</button>
             </div>
         </div>
 
@@ -458,7 +461,7 @@
                 <span>발음 정확도</span>
             </button>
             <button class="quiz-menu-btn" onclick="selectQuizType('writing')">
-                <div>✍️ 뜻 보고 직접 쓰기</div>
+                <div>✍️ 쓰기</div>
                 <span>한자 출력</span>
             </button>
         </div>
@@ -511,12 +514,12 @@
                 <div id="quiz-box" class="quiz-box"></div>
                 <div id="quiz-options" class="quiz-options"></div>
 
-                <div id="quiz-writing-box" class="hidden" style="margin-top: 8px;">
+                <div id="quiz-writing-box" class="hidden" style="margin-top: 10px;">
                     <input type="text" id="quiz-input" placeholder="단어를 입력하세요" style="width: 100%; padding: 18px 14px; font-size: 16px; border: 1.5px solid var(--border); border-radius: 16px; text-align: center; box-sizing: border-box; outline: none; margin-bottom: 10px; box-shadow: var(--shadow-sm);" />
                     <button class="quiz-action-btn btn-primary" onclick="submitWritingAnswer()" style="padding: 16px; background: var(--dark-brown); color: white;">정답 확인 ✍️</button>
                 </div>
                 
-                <div id="quiz-post-actions-pre-expl" class="hidden" style="margin-top: 60px; width: 100%;">
+                <div id="quiz-post-actions-pre-expl" class="hidden" style="margin-top: 40px; width: 100%;">
                     <button id="btn-show-expl" style="width: 100%; background: var(--text); color: white; padding: 16px; border: none; border-radius: 16px; font-size: 16px; font-weight: 700; margin-bottom: 10px; box-shadow: var(--shadow-sm);" onclick="showQuizExplanation()">📖 해설 보기</button>
                     <div style="display: flex; gap: 10px; width: 100%;">
                         <button style="flex:1; background: var(--btn-sub-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); padding: 16px; border-radius: 16px; font-weight: 700; font-size: 16px; box-shadow: var(--shadow-sm);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
@@ -524,21 +527,21 @@
                     </div>
                 </div>
 
-                <div id="quiz-explanation-box" class="hidden" style="margin-top: 40px; background: var(--expl-box-bg); border: 1.5px solid var(--expl-border); padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
-                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid var(--expl-border); padding-bottom: 12px; color: var(--brown-text);"></div>
+                <div id="quiz-explanation-box" class="hidden" style="margin-top: 40px; background: #f1e8e1; border: 1.5px solid var(--expl-border); padding: 18px 16px; border-radius: 20px; text-align: left; width: 100%; box-sizing: border-box; box-shadow: var(--shadow-sm);">
+                    <div id="qz-word-info" style="font-size: 16px; font-weight: 800; margin-bottom: 12px; border-bottom: 1px solid var(--primary); padding-bottom: 12px; color: var(--primary);"></div>
                     
-                    <div id="qz-ex-zh" style="margin-bottom:6px; font-weight:700; font-size: 15px; color: var(--text);"></div>
-                    <div id="qz-ex-py" style="margin-bottom:6px; font-size:13px; color: var(--primary); font-weight:600;"></div>
-                    <div id="qz-ex-ko" style="color: var(--gray); font-weight:500; margin-bottom: 18px; font-size: 14px;"></div>
+                    <div id="qz-ex-zh" style="margin-bottom:7px; font-weight:700; font-size: 15px; color: var(--text);"></div>
+                    <div id="qz-ex-py" style="margin-bottom:7px; font-size:13px; color: var(--primary); font-weight:600;"></div>
+                    <div id="qz-ex-ko" style="color: var(--text); font-weight:500; margin-bottom: 20px; font-size: 14px;"></div>
                     
-                    <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-                        <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="speakChinese(currentList[currentIndex].word)">🔊 단어 발음</button>
-                        <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="playExampleAudio(currentList[currentIndex])">🔊 예문 전체 듣기</button>
+                    <div style="display: flex; gap: 8px; margin-bottom: 11px;">
+                        <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 20px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="speakChinese(currentList[currentIndex].word)">🔊 단어 발음 듣기</button>
+                        <button style="flex: 1; background: var(--in-btn-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 20px; padding: 14px; font-size: 13px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="playExampleAudio(currentList[currentIndex])">🔊 예문 전체 듣기</button>
                     </div>
                     
                     <div style="display: flex; gap: 10px;">
-                        <button style="flex: 1; background: var(--btn-sub-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 16px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
-                        <button style="flex: 1; background: var(--primary); color: white; border: none; border-radius: 16px; padding: 16px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="nextQuizQuestion()">다음 문제 ▶</button>
+                        <button style="flex: 1; background: var(--btn-sub-bg); color: var(--btn-sub-text); border: 1.5px solid var(--btn-sub-border); border-radius: 16px; padding: 14px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="prevQuizQuestion()">◀ 이전 문제</button>
+                        <button style="flex: 1; background: var(--primary); color: white; border: none; border-radius: 16px; padding: 14px; font-size: 16px; font-weight: 700; box-shadow: var(--shadow-sm);" onclick="nextQuizQuestion()">다음 문제 ▶</button>
                     </div>
                 </div>
             </div>
@@ -560,7 +563,7 @@
                             <div id="rc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                         </div>
                         <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
-                            <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 발음 듣기</button>
+                            <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
                         </div>
                     </div>
                     <div id="rc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -756,30 +759,23 @@
             dayWords.forEach((item, idx) => {
                 const status = wordStatuses[item.word_id] || 0;
                 let statusEmoji = status === 1 ? '🟤' : status === 2 ? '🟠' : '⚪';
-                const formattedNum = String(idx + 1).padStart(4, '0');
+                
+                // 누적 번호 계산 (0001부터 0700까지)
+                const globalNum = String(startIdx + idx + 1).padStart(4, '0');
                 
                 const card = document.createElement('div');
-                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:14px 16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
+                card.style.cssText = "background:var(--card-bg); border:1px solid var(--border); padding:16px; border-radius:14px; display:flex; justify-content:space-between; align-items:center; box-shadow:var(--shadow-sm); position:relative;";
                 
                 card.innerHTML = `
-                    <!-- 1. 왼쪽 상단 작은 번호 (nnnn) -->
-                    <div style="position:absolute; top:4px; left:12px; font-size:10px; color:var(--gray); font-weight:500;">${formattedNum}</div>
-                    
-                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer; margin-top:6px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
+                    <div style="position:absolute; top:6px; left:12px; font-size:11px; color:var(--gray); font-weight:700;">${globalNum}</div>
+                    <div style="display:flex; flex-direction:column; gap:2px; min-width: 100px; cursor:pointer; margin-top:10px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">
                         <span style="font-size:24px; font-weight:800; color:var(--text);">${item.word}</span>
                         <span style="font-size:13px; color:var(--primary); font-weight:400;">${item.pinyin}</span>
                     </div>
-                    
-                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer; margin-top:6px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
-                    
-                    <!-- 2. 오른쪽 상단으로 이동한 동그라미 아이콘 -->
-                    <div style="position:absolute; top:4px; right:12px;">
-                        <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
-                    </div>
-                    
-                    <!-- 3. 오른쪽 중앙~하단 쪽 스피커 이모티콘 (터치 시 병음 듣기) -->
-                    <div style="position:absolute; bottom:6px; right:12px;">
-                        <span style="font-size:18px; cursor:pointer; padding:2px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}')">🔊</span>
+                    <div style="flex:1; text-align:left; padding:0 12px; font-size:15px; font-weight:600; color:var(--text); word-break:break-all; cursor:pointer; margin-top:10px;" onclick="openWordCard(${startIdx}, ${endIdx}, ${idx})">${item.meaning}</div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:space-between; height:100%; min-width:30px; margin-top:2px;">
+                        <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding:2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
+                        <span style="font-size:16px; cursor:pointer; padding:4px; margin-top:12px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}');">🔊</span>
                     </div>
                 `;
 
@@ -802,7 +798,7 @@
         }
 
         function openWordCard(startIdx, endIdx, idx) {
-            isDirectStudyMode = true; 
+            isDirectStudyMode = true;
             currentList = allWords.slice(startIdx, endIdx);
             currentVocbWrongItems = [];
             currentIndex = idx;
@@ -811,11 +807,11 @@
         }
 
         function openVocbOptions() {
-            isDirectStudyMode = false; 
+            isDirectStudyMode = false;
             showScreen('screen-vocab-options');
         }
 
-        function startVocabSessionFromOptions() {
+        function startVocbSessionFromOptions() {
             isDirectStudyMode = false;
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
             
@@ -918,13 +914,13 @@
             if (isDirectStudyMode) {
                 studyBtnGroup.classList.add('hidden');
                 navBtnGroup.innerHTML = `
-                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 18px;">◀ 이전 단어</button>
-                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 18px; background: var(--dark-brown); color: white;">다음 단어 ▶</button>
+                    <button class="btn-secondary" onclick="prevVocbCard()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">◀ 이전 단어</button>
+                    <button class="btn-secondary" onclick="nextVocbCardModal()" style="flex:1; padding: 18px; background: var(--text); color: white; border-radius: 14px;">다음 단어 ▶</button>
                 `;
             } else {
                 studyBtnGroup.classList.remove('hidden');
                 navBtnGroup.innerHTML = `
-                    <button class="btn-secondary" onclick="prevVocbCard()" style="width: 100%; padding: 18px;">◀ 이전 단어</button>
+                    <button class="btn-secondary" onclick="prevVocbCard()" style="width: 100%;">◀ 이전 단어</button>
                 `;
             }
 
@@ -942,12 +938,12 @@
         }
 
         function prevVocbCard() {
-            if (currentIndex > 0) { currentIndex--; showVocabCard(); }
+            if (currentIndex > 0) { currentIndex--; showVocbCard(); }
             else alert("첫 번째 단어입니다.");
         }
 
         function nextVocbCardModal() {
-            if (currentIndex < currentList.length - 1) { currentIndex++; showVocabCard(); }
+            if (currentIndex < currentList.length - 1) { currentIndex++; showVocbCard(); }
             else alert("마지막 단어입니다.");
         }
 
@@ -963,7 +959,7 @@
                 }
             }
             currentIndex++;
-            showVocabCard();
+            showVocbCard();
         }
 
         async function selectQuizType(type) {
@@ -1059,7 +1055,7 @@
                 let highlightedSentence = rawSentence.split(item.word).join(`<span class="highlight-word">_____</span>`);
                 
                 quizBox.innerHTML = `
-                    <div style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.4;">${highlightedSentence}</div>
+                    <div style="font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.4;">${highlightedSentence}</div>
                     <div style="font-size: 13px; font-weight: 500; color: var(--gray);">${item.example_ko || item.meaning}</div>
                 `;
                 renderChoiceOptions(item.word, 'word');
@@ -1072,7 +1068,7 @@
                 quizBox.innerHTML = `<div style="font-size:32px; font-weight:800;">${item.word}</div>`;
                 renderChoiceOptions(item.pinyin, 'pinyin');
             } else if (activeType === 'writing') {
-                typeLabel = '✍️ 뜻 보고 직접 쓰기';
+                typeLabel = '✍️ 쓰기';
                 quizBox.innerHTML = `<div>${item.meaning}</div>`;
                 writingBox.classList.remove('hidden');
                 document.getElementById('quiz-input').value = '';
@@ -1140,7 +1136,7 @@
             } else {
                 quizBox.style.background = 'var(--danger-light)'; quizBox.style.color = 'var(--danger)';
                 quizBox.innerHTML = `
-                    <div style="font-size:12px; color:var(--danger); font-weight:600; margin-bottom:4px;">오답: ${userInput || '없음'}</div>
+                    <div style="font-size:12px; color:var(--text); font-weight:600; margin-bottom:6px;">오답: ${userInput || '없음'}</div>
                     <div>${item.meaning}</div>
                     <div style="font-size:30px; font-weight:800; margin-top: 6px;">${item.word}</div>
                     <div style="font-size:14px; color:var(--primary); font-weight:700; margin-top:4px;">${item.pinyin}</div>
