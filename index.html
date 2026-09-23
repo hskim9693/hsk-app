@@ -390,19 +390,23 @@
                 <div style="font-size:13px; font-weight:600; color:var(--gray);" id="vocab-progress">0 / 0</div>
             </div>
 
-            <div id="flashcard-elem" class="flashcard" onclick="toggleCardFront()">
+            <!-- 1. 플래시카드 전체 onclick 제거 및 앞/뒷면 내부 컨테이너에 각각 클릭 이벤트 지정 -->
+            <div id="flashcard-elem" class="flashcard">
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
-                <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;">
-                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(50px); justify-content: center;">
+                <!-- 앞면 영역: 이 영역을 누를 때만 카드가 뒤집힘 -->
+                <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;" onclick="toggleCardFront()">
+                    <div style="flex: 1; display: flex; align-items: center; transform: translateY(30px); justify-content: center;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
                     <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
-                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto; cursor: pointer;" onclick="speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
+                        <!-- 버튼에 event.stopPropagation()을 확실히 주어 뒷면으로 넘어가는 것 방지 -->
+                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto; cursor: pointer;" onclick="event.stopPropagation(); speakChinese(currentList[currentIndex].word);">🔊 단어 듣기</button>
                     </div>
                 </div>
 
-                <div id="vc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <!-- 뒷면 영역 -->
+                <div id="vc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="toggleCardFront()">
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
                         <div id="vc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 6px;"></div>
                         <div id="vc-pinyin" style="font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700;"></div>
@@ -713,63 +717,36 @@
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
 
-async function openVocbDays() {
-        if (!allWords || allWords.length === 0) {
-            await loadWordsData();
-        }
-        showScreen('screen-vocab-days');
-        const grid = document.getElementById('day-grid');
-        if (!grid) return;
-        grid.innerHTML = '';
-        
-        // Day별 체크 상태를 불러옴 (없으면 빈 객체)
-        let dayChecklist = JSON.parse(localStorage.getItem('hsk_day_checklists') || '{}');
-
-        const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
-        for (let i = 0; i < totalDays; i++) {
-            const start = i * CHUNK_SIZE;
-            const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
-            const dayNum = i + 1;
+        async function openVocbDays() {
+            if (!allWords || allWords.length === 0) {
+                await loadWordsData();
+            }
+            showScreen('screen-vocab-days');
+            const grid = document.getElementById('day-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
             
-            let dayWords = allWords.slice(start, end);
-            let learnedCount = dayWords.filter(w => (wordStatuses[w.word_id] || 0) === 1).length;
-            let percent = dayWords.length > 0 ? Math.round((learnedCount / dayWords.length) * 100) : 0;
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
+            for (let i = 0; i < totalDays; i++) {
+                const start = i * CHUNK_SIZE;
+                const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
+                const dayNum = i + 1;
+                
+                let dayWords = allWords.slice(start, end);
+                let learnedCount = dayWords.filter(w => (wordStatuses[w.word_id] || 0) === 1).length;
+                let percent = dayWords.length > 0 ? Math.round((learnedCount / dayWords.length) * 100) : 0;
 
-            // 해당 Day가 체크되어 있는지 확인
-            const isChecked = dayChecklist[dayNum] ? 'checked' : '';
-
-            const btn = document.createElement('div');
-            btn.className = 'day-card';
-            // 체크박스를 왼쪽에 배치하고, 카드의 나머지 부분을 클릭하면 단어 목록으로 이동하도록 설정
-            btn.style.cssText = "background: var(--card-bg); border: 1.5px solid var(--border); padding: 22px 16px; border-radius: 18px; font-size: 18px; font-weight: 700; cursor: pointer; text-align: left; position: relative; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 12px;";
-            
-            btn.innerHTML = `
-                <input type="checkbox" data-day="${dayNum}" ${isChecked} style="width: 20px; height: 20px; cursor: pointer;" onclick="toggleDayCheck(${dayNum}, event)" title="학습 완료 체크">
-                <div style="flex: 1; cursor: pointer;" onclick="selectVocbDay(${start}, ${end}, ${dayNum})">
-                    Day ${dayNum}
-                </div>
-                <div style="position: absolute; right: 12px; top: 12px; background: var(--primary-light); color: var(--primary); font-size: 12px; padding: 4px 8px; border-radius: 8px; font-weight: 400;" onclick="selectVocbDay(${start}, ${end}, ${dayNum})">${percent}%</div>
-            `;
-            
-            // 카드 배경 전체를 눌러도 단어장으로 이동하게 하되, 체크박스 클릭은 충돌 안 나게 처리
-            grid.appendChild(btn);
+                const btn = document.createElement('div');
+                btn.className = 'day-card';
+                btn.innerHTML = `
+                    <div>Day ${dayNum}</div>
+                    <div style="position: absolute; right: 12px; top: 12px; background: var(--primary-light); color: var(--primary); font-size: 12px; padding: 4px 8px; border-radius: 8px; font-weight: 400;">${percent}%</div>
+                `;
+                btn.onclick = () => selectVocbDay(start, end, dayNum);
+                grid.appendChild(btn);
+            }
         }
-    }
 
-        // Day 체크박스 상태 변경 시 실행되는 함수
-    function toggleDayCheck(dayNum, event) {
-        event.stopPropagation(); // 카드 전체 클릭 이벤트와 충돌 방지
-        let dayChecklist = JSON.parse(localStorage.getItem('hsk_day_checklists') || '{}');
-        
-        if (event.target.checked) {
-            dayChecklist[dayNum] = true;
-        } else {
-            delete dayChecklist[dayNum];
-        }
-        
-        localStorage.setItem('hsk_day_checklists', JSON.stringify(dayChecklist));
-    }
-        
       function selectVocbDay(startIdx, endIdx, dayNum) {
             selectedStartIdx = startIdx;
             selectedEndIdx = endIdx;
@@ -812,13 +789,13 @@ async function openVocbDays() {
                     <div style="min-width: 20px;"></div>
                     
                     <!-- 5. 상태 동그라미 (오른쪽 상단으로 이동) -->
-                    <div style="position:absolute; top:10px; right:14px;">
+                    <div style="position:absolute; top:6px; right:9px;">
                         <span id="list-status-${item.word_id}" style="font-size:13.6px; cursor:pointer; padding: 2px;" title="상태 변경" onclick="toggleListWordStatus(${item.word_id}, event)">${statusEmoji}</span>
                     </div>
                     
                     <!-- 6. 스피커 아이콘 (오른쪽 중앙~하단 배치 및 발음 듣기 기능) -->
-                    <div style="position:absolute; bottom:10px; right:14px;">
-                        <span style="font-size:16px; cursor:pointer; padding: 2px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}');">🔊</span>
+                    <div style="position:absolute; bottom:15px; right:12px;">
+                        <span style="font-size:15px; cursor:pointer; padding: 2px;" title="발음 듣기" onclick="event.stopPropagation(); speakChinese('${item.word}');">🔊</span>
                     </div>
                 `;
 
