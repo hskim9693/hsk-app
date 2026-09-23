@@ -208,6 +208,13 @@
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
         
         /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
+        .flashcard button {
+            position: relative;
+            z-index: 20;
+            pointer-events: auto !important;
+            touch-action: manipulation;
+        }
+
         .flashcard {
             background: var(--card-bg);
             width: 100%;
@@ -399,9 +406,9 @@
                     <div style="flex: 1; display: flex; align-items: center; transform: translateY(30px); justify-content: center; cursor: pointer;" onclick="toggleCardFront(event)">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
-                    <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center;">
-                        <!-- 버튼에 event.stopPropagation()을 확실히 주어 뒷면으로 넘어가는 것 방지 -->
-                        <button class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto; cursor: pointer;" onclick="event.preventDefault(); event.stopPropagation(); speakChinese(currentList[currentIndex].word); return false;">🔊 단어 듣기</button>
+                    <div style="height: 33%; display: flex; align-items: flex-start; justify-content: center; position: relative; z-index: 10; pointer-events: auto;">
+                        <!-- 단어 듣기 버튼은 카드 뒤집기 이벤트와 완전히 분리 -->
+                        <button type="button" class="btn-secondary" style="background: var(--bg); color: var(--text); border: none; border-radius: 14px; padding: 12px 24px; font-size: 14px; font-weight: 700; width: auto; cursor: pointer; position: relative; z-index: 11; pointer-events: auto; touch-action: manipulation;" onclick="speakWordButton(event);">🔊 단어 듣기</button>
                     </div>
                 </div>
 
@@ -672,6 +679,18 @@
                 console.error("데이터 로드 실패:", error);
                 alert("단어장 데이터(hsk_basic_words_800.json)를 불러오지 못했습니다. 파일 위치나 파일명을 확인해주세요.");
             }
+        }
+
+        function speakWordButton(event) {
+            // iPhone Safari에서 버튼 터치가 카드의 뒤집기 이벤트로 전달되지 않도록 완전히 차단
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                if (event.stopImmediatePropagation) event.stopImmediatePropagation();
+            }
+            const item = currentList && currentList[currentIndex];
+            if (item && item.word) speakChinese(item.word);
+            return false;
         }
 
         function speakChinese(text) {
