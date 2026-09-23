@@ -395,7 +395,7 @@
                 <div id="vc-status-badge" class="status-badge" onclick="event.stopPropagation(); cycleWordStatus();" title="상태 변경">⚪</div>
                 
                 <!-- 앞면 영역: 이 영역을 누를 때만 카드가 뒤집힘 -->
-                <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;" onclick="toggleCardFront(event)">
+                <div id="vc-front-content" style="width: 100%; height: 100%; display: flex; flex-direction: column; position: relative;" onclick="toggleCardFront()">
                     <div style="flex: 1; display: flex; align-items: center; transform: translateY(30px); justify-content: center;">
                         <div id="vc-word" style="font-size: 48px; font-weight: 800; color: var(--text);"></div>
                     </div>
@@ -406,7 +406,7 @@
                 </div>
 
                 <!-- 뒷면 영역 -->
-                <div id="vc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="toggleCardFront(event)">
+                <div id="vc-back" class="hidden" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;" onclick="toggleCardFront()">
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
                         <div id="vc-word-back" style="font-size: 32px; font-weight: 800; color: var(--text); margin-bottom: 6px;"></div>
                         <div id="vc-pinyin" style="font-size: 20px; color: var(--primary); margin-bottom: 8px; font-weight: 700;"></div>
@@ -949,9 +949,7 @@
             document.getElementById('vc-front-content').classList.remove('hidden');
         }
 
-        function toggleCardFront(event) {
-            // 버튼(또는 버튼 내부 요소) 클릭은 카드 뒤집기로 이어지지 않도록 차단
-            if (event && event.target && event.target.closest('button')) return;
+        function toggleCardFront() {
             isFlipped = !isFlipped;
             const back = document.getElementById('vc-back');
             const front = document.getElementById('vc-front-content');
