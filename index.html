@@ -206,6 +206,15 @@
             box-shadow: var(--shadow-sm);
         }
         .day-card:active { transform: scale(0.95); background: var(--gray-light); }
+        .day-complete-checkbox {
+            width: 22px;
+            height: 22px;
+            margin: 0;
+            flex: 0 0 auto;
+            accent-color: var(--primary);
+            cursor: pointer;
+            touch-action: manipulation;
+        }
         
         /* 1. 단어장 카드(흰색 화면) 크기를 가로 기준 4:5 비율로 설정 */
         .flashcard {
@@ -753,11 +762,28 @@
 
                 const btn = document.createElement('div');
                 btn.className = 'day-card';
+                const completedDays = JSON.parse(localStorage.getItem('hsk_completed_days') || '{}');
+                const isCompleted = completedDays[dayNum] === true;
                 btn.innerHTML = `
-                    <div>Day ${dayNum}</div>
+                    <div style="display:flex; align-items:center; gap:10px; padding-right:55px;">
+                        <input type="checkbox" class="day-complete-checkbox" data-day="${dayNum}" ${isCompleted ? 'checked' : ''} aria-label="Day ${dayNum} 학습 완료">
+                        <span>Day ${dayNum}</span>
+                    </div>
                     <div style="position: absolute; right: 12px; top: 12px; background: var(--primary-light); color: var(--primary); font-size: 12px; padding: 4px 8px; border-radius: 8px; font-weight: 400;">${percent}%</div>
                 `;
-                btn.onclick = () => selectVocbDay(start, end, dayNum);
+
+                const checkbox = btn.querySelector('.day-complete-checkbox');
+                checkbox.addEventListener('click', (event) => event.stopPropagation());
+                checkbox.addEventListener('change', (event) => {
+                    const completed = JSON.parse(localStorage.getItem('hsk_completed_days') || '{}');
+                    completed[dayNum] = event.target.checked;
+                    localStorage.setItem('hsk_completed_days', JSON.stringify(completed));
+                });
+
+                btn.onclick = (event) => {
+                    if (event.target.closest('.day-complete-checkbox')) return;
+                    selectVocbDay(start, end, dayNum);
+                };
                 grid.appendChild(btn);
             }
         }
