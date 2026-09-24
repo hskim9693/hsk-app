@@ -1260,7 +1260,9 @@
 
         function renderChoiceOptions(correctAnswer, poolKey) {
             const optionsBox = document.getElementById('quiz-options');
-            let incorrects = allWords.filter(w => w[poolKey] !== correctAnswer);
+            // 선택한 퀴즈 범위(currentList) 안에서만 오답 보기를 생성합니다.
+            const sourcePool = currentList && currentList.length > 0 ? currentList : allWords;
+            let incorrects = sourcePool.filter(w => w[poolKey] !== correctAnswer);
             incorrects = shuffle(incorrects).slice(0, 3);
             let choices = shuffle([...incorrects.map(w => w[poolKey]), correctAnswer]);
 
