@@ -359,11 +359,20 @@
                 <div id="vocab-search-result" class="hidden" style="margin-top:10px;"></div>
             </div>
 
-            <!-- 여러 Day를 한 번에 단어장 학습하는 범위 학습 -->
-            <div class="panel" style="text-align:left; padding:18px; margin-bottom:16px;">
-                <h3 style="margin:0 0 12px 0; font-size:17px; color:var(--primary);">📚 범위 지정해서 학습하기</h3>
+            <!-- 범위 학습 버튼 -->
+            <button class="quiz-menu-btn" onclick="openVocabRangeSettings()" style="margin-bottom:16px; padding:22px 20px;">
+                <div>📚 학습하기</div>
+                <span>범위를 선택해서 학습</span>
+            </button>
+
+            <div id="day-grid" class="day-grid"></div>
+        </div>
+
+        <div id="screen-vocab-range-settings" class="hidden">
+            <div class="panel" style="text-align:left; padding:20px;">
+                <h3 style="margin:0 0 14px 0; font-size:18px; color:var(--primary);">📚 학습 범위 설정</h3>
                 <div class="control-group" style="margin-bottom:10px;">
-                    <label>단어 순서</label>
+                    <label>순서</label>
                     <div class="radio-group">
                         <label><input type="radio" name="vocab-range-order" value="sequential" checked> 순차</label>
                         <label><input type="radio" name="vocab-range-order" value="random"> 랜덤</label>
@@ -377,8 +386,8 @@
                         <select id="vocab-range-end-day" class="control-select" style="flex:1;"></select>
                     </div>
                 </div>
-                <div class="control-group" style="flex-direction:column; align-items:flex-start; gap:6px; margin-bottom:12px;">
-                    <label>상태 선택</label>
+                <div class="control-group" style="flex-direction:column; align-items:flex-start; gap:6px; margin-bottom:16px;">
+                    <label>출제 (복수 선택 가능)</label>
                     <div class="radio-group" style="width:100%; justify-content:space-between; flex-wrap:wrap;">
                         <label><input type="checkbox" name="vocab-range-status" value="1" checked> 🟤 외움</label>
                         <label><input type="checkbox" name="vocab-range-status" value="2" checked> 🟠 헷갈림</label>
@@ -387,8 +396,7 @@
                 </div>
                 <button class="btn-primary" onclick="startRangeVocabSession()">학습 시작하기 🚀</button>
             </div>
-
-            <div id="day-grid" class="day-grid"></div>
+            <button class="btn-secondary" onclick="openVocbDays()">◀ Day 목록으로</button>
         </div>
 
         <div id="screen-vocab-day-detail" class="hidden">
@@ -811,7 +819,7 @@
         }
 
         function showScreen(screenId) {
-            const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-day-detail', 'screen-vocab-options', 'screen-vocab-card', 'screen-vocab-result', 'screen-quiz-menu', 'screen-quiz-settings', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
+            const screens = ['screen-home', 'screen-vocab-days', 'screen-vocab-range-settings', 'screen-vocab-day-detail', 'screen-vocab-options', 'screen-vocab-card', 'screen-vocab-result', 'screen-quiz-menu', 'screen-quiz-settings', 'screen-quiz-play', 'screen-review', 'screen-settings', 'screen-result'];
             screens.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
@@ -826,7 +834,7 @@
             } else {
                 if (topNav) topNav.classList.remove('hidden');
                 const titles = {
-                    'screen-vocab-days': 'Day 선택', 'screen-vocab-day-detail': '단어 목록', 'screen-vocab-card': `Day ${selectedDayNum || ''}`, 'screen-vocab-result': '학습 완료',
+                    'screen-vocab-days': 'Day 선택', 'screen-vocab-range-settings': '학습 범위 설정', 'screen-vocab-day-detail': '단어 목록', 'screen-vocab-card': `Day ${selectedDayNum || ''}`, 'screen-vocab-result': '학습 완료',
                     'screen-quiz-menu': '퀴즈', 'screen-quiz-settings': '퀴즈 설정', 'screen-quiz-play': '퀴즈',
                     'screen-review': '오답 집중 훈련', 'screen-settings': '설정', 'screen-result': '결과 확인'
                 };
@@ -838,6 +846,22 @@
         function goVocabDays() { showScreen('screen-vocab-days'); if (typeof openVocbDays === 'function') openVocbDays(); }
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
+
+        function openVocabRangeSettings() {
+            showScreen('screen-vocab-range-settings');
+            if (!allWords || allWords.length === 0) return;
+            const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
+            const start = document.getElementById('vocab-range-start-day');
+            const end = document.getElementById('vocab-range-end-day');
+            if (!start || !end) return;
+            const prevStart = parseInt(start.value) || 1;
+            const prevEnd = parseInt(end.value) || totalDays;
+            start.innerHTML = ''; end.innerHTML = '';
+            for (let d=1; d<=totalDays; d++) { start.add(new Option(`Day ${d}`,d)); end.add(new Option(`Day ${d}`,d)); }
+            start.value = String(Math.min(prevStart,totalDays));
+            end.value = String(Math.min(Math.max(prevEnd,1),totalDays));
+            if (parseInt(start.value) > parseInt(end.value)) end.value = start.value;
+        }
 
         function normalizeSearchText(value) {
             return String(value || '').toLowerCase().trim();
