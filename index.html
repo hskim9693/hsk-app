@@ -324,7 +324,7 @@
 
         <div id="screen-home">
             <div class="panel" style="margin-bottom: 30px; padding: 32px 18px; background: var();">
-                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">HSK 1200</h1>
+                <h1 style="margin: 0 0 6px 0; font-size: 26px; color: var(--primary);">HSK</h1>
                 <p style="margin: 0; color: var(--gray); font-size: 14px; font-weight: 500;">매일 조금씩 단어 외우기 ^_^v</p>
             </div>
 
@@ -358,6 +358,36 @@
                 </div>
                 <div id="vocab-search-result" class="hidden" style="margin-top:10px;"></div>
             </div>
+
+            <!-- 여러 Day를 한 번에 단어장 학습하는 범위 학습 -->
+            <div class="panel" style="text-align:left; padding:18px; margin-bottom:16px;">
+                <h3 style="margin:0 0 12px 0; font-size:17px; color:var(--primary);">📚 범위 지정해서 학습하기</h3>
+                <div class="control-group" style="margin-bottom:10px;">
+                    <label>단어 순서</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="vocab-range-order" value="sequential" checked> 순차</label>
+                        <label><input type="radio" name="vocab-range-order" value="random"> 랜덤</label>
+                    </div>
+                </div>
+                <div class="control-group" style="flex-direction:column; align-items:flex-start; gap:8px; margin-bottom:10px;">
+                    <label>범위 지정</label>
+                    <div style="display:flex; align-items:center; gap:8px; width:100%;">
+                        <select id="vocab-range-start-day" class="control-select" style="flex:1;"></select>
+                        <span style="font-weight:800; color:var(--border);">~</span>
+                        <select id="vocab-range-end-day" class="control-select" style="flex:1;"></select>
+                    </div>
+                </div>
+                <div class="control-group" style="flex-direction:column; align-items:flex-start; gap:6px; margin-bottom:12px;">
+                    <label>상태 선택</label>
+                    <div class="radio-group" style="width:100%; justify-content:space-between; flex-wrap:wrap;">
+                        <label><input type="checkbox" name="vocab-range-status" value="1" checked> 🟤 외움</label>
+                        <label><input type="checkbox" name="vocab-range-status" value="2" checked> 🟠 헷갈림</label>
+                        <label><input type="checkbox" name="vocab-range-status" value="0" checked> ⚪ 모름</label>
+                    </div>
+                </div>
+                <button class="btn-primary" onclick="startRangeVocabSession()">학습 시작하기 🚀</button>
+            </div>
+
             <div id="day-grid" class="day-grid"></div>
         </div>
 
@@ -665,6 +695,7 @@
         let isFlipped = false;
         let currentQuizType = '';
         let isDirectStudyMode = false;
+        let isRangeVocabMode = false;
         
         let wordStatuses = JSON.parse(localStorage.getItem('hsk_word_statuses') || '{}');
         let wrongWordIds = JSON.parse(localStorage.getItem('hsk_wrong_words') || '[]');
@@ -901,8 +932,26 @@
             if (searchInput) searchInput.value = '';
             const searchResult = document.getElementById('vocab-search-result');
             if (searchResult) { searchResult.innerHTML = ''; searchResult.classList.add('hidden'); }
-            
+
+            // 퀴즈의 범위 선택과 동일하게 전체 Day를 시작/종료 범위로 선택할 수 있습니다.
             const totalDays = Math.ceil(allWords.length / CHUNK_SIZE) || 1;
+            const rangeStart = document.getElementById('vocab-range-start-day');
+            const rangeEnd = document.getElementById('vocab-range-end-day');
+            if (rangeStart && rangeEnd) {
+                const prevStart = parseInt(rangeStart.value) || 1;
+                const prevEnd = parseInt(rangeEnd.value) || Math.min(1, totalDays);
+                rangeStart.innerHTML = '';
+                rangeEnd.innerHTML = '';
+                for (let d = 1; d <= totalDays; d++) {
+                    rangeStart.add(new Option(`Day ${d}`, d));
+                    rangeEnd.add(new Option(`Day ${d}`, d));
+                }
+                rangeStart.value = String(Math.min(Math.max(prevStart, 1), totalDays));
+                rangeEnd.value = String(Math.min(Math.max(prevEnd, 1), totalDays));
+                if (parseInt(rangeStart.value) > parseInt(rangeEnd.value)) rangeEnd.value = rangeStart.value;
+            }
+            
+            
             for (let i = 0; i < totalDays; i++) {
                 const start = i * CHUNK_SIZE;
                 const end = Math.min((i + 1) * CHUNK_SIZE, allWords.length);
@@ -1010,7 +1059,46 @@
             }
         }
 
+        function startRangeVocabSession() {
+            const startDay = parseInt(document.getElementById('vocab-range-start-day').value);
+            const endDay = parseInt(document.getElementById('vocab-range-end-day').value);
+            if (startDay > endDay) {
+                alert("시작 Day가 종료 Day보다 클 수 없습니다.");
+                return;
+            }
+
+            const checkedStatuses = Array.from(document.querySelectorAll('input[name="vocab-range-status"]:checked')).map(el => parseInt(el.value));
+            if (checkedStatuses.length === 0) {
+                alert("최소 하나 이상의 상태를 선택해주세요.");
+                return;
+            }
+
+            let list = allWords.slice((startDay - 1) * CHUNK_SIZE, endDay * CHUNK_SIZE).filter(w => {
+                const status = wordStatuses[w.word_id] || 0;
+                return checkedStatuses.includes(status);
+            });
+
+            if (list.length === 0) {
+                alert("해당 조건에 부합하는 단어가 없습니다.");
+                return;
+            }
+
+            const mode = document.querySelector('input[name="vocab-range-order"]:checked').value;
+            if (mode === 'random') list = shuffle(list);
+
+            isRangeVocabMode = true;
+            selectedStartIdx = (startDay - 1) * CHUNK_SIZE;
+            selectedEndIdx = Math.min(endDay * CHUNK_SIZE, allWords.length);
+            selectedDayNum = `${startDay}~${endDay}`;
+            currentList = list;
+            currentVocbWrongItems = [];
+            currentIndex = 0;
+            showScreen('screen-vocab-card');
+            showVocabCard();
+        }
+
         function openWordCard(startIdx, endIdx, idx) {
+            isRangeVocabMode = false;
             isDirectStudyMode = true;
             currentList = allWords.slice(startIdx, endIdx);
             currentVocbWrongItems = [];
@@ -1020,11 +1108,13 @@
         }
 
         function openVocbOptions() {
+            isRangeVocabMode = false;
             isDirectStudyMode = false;
             showScreen('screen-vocab-options');
         }
 
         function startVocabSessionFromOptions() {
+            isRangeVocabMode = false;
             isDirectStudyMode = false;
             let list = allWords.slice(selectedStartIdx, selectedEndIdx);
             
@@ -1057,6 +1147,18 @@
                     return;
                 }
                 currentList = shuffle([...currentVocbWrongItems]);
+            } else if (isRangeVocabMode) {
+                let list = allWords.slice(selectedStartIdx, selectedEndIdx);
+                const checkedStatuses = Array.from(document.querySelectorAll('input[name="vocab-range-status"]:checked')).map(el => parseInt(el.value));
+                list = list.filter(w => checkedStatuses.includes(wordStatuses[w.word_id] || 0));
+                if (document.querySelector('input[name="vocab-range-order"]:checked').value === 'random') {
+                    list = shuffle(list);
+                }
+                if (list.length === 0) {
+                    alert("해당 조건에 부합하는 단어가 없습니다.");
+                    return;
+                }
+                currentList = list;
             } else {
                 let list = allWords.slice(selectedStartIdx, selectedEndIdx);
                 const checkedStatuses = Array.from(document.querySelectorAll('input[name="vocab-status"]:checked')).map(el => parseInt(el.value));
