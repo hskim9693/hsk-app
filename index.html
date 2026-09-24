@@ -456,7 +456,7 @@
                 <div class="btn-group" style="flex-direction: column; gap: 8px;">
                     <button class="btn-primary" onclick="restartVocbSession(false)">🔄 다시 학습하기</button>
                     <button id="btn-vocab-retry-wrong" class="btn-danger" onclick="restartVocbSession(true)">🔥 틀린 단어만 학습하기</button>
-                    <button class="btn-secondary" onclick="goHome()">📚 단어장으로 돌아가기</button>
+                    <button class="btn-secondary" onclick="goVocabDays()">📚 단어장으로 돌아가기</button>
                 </div>
             </div>
         </div>
@@ -804,6 +804,7 @@
             window.scrollTo(0, 0);
         }
 
+        function goVocabDays() { showScreen('screen-vocab-days'); if (typeof openVocbDays === 'function') openVocbDays(); }
         function goHome() { showScreen('screen-home'); }
         function goSettings() { showScreen('screen-settings'); }
 
